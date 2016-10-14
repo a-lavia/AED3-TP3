@@ -1,0 +1,78 @@
+\documentclass[10pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel} 
+\usepackage[margin = 1in]{geometry} 
+\usepackage{caratula}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage[Algoritmo]{algorithm}
+\usepackage[fleqn]{amsmath}
+\usepackage{color}
+\usepackage{url}
+\usepackage[colorlinks = true, linkcolor = blue]{hyperref}
+\usepackage{comment}
+\usepackage{hyperref}
+
+\hypersetup{urlcolor=blue}
+
+\makeatletter
+\newenvironment{breakablealgorithm}
+  {% \begin{breakablealgorithm}
+   \begin{center}
+     \refstepcounter{algorithm}% New algorithm
+     \hrule height.8pt depth0pt \kern2pt% \@fs@pre for \@fs@ruled
+     \renewcommand{\caption}[2][\relax]{% Make a new \caption
+       {\raggedright\textbf{\ALG@name~\thealgorithm} ##2\par}%
+       \ifx\relax##1\relax % #1 is \relax
+         \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##2}%
+       \else % #1 is not \relax
+         \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##1}%
+       \fi
+       \kern2pt\hrule\kern2pt
+     }
+  }{% \end{breakablealgorithm}
+     \kern2pt\hrule\relax% \@fs@post for \@fs@ruled
+   \end{center}
+  }
+\makeatother
+
+
+\begin{document}
+
+\titulo{Trabajo práctico III}
+
+\subtitulo{Camino mínimo a maestro Pokémon}
+
+\materia{Algoritmos y Estructuras de Datos III}
+
+\integrante{Bogdanich Espina, Vera}{601/14}{verabogdanichespina@gmail.com}
+\integrante{Cámera, Joel Esteban}{257/14}{joel.e.camera@gmail.com}
+\integrante{Gomez Gonzalez, Horacio Javier}{756/13}{horaciogomez.1993@gmail.com}
+\integrante{Lavia, Alejandro Norberto}{43/11}{lavia.alejandro@gmail.com}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\input{ej1.tex}
+
+\newpage
+
+\input{ej2.tex}
+
+\newpage
+
+\input{ej3.tex}
+
+\newpage
+
+\input{ej4.tex}
+
+\newpage
+
+\input{ej5.tex}
+
+\end{document}
