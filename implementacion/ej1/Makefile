@@ -3,7 +3,7 @@
 BIN = ej1
 
 all:
-	g++ ej.cpp funciones.cpp -std=c++11 -o ej1
+	g++ ej.cpp funciones.cpp ../implementacion.cpp -std=c++11 -o ej1
 
 clean:
 	rm -f $(BIN)
