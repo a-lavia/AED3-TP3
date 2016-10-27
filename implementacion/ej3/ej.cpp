@@ -1,9 +1,10 @@
 #include "funciones.h"
 
-int main (int argc, char* argv[]){
-    int cantGimnasios, cantPokeparadas;    
+int main(int argc, char* argv[]){
+    int cantGimnasios, cantPokeparadas, tamMochila;    
     cin >> cantGimnasios;
     cin >> cantPokeparadas;
+    cin >> tamMochila;
 
     int cantNodos = cantGimnasios + cantPokeparadas;
  
@@ -33,11 +34,17 @@ int main (int argc, char* argv[]){
 
     float distanciaTotal = 0;
 
-    int nodoInicial = solucionInicial(nodos, distancias, &distanciaTotal);
+    int nodoInicial = solucionInicial(nodos, distancias, tamMochila, &distanciaTotal);
 
-    busquedaLocal1(nodos, distancias, distanciaTotal, cantGimnasios, nodoInicial);
+    if(nodoInicial != INV){
+        cout << "vecindad1:" << endl;
+        busquedaLocal(nodos, distancias, distanciaTotal, cantGimnasios, nodoInicial, vecindad1);
 
-    busquedaLocal2(nodos, distancias, distanciaTotal, cantGimnasios, nodoInicial);
+        cout << endl << "vecindad2:" << endl;
+        busquedaLocal(nodos, distancias, distanciaTotal, cantGimnasios, nodoInicial, vecindad2);
+    } else{
+        cout << -1 << endl;
+    }
 
     return 0;
 }
