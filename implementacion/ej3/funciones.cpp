@@ -23,7 +23,7 @@ void busquedaLocal1(vector<Nodo> nodos, vector<vector<float>>& distancias, float
 }
 
 bool encuentroSolucionVecinaMejor1(vector<Nodo>& nodos, float distanciaTotal, vector<Nodo>& nodosSV, float* distanciaTotalSV, int* nodoInicial){
-
+    // Opcion: Intercambiar el orden del recorrido, o sea, el orden de los nodos.
 }
 
 void busquedaLocal2(vector<Nodo> nodos, vector<vector<float>>& distancias, float distanciaTotal, int cantGimnasios, int nodoInicial){
@@ -39,7 +39,7 @@ void busquedaLocal2(vector<Nodo> nodos, vector<vector<float>>& distancias, float
 }
 
 bool encuentroSolucionVecinaMejor2(vector<Nodo>& nodos, float distanciaTotal, vector<Nodo>& nodosSV, float* distanciaTotalSV, int* nodoInicial){
-
+    // Opcion: Cambiar los caminos hacia las pokeparadas, considerando tambien las que estan afuera del recorrido original, o sea, el orden de las aristas.
 }
 
 void imprimirSalida(vector<Nodo>& nodos, int nodoInicial, float distanciaTotal, int cantGimnasios){
