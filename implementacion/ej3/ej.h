@@ -8,6 +8,8 @@
 #include <map>
 #include <cassert>
 
+#define POCIONES_POKEPARADA 3
+
 using namespace std;
     
 struct Nodo{

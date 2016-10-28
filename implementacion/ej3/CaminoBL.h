@@ -28,7 +28,8 @@ class CaminoBL{
         bool intercambiarMantieneIgual(Nodo* n1, Nodo* n2);
 
         int distanciaIntercambiar(const Nodo* n1, const Nodo* n2);
-        void intercambiarNodos(Nodo* n1, Nodo* n2, int distanciaNueva);
+        bool puedoIntercambiar(Nodo* n1, Nodo* n2);
+        void intercambiar(Nodo* n1, Nodo* n2, int distanciaNueva);
 
         bool encuentroSolucionVecinaMejor2();
 
@@ -143,8 +144,8 @@ bool CaminoBL::intercambiarMejora(Nodo* n1, Nodo* n2){
     bool mejora = false;
     float distanciaNueva = distanciaIntercambiar(n1, n2);
     
-    if(distanciaNueva < distancia()){  
-        intercambiarNodos(n1, n2, distanciaNueva);
+    if(distanciaNueva < distancia() && puedoIntercambiar(n1, n2)){  
+        intercambiar(n1, n2, distanciaNueva);
         mejora = true;
     }
     
@@ -170,8 +171,8 @@ bool CaminoBL::intercambiarMantieneIgual(Nodo* n1, Nodo* n2){
     bool mantiene = false;
     float distanciaNueva = distanciaIntercambiar(n1, n2);
     
-    if(distanciaNueva == distancia()){  
-        intercambiarNodos(n1, n2, distanciaNueva);
+    if(distanciaNueva == distancia() && puedoIntercambiar(n1, n2)){  
+        intercambiar(n1, n2, distanciaNueva);
         mantiene = true;
     }
     
@@ -204,7 +205,30 @@ int CaminoBL::distanciaIntercambiar(const Nodo* n1, const Nodo* n2){
     return distanciaNueva;
 }
 
-void CaminoBL::intercambiarNodos(Nodo* n1, Nodo* n2, int distanciaNueva){
+bool CaminoBL::puedoIntercambiar(Nodo* n1, Nodo* n2){
+    int pocionesDisponibles = 0;
+
+    Nodo* nodoActual = nodoInicial();
+    while(pocionesDisponibles >= 0 && nodoActual != NULL){
+        if(nodoActual->gimnasio){
+            pocionesDisponibles -= nodoActual->pociones;
+        } else{
+            pocionesDisponibles += POCIONES_POKEPARADA;
+        }
+
+        if(nodoActual == n1->anterior && nodoActual != NULL){
+            nodoActual = n2;
+        }
+
+        if(nodoActual == n2->anterior && nodoActual != NULL){
+            nodoActual = n1;
+        }
+    }
+
+    return pocionesDisponibles >= 0;
+}
+
+void CaminoBL::intercambiar(Nodo* n1, Nodo* n2, int distanciaNueva){
     n2->anterior = n1->anterior;
     n2->siguiente = n1->siguiente;
     
