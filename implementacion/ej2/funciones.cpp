@@ -9,7 +9,6 @@ int cant_gym;
 int cant_paradas;
 priority_queue<int, vector<int>, greater<int> > cola_gym;
 priority_queue<int, vector<int>, greater<int> > cola_paradas;
-queue<int> cprueba;
 
 
 void solucionGolosa(unsigned int mochila_size, vector<struct gym>& gimnasios, vector<struct parada>& paradas, vector<vector<float>>& matriz_dist){
@@ -59,7 +58,7 @@ void solucionGolosa(unsigned int mochila_size, vector<struct gym>& gimnasios, ve
 	// Si hay pokeparadas y no gyms -> gane
 
 	// Comienzo por la primer pokeparada
-	idx_actual = cant_gym + 1;
+	idx_actual = cant_gym;
 	paradas[0].visitado = true;
 	mochila = 3;
 	cola_paradas.push(0);
@@ -127,8 +126,8 @@ void leGanoAlGymConMenosPociones(vector<struct gym>& gimnasios, vector<vector<fl
 	mochila -= gimnasios[idx_gym].p;
 	D += matriz_dist[idx_actual][idx_gym];
 	cola_gym.push(idx_gym);
-	idx_actual = idx_gym;
 	gimnasios[idx_gym].visitado = true;
+	idx_actual = idx_gym;
 }
 
 /************************************************************************/
