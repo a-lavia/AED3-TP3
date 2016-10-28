@@ -29,7 +29,7 @@ void solucionGolosa(unsigned int mochila_size, vector<struct gym>& gimnasios, ve
 	if((suma_total_pociones > paradas.size()*3) || 
 	   ((paradas.size() == 0 || mochila_size == 0) && suma_total_pociones > 0))
 	{
-		cout << "-1";
+		cout << -1 << endl;;
 		return;
 	}
 
@@ -44,6 +44,7 @@ void solucionGolosa(unsigned int mochila_size, vector<struct gym>& gimnasios, ve
 		for(int i = 1; i <= gimnasios.size(); i++){
 			cout << " " << i;
 		}
+        cout << endl;
 		return;
 	}
 
@@ -84,13 +85,14 @@ void solucionGolosa(unsigned int mochila_size, vector<struct gym>& gimnasios, ve
 
 	// Imprimo soluciones
 	if(gym_no_recorridos > 0){
-		cout << "-1";
+		cout << -1 << endl;
 		return;
 	}
 
 	cout << D << " " << cola_gym.size()+cola_paradas.size();
 	imprimirCola(cola_gym, false);
 	imprimirCola(cola_paradas, true);
+    cout << endl;
 
 	return;
 }

@@ -8,8 +8,6 @@
 #include <map>
 #include <cassert>
 
-#define INV -1
-
 using namespace std;
     
 struct Nodo{
@@ -20,10 +18,10 @@ struct Nodo{
     bool gimnasio;
 
     bool visitado;
-    int anterior;
-    int siguiente;
+    Nodo* anterior;
+    Nodo* siguiente;
 
-    Nodo() : visitado(false), anterior(INV), siguiente(INV){
+    Nodo() : visitado(false), anterior(NULL), siguiente(NULL){
 
     }
 };
