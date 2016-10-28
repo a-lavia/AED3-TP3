@@ -37,7 +37,7 @@ void solucionCasoGeneral(int idx_comienzo, struct solucion& sol, unsigned int mo
 						 vector<struct parada> paradas, vector<vector<float>>& matriz_dist);
 
 bool leGanoAAlgunGym(vector<struct gym>& gimnasios);
-void leGanoAlGymConMenosPocionesMasCercano(struct solucion& sol, vector<struct gym>& gimnasios, vector<vector<float>>& matriz_dist);
+void leGanoAlGymMasCercano(struct solucion& sol, vector<struct gym>& gimnasios, vector<vector<float>>& matriz_dist);
 void voyParadaMasCercana(int mochila_size, struct solucion& sol, vector<struct parada>& paradas, vector<vector<float>>& matriz_dist);
 int dameIdxMejorSolucion(vector<solucion>& soluciones);
 

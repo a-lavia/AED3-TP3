@@ -109,7 +109,7 @@ void solucionCasoGeneral(int idx_comienzo, struct solucion& sol, unsigned int mo
 		// Puedo ganarle al gimnasio con menos pociones?
 			// Si y le gano-> pierdo las pociones requeridas, restar gym_no_recorridos, agregar a la cola, sumar distancia.
 		if(leGanoAAlgunGym(gimnasios)){
-			leGanoAlGymConMenosPocionesMasCercano(sol, gimnasios, matriz_dist);
+			leGanoAlGymMasCercano(sol, gimnasios, matriz_dist);
 			gym_no_recorridos--;
 
 		} else if(mochila == mochila_size || paradas_no_recorridas == 0){
@@ -145,7 +145,7 @@ bool leGanoAAlgunGym(vector<struct gym>& gimnasios){
 
 /************************************************************************/
 
-void leGanoAlGymConMenosPocionesMasCercano(struct solucion& sol, vector<struct gym>& gimnasios, vector<vector<float>>& matriz_dist){
+void leGanoAlGymMasCercano(struct solucion& sol, vector<struct gym>& gimnasios, vector<vector<float>>& matriz_dist){
 	// Busco al gym que le gano con menor cant de pociones
 	int idx_gym = -1;
 	int dist;
@@ -157,7 +157,6 @@ void leGanoAlGymConMenosPocionesMasCercano(struct solucion& sol, vector<struct g
 			}
 		} else {
 			if(!gimnasios[i].visitado && 
-				gimnasios[i].p < gimnasios[idx_gym].p && 
 				mochila >= gimnasios[i].p && 
 				matriz_dist[idx_actual][i] < dist)
 			{
