@@ -7,23 +7,24 @@
 
 using namespace std;
 
-struct gym {
+struct nodo {
 	float x;
 	float y;
+	int indice;
+};
+
+struct gym : nodo {
 	int p;
 	bool visitado;
 };
 
-struct parada {
-	float x;
-	float y;
+struct parada : nodo {
 	bool visitado;
 };
 
 struct solucion {
 	float d;
-	priority_queue<int, vector<int>, greater<int> > gym;
-	priority_queue<int, vector<int>, greater<int> > paradas;
+	queue<int> camino;
 };
 
 
@@ -39,16 +40,11 @@ void solucionCasoGeneral(int idx_comienzo, struct solucion& sol, unsigned int mo
 bool leGanoAAlgunGym(vector<struct gym>& gimnasios);
 void leGanoAlGymMasCercano(struct solucion& sol, vector<struct gym>& gimnasios, vector<vector<float>>& matriz_dist);
 void voyParadaMasCercana(int mochila_size, struct solucion& sol, vector<struct parada>& paradas, vector<vector<float>>& matriz_dist);
-int dameIdxMejorSolucion(vector<solucion>& soluciones);
 
 void imprimirSolucion(struct solucion& sol);
-void imprimirCola(priority_queue<int, vector<int>, greater<int> >& cola, int cant);
+void imprimirCola(queue<int>& cola);
 void imprimirMatriz(vector<vector<float>>& matriz_dist);
 void imprimirVector(vector<struct gym>& gimnasios);
 void imprimirVector(vector<struct parada>& paradas);
 
-float distancia(const gym &g1, const gym &g2);
-float distancia(const parada &p1, const parada &p2);
-float distancia(const parada &p, const gym &g);
-float distancia(const gym &g, const parada &p);
-float distancia(float x1, float x2, float y1, float y2);
+float distancia2(const nodo &n1, const nodo &n2);

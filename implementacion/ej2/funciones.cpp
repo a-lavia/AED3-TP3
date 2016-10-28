@@ -21,17 +21,22 @@ void solHeuristicaGolosa(unsigned int mochila_size, vector<struct gym>& gimnasio
 
 
 	// Busco la mejor solución comenzando por cada parada y cada una de estas soluciones la guardo en el vector soluciones.
-	vector<solucion> soluciones;
+	struct solucion mejor_sol;
+	mejor_sol.d = -1;
 
-	for(int i = 0; i < paradas.size(); i++){
+	for(int i = gimnasios.size(); i < paradas.size() + gimnasios.size(); i++){
 		struct solucion sol_nueva;
 		sol_nueva.d = 0;
 		solucionCasoGeneral(i, sol_nueva, mochila_size, gimnasios, paradas, matriz_dist);
-		soluciones.push_back(sol_nueva);
+
+		if((mejor_sol.d == -1 && sol_nueva.d != -1) || 
+			(sol_nueva.d != -1 && sol_nueva.d < mejor_sol.d))
+		{
+			mejor_sol = sol_nueva;
+		}
 	}
 
-	int idx_mejor_sol = dameIdxMejorSolucion(soluciones);
-	imprimirSolucion(soluciones[idx_mejor_sol]);
+	imprimirSolucion(mejor_sol);
 
 	return;
 }
@@ -65,14 +70,22 @@ bool solucionCasosParticulares(unsigned int mochila_size, vector<struct gym> gim
 	// Estoy devolviendo una solución lineal, o sea, por como ingresan
 	int d = 0;
 	if((paradas.size() == 0 || mochila_size == 0) && suma_total_pociones == 0){
+		struct solucion mejor_sol;
+		mejor_sol.d = -1;
 
-		for(int i = 0; i < gimnasios.size()-1; i++){
-			d += distancia(gimnasios[i], gimnasios[i+1]);
+		for(int i = 0; i < gimnasios.size(); i++){
+			struct solucion sol_nueva;
+			sol_nueva.d = 0;
+			solucionCasoGeneral(i, sol_nueva, mochila_size, gimnasios, paradas, matriz_dist);
+
+			if((mejor_sol.d == -1 && sol_nueva.d != -1) || 
+				(sol_nueva.d != -1 && sol_nueva.d < mejor_sol.d))
+			{
+				mejor_sol = sol_nueva;
+			}
 		}
-		cout << d << " " << gimnasios.size();
-		for(int i = 1; i <= gimnasios.size(); i++){
-			cout << " " << i;
-		}
+
+		imprimirSolucion(mejor_sol);
 
 		return true;
 	}
@@ -98,12 +111,22 @@ void solucionCasoGeneral(int idx_comienzo, struct solucion& sol, unsigned int mo
 	// Si no hay mas pokeparadas y si gyms -> -1
 	// Si hay pokeparadas y no gyms -> gane
 
-	// Comienzo por la poke parada de idx_comienzo
-	idx_actual = cant_gym + idx_comienzo;
-	paradas[idx_comienzo].visitado = true;
-	mochila = 3;
-	sol.paradas.push(idx_comienzo);
-	paradas_no_recorridas--;
+	// Comienzo dependiendo de que es idx_comienzo, si es < que gimnasios.size() entonces es el caso particular
+	// sino es el caso general y comienzo desde una poke parada.
+	idx_actual = idx_comienzo;
+	sol.camino.push(idx_actual);
+	
+	if(idx_comienzo < gimnasios.size()){
+		gimnasios[idx_comienzo].visitado = true;
+		mochila = 0;	
+		gym_no_recorridos--;
+	} else {
+		// idx_comienzo aqui es indice de paradas + gimnasios.size, entonces para conocer el indice real lo tengo que restar
+		paradas[idx_comienzo - gimnasios.size()].visitado = true;
+		mochila = 3;
+		paradas_no_recorridas--;
+	}
+
 
 	while(gym_no_recorridos > 0){
 		// Puedo ganarle al gimnasio con menos pociones?
@@ -167,8 +190,8 @@ void leGanoAlGymMasCercano(struct solucion& sol, vector<struct gym>& gimnasios, 
 	}
 
 	mochila -= gimnasios[idx_gym].p;
-	sol.d += matriz_dist[idx_actual][idx_gym];
-	sol.gym.push(idx_gym);
+	sol.d += sqrt(matriz_dist[idx_actual][idx_gym]);
+	sol.camino.push(idx_gym);
 	gimnasios[idx_gym].visitado = true;
 	idx_actual = idx_gym;
 
@@ -191,8 +214,8 @@ void voyParadaMasCercana(int mochila_size, struct solucion& sol, vector<struct p
 	}
 
 	mochila = (mochila+3) > mochila_size ? mochila_size : (mochila+3);
-	sol.d += matriz_dist[idx_actual][idx_parada];
-	sol.paradas.push(idx_parada);
+	sol.d += sqrt(matriz_dist[idx_actual][idx_parada]);
+	sol.camino.push(idx_parada + cant_gym);
 	idx_actual = idx_parada + cant_gym;
 	paradas[idx_parada].visitado = true;
 
@@ -201,53 +224,28 @@ void voyParadaMasCercana(int mochila_size, struct solucion& sol, vector<struct p
 
 /************************************************************************/
 
-int dameIdxMejorSolucion(vector<solucion>& soluciones){
-	int idx, c;
-
-	// Busco el primer indice en el que d != -1
-	for(int i = 0; i < soluciones.size(); i++){
-		if(soluciones[i].d != -1){
-			idx = i;
-			c = i;
-			break;
-		}
-	}
-
-	// Comienzo a buscar desde el primer indice que no es -1
-	for(int i = c; i < soluciones.size(); i++){
-		if(soluciones[i].d != -1 && soluciones[i].d < soluciones[idx].d)
-			idx = i;
-	}
-	return idx;
-}
-
-/************************************************************************/
-
 void imprimirSolucion(struct solucion& sol){
 	// Imprimo soluciones
-	if(sol.d == -1){
-		cout << "-1";
+	cout << sol.d;
+	if(sol.d == -1)
 		return;
-	}
-	cout << sol.d << " " << sol.gym.size() + sol.paradas.size();
-	
-	int gym_size = sol.gym.size();
 
-	imprimirCola(sol.gym, 0);
-	imprimirCola(sol.paradas, gym_size);
+	cout << " " << sol.camino.size();
+	
+	imprimirCola(sol.camino);
 	return;
 }
 
 /************************************************************************/
 
-void imprimirCola(priority_queue<int, vector<int>, greater<int> >& cola, int cant){
+void imprimirCola(queue<int>& cola){
 	// b == true => paradas  || b == false => gimnasios
 	int nodo;
 	int size = cola.size();
 	for(int i = 0; i < size; i++){
-		nodo = cola.top();
+		nodo = cola.front();
 		cola.pop();
-		cout << " " << nodo + cant + 1;
+		cout << " " << nodo + 1;
 	}
 	return;
 }
@@ -289,25 +287,9 @@ void imprimirVector(vector<struct parada>& paradas){
 
 /************************************************************************/
 
-float distancia(const gym &g1, const gym &g2){
-	return distancia(g1.x, g2.x, g1.y, g2.y);
-}
+float distancia2(const nodo &n1, const nodo &n2){
+	float x = n2.x - n1.x;
+	float y = n2.y - n1.y;
 
-float distancia(const parada &p1, const parada &p2){
-	return distancia(p1.x, p2.x, p1.y, p2.y);
-}
-
-float distancia(const parada &p, const gym &g){
-	return distancia(p.x, g.x, p.y, g.y);
-}
-
-float distancia(const gym &g, const parada &p){
-	return distancia(g.x, p.x, g.y, p.y);
-}
-
-float distancia(float x1, float x2, float y1, float y2){
-	float x = x2 - x1;
-	float y = y2 - y1;
-
-	return sqrt(x*x + y*y);
+	return (x*x + y*y);
 }
