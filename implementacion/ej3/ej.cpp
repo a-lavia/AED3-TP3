@@ -1,6 +1,6 @@
 #include "ej.h"
-#include "grafo.h"
-#include "camino.h"
+#include "Grafo.h"
+#include "CaminoBL.h"
 
 int main(int argc, char* argv[]){
     int cantGimnasios, cantPokeparadas, tamMochila;    
@@ -41,12 +41,12 @@ int main(int argc, char* argv[]){
         }
     }
 
-    Camino c(g, tamMochila);
+    CaminoBL c(g, tamMochila);
 
     c.solucionInicial();
 
     if(c.nodoInicial() != NULL){
-        Camino cCopia = c;
+        CaminoBL cCopia = c;
 
         cout << "vecindad1:" << endl;
         c.busquedaLocal(vecindad1);

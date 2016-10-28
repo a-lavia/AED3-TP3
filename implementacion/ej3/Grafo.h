@@ -47,14 +47,18 @@ float Grafo::distancia(const Nodo& n1, const Nodo& n2){
     return _distancias[n1.id - 1][n2.id - 1];
 }
 
-void Grafo::asignarDistancia(const Nodo& n1, const Nodo& n2, float distancia){
+void Grafo::asignarDistancia(const Nodo& n1, const Nodo& n2, float distancia){    
     _distancias[n1.id - 1][n2.id - 1] = distancia;
 }
 
 void Grafo::asignarNodo(const Nodo& n){
-    assert(n.id == nodos().size() + 1);
+    assert(n.id <= nodos().size() + 1);
 
-    nodos().push_back(n);
+    if(n.id == nodos().size() + 1){
+        nodos().push_back(n);
+    } else{
+        nodos()[n.id - 1] = n;
+    }
 }
 
 #endif
