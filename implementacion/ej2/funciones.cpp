@@ -236,6 +236,8 @@ void imprimirSolucion(struct solucion& sol){
 
 	imprimirCola(sol.gym, 0);
 	imprimirCola(sol.paradas, gym_size);
+    cout << endl;
+    
 	return;
 }
 
