@@ -11,8 +11,8 @@ class CaminoBL{
 
         Grafo& grafo();
         Nodo* nodoInicial();
-        float distancia();
-        int tamMochila();
+        float distancia() const;
+        int tamMochila() const;
 
         void asignarNodoInicial(Nodo* nodoInicial);
         void asignarDistancia(int distancia);
@@ -23,8 +23,13 @@ class CaminoBL{
         
         bool encuentroSolucionVecinaMejor1(vector<Nodo*>& nodosVisitados);
         bool intercambiarMejora(Nodo* n1, Nodo* n2);
+
         bool encuentroSolucionVecinaIgual1(vector<Nodo*>& nodosVisitados);
         bool intercambiarMantieneIgual(Nodo* n1, Nodo* n2);
+
+        int distanciaIntercambiar(const Nodo* n1, const Nodo* n2);
+        bool puedoIntercambiar(Nodo* n1, Nodo* n2);
+        void intercambiar(Nodo* n1, Nodo* n2, int distanciaNueva);
 
         bool encuentroSolucionVecinaMejor2();
 
@@ -60,11 +65,11 @@ Nodo* CaminoBL::nodoInicial(){
     return _nodoInicial;
 }
 
-float CaminoBL::distancia(){
+float CaminoBL::distancia() const{
     return _distancia;
 }
 
-int CaminoBL::tamMochila(){
+int CaminoBL::tamMochila() const{
     return _tamMochila;
 }
 
@@ -85,6 +90,8 @@ void CaminoBL::solucionInicial(){
 }
 
 void CaminoBL::busquedaLocal(Vecindad criterio){
+    assert(nodoInicial() != NULL);
+
     if(criterio == vecindad1){
         vector<Nodo*> nodosVisitados;
         Nodo* nodoActual = nodoInicial();
@@ -117,7 +124,7 @@ void CaminoBL::busquedaLocal(Vecindad criterio){
 }
 
 bool CaminoBL::encuentroSolucionVecinaMejor1(vector<Nodo*>& nodosVisitados){
-    // SWAP: intercambia el orden de los nodos del recorrido.
+    // Intercambia el orden de los nodos del recorrido.
 
     bool busco = true;
     int cantVisitados = nodosVisitados.size();
@@ -135,34 +142,10 @@ bool CaminoBL::encuentroSolucionVecinaMejor1(vector<Nodo*>& nodosVisitados){
 
 bool CaminoBL::intercambiarMejora(Nodo* n1, Nodo* n2){
     bool mejora = false;
-
-    float distanciaNueva = distancia();
-    if(n1->anterior != NULL){
-        distanciaNueva = distanciaNueva - grafo().distancia(*(n1->anterior), *n1) + grafo().distancia(*(n1->anterior), *n2);
-    }
-    if(n2->siguiente != NULL){
-        distanciaNueva = distanciaNueva - grafo().distancia(*n2, *(n2->siguiente)) + grafo().distancia(*n1, *(n2->siguiente));
-    }
+    float distanciaNueva = distanciaIntercambiar(n1, n2);
     
-    if(distanciaNueva < distancia()){
-        n2->anterior = n1->anterior;
-        n2->siguiente = n1;
-        
-        n1->anterior = n2;
-        n1->siguiente = n2->siguiente;
-
-        if(n2->siguiente != NULL){
-            n2->siguiente->anterior = n1;
-        }
-
-        if(n1->anterior != NULL){
-            n1->anterior->siguiente = n2;
-        } else{
-            asignarNodoInicial(n2);
-        }
-
-        asignarDistancia(distanciaNueva);
-
+    if(distanciaNueva < distancia() && puedoIntercambiar(n1, n2)){  
+        intercambiar(n1, n2, distanciaNueva);
         mejora = true;
     }
     
@@ -185,13 +168,98 @@ bool CaminoBL::encuentroSolucionVecinaIgual1(vector<Nodo*>& nodosVisitados){
 }
 
 bool CaminoBL::intercambiarMantieneIgual(Nodo* n1, Nodo* n2){
+    bool mantiene = false;
+    float distanciaNueva = distanciaIntercambiar(n1, n2);
+    
+    if(distanciaNueva == distancia() && puedoIntercambiar(n1, n2)){  
+        intercambiar(n1, n2, distanciaNueva);
+        mantiene = true;
+    }
+    
+    return mantiene;
+}
 
+int CaminoBL::distanciaIntercambiar(const Nodo* n1, const Nodo* n2){
+    float distanciaNueva = distancia();
 
-    return false;
+    if(n1->anterior != NULL){
+        distanciaNueva -= grafo().distancia(*(n1->anterior), *n1);
+        distanciaNueva += grafo().distancia(*(n1->anterior), *n2);
+    }
+
+    if(n1->siguiente != NULL){
+        distanciaNueva -= grafo().distancia(*(n1->siguiente), *n1);
+        distanciaNueva += grafo().distancia(*(n1->siguiente), *n2);
+    }
+
+    if(n2->anterior != NULL){
+        distanciaNueva -= grafo().distancia(*(n2->anterior), *n2);
+        distanciaNueva += grafo().distancia(*(n2->anterior), *n1);
+    }
+
+    if(n2->siguiente != NULL){
+        distanciaNueva -= grafo().distancia(*(n2->siguiente), *n2);
+        distanciaNueva += grafo().distancia(*(n2->siguiente), *n1);
+    }
+
+    return distanciaNueva;
+}
+
+bool CaminoBL::puedoIntercambiar(Nodo* n1, Nodo* n2){
+    int pocionesDisponibles = 0;
+
+    Nodo* nodoActual = nodoInicial();
+    while(pocionesDisponibles >= 0 && nodoActual != NULL){
+        if(nodoActual->gimnasio){
+            pocionesDisponibles -= nodoActual->pociones;
+        } else{
+            pocionesDisponibles += POCIONES_POKEPARADA;
+        }
+
+        if(nodoActual == n1->anterior && nodoActual != NULL){
+            nodoActual = n2;
+        }
+
+        if(nodoActual == n2->anterior && nodoActual != NULL){
+            nodoActual = n1;
+        }
+    }
+
+    return pocionesDisponibles >= 0;
+}
+
+void CaminoBL::intercambiar(Nodo* n1, Nodo* n2, int distanciaNueva){
+    n2->anterior = n1->anterior;
+    n2->siguiente = n1->siguiente;
+    
+    n1->anterior = n2->anterior;
+    n1->siguiente = n2->siguiente;
+
+    if(n1->anterior != NULL){
+        n1->anterior->siguiente = n2;
+    } else{
+        asignarNodoInicial(n2);
+    }
+
+    if(n2->anterior != NULL){
+        n2->anterior->siguiente = n1;
+    } else{
+        asignarNodoInicial(n1);
+    }
+
+    if(n1->siguiente != NULL){
+        n1->siguiente->anterior = n2;
+    }
+
+    if(n2->siguiente != NULL){
+        n2->siguiente->anterior = n1;
+    }
+
+    asignarDistancia(distanciaNueva);
 }
 
 bool CaminoBL::encuentroSolucionVecinaMejor2(){
-    // Opcion: Cambiar los caminos hacia las pokeparadas, considerando tambien las que estan afuera del recorrido original, o sea, el orden de las aristas.
+    // Intercambiar pokeparadas incluyendo las que estan afuera del recorrido original.
 
     return false;
 }

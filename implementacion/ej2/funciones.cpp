@@ -231,8 +231,8 @@ void imprimirSolucion(struct solucion& sol){
 		return;
 
 	cout << " " << sol.camino.size();
-	
 	imprimirCola(sol.camino);
+
 	return;
 }
 

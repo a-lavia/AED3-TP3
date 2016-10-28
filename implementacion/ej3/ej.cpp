@@ -27,7 +27,7 @@ int main(int argc, char* argv[]){
         nodoNuevo.id = nodoActual + 1;
         cin >> nodoNuevo.x;
         cin >> nodoNuevo.y;
-        nodoNuevo.pociones = 3;
+        nodoNuevo.pociones = POCIONES_POKEPARADA;
         nodoNuevo.gimnasio = false;
         g.asignarNodo(nodoNuevo);
         nodoActual++;
