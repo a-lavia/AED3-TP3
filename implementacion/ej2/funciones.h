@@ -32,6 +32,6 @@ bool leGanoAAlgunGym(vector<struct gym>& gimnasios);
 void leGanoAlGymConMenosPociones(vector<struct gym>& gimnasios, vector<vector<float>>& matriz_dist);
 void voyParadaMasCercana(int mochila_size, vector<struct parada>& paradas, vector<vector<float>>& matriz_dist);
 void imprimirMatriz(vector<vector<float>>& matriz_dist);
-void imprimirCola(priority_queue<int, vector<int>, greater<int> >& cola);
+void imprimirCola(priority_queue<int, vector<int>, greater<int> >& cola, bool b);
 void imprimirVector(vector<struct gym>& gimnasios);
 void imprimirVector(vector<struct parada>& paradas);

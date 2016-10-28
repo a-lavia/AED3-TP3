@@ -89,8 +89,8 @@ void solucionGolosa(unsigned int mochila_size, vector<struct gym>& gimnasios, ve
 	}
 
 	cout << D << " " << cola_gym.size()+cola_paradas.size();
-	imprimirCola(cola_gym);
-	imprimirCola(cola_paradas);
+	imprimirCola(cola_gym, false);
+	imprimirCola(cola_paradas, true);
 
 	return;
 }
@@ -154,13 +154,19 @@ void voyParadaMasCercana(int mochila_size, vector<struct parada>& paradas, vecto
 
 /************************************************************************/
 
-void imprimirCola(priority_queue<int, vector<int>, greater<int> >& cola){
+void imprimirCola(priority_queue<int, vector<int>, greater<int> >& cola, bool b){
+	// b == true => paradas  || b == false => gimnasios
 	int nodo;
 	int size = cola.size();
 	for(int i = 0; i < size; i++){
 		nodo = cola.top();
 		cola.pop();
-		cout << " " << nodo;
+		
+		if(b){
+			cout << " " << nodo + cant_gym + 1;
+		} else {
+			cout << " " << nodo + 1;
+		}
 	}
 	return;
 }
