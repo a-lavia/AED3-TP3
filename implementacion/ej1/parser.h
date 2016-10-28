@@ -3,6 +3,6 @@
 
 #include "funciones.h"
 
-void leerEntrada(int& cantGimnasios, int& cantPokeparadas, vector<vector<float>>& matrizDistancias, vector<Nodo>& nodos);
+void leerEntrada(int& cantGimnasios, int& cantPokeparadas, /*vector<vector<float>>& matrizDistancias,*/ list<Nodo>& nodos);
 
 #endif
