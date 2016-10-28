@@ -1,5 +1,9 @@
 #include "funciones.h"
 
+
+vector<solucion> soluciones;
+
+
 int main(int argc, char* argv[]){
 	int cant_gym;
 	int cant_paradas;
@@ -63,7 +67,7 @@ int main(int argc, char* argv[]){
 	// Imprimo la matriz_dist
 	// imprimirMatriz(matriz_dist);
 
-	solucionGolosa(mochila, gimnasios, paradas, matriz_dist);
+	solHeuristicaGolosa(mochila, gimnasios, paradas, matriz_dist);
 
 	return 0;
 }
