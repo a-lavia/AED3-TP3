@@ -48,10 +48,10 @@ int main(int argc, char* argv[]){
         Grafo grafoCopia = grafo;
 
         cout << "vecindad1:" << endl;
-        grafo.busquedaLocal(distanciaTotal, cantGimnasios, nodoInicial, vecindad1);
+        grafo.busquedaLocal(distanciaTotal, nodoInicial, vecindad1);
 
         cout << endl << "vecindad2:" << endl;
-        grafoCopia.busquedaLocal(distanciaTotal, cantGimnasios, nodoInicial, vecindad2);
+        grafoCopia.busquedaLocal(distanciaTotal, nodoInicial, vecindad2);
     } else{
         cout << -1 << endl;
     }

@@ -17,12 +17,12 @@ class Grafo{
 
         int solucionInicial(int tamMochila, float* distanciaTotal);
 
-        void busquedaLocal(float distanciaTotal, int cantGimnasios, int nodoInicial, Vecindad criterio);
-        bool encuentroSolucionVecinaMejor1(float distanciaTotal, vector<Nodo>& nodosSV, float* distanciaTotalSV, int* nodoInicial);
-        bool intercambiarMejora(float distanciaTotal, vector<Nodo>& nodosSV, float* distanciaTotalSV, int* nodoInicial, const Nodo& n1, const Nodo& n2);
-        bool encuentroSolucionVecinaMejor2(float distanciaTotal, vector<Nodo>& nodosSV, float* distanciaTotalSV, int* nodoInicial);
+        void busquedaLocal(float distanciaTotal, int nodoInicial, Vecindad criterio);
+        bool encuentroSolucionVecinaMejor1(vector<int>& nodosVisitados, float distanciaTotal, int* nodoInicial);
+        bool intercambiarMejora(float distanciaTotal, int n1, int n2, int* nodoInicial);
+        bool encuentroSolucionVecinaMejor2(float distanciaTotal, int* nodoInicial);
 
-        void imprimirSolucion(int nodoInicial, float distanciaTotal, int cantGimnasios);
+        void imprimirSolucion(float distanciaTotal, int nodoInicial);
 
     private: 
         vector<Nodo> _nodos;
@@ -68,78 +68,87 @@ int Grafo::solucionInicial(int tamMochila, float* distanciaTotal){
     return INV;
 }
 
-void Grafo::busquedaLocal(float distanciaTotal, int cantGimnasios, int nodoInicial, Vecindad criterio){
-    vector<Nodo> nodosSV;
-    float distanciaTotalSV;
-
+void Grafo::busquedaLocal(float distanciaTotal, int nodoInicial, Vecindad criterio){
     if(criterio == vecindad1){
-        while(encuentroSolucionVecinaMejor1(distanciaTotal, nodosSV, &distanciaTotalSV, &nodoInicial)){
-            nodos() = nodosSV;
-            distanciaTotal = distanciaTotalSV;
+        vector<int> nodosVisitados;
+        Nodo nodoActual = nodo(nodoInicial);
+        nodosVisitados.push_back(nodoActual.id);
+        while(nodoActual.siguiente != INV){
+            nodoActual = nodo(nodoActual.siguiente);
+            nodosVisitados.push_back(nodoActual.id);
         }
+        while(encuentroSolucionVecinaMejor1(nodosVisitados, distanciaTotal, &nodoInicial)){
+        }
+        // Chequear cuando no hay mejores pero hay iguales, hay que tener cuidado con los ciclos.
     } else{
-        while(encuentroSolucionVecinaMejor2(distanciaTotal, nodosSV, &distanciaTotalSV, &nodoInicial)){
-            nodos() = nodosSV;
-            distanciaTotal = distanciaTotalSV;
+        while(encuentroSolucionVecinaMejor2(distanciaTotal, &nodoInicial)){
         } 
     }
 
-    imprimirSolucion(nodoInicial, distanciaTotal, cantGimnasios);
+    imprimirSolucion(distanciaTotal, nodoInicial);
 }
 
-bool Grafo::encuentroSolucionVecinaMejor1(float distanciaTotal, vector<Nodo>& nodosSV, float* distanciaTotalSV, int* nodoInicial){
+bool Grafo::encuentroSolucionVecinaMejor1(vector<int>& nodosVisitados, float distanciaTotal, int* nodoInicial){
     // SWAP: intercambia el orden de los nodos del recorrido.
-    
-    bool encontre = false;
 
-    vector<Nodo> nodosVisitados;
-    Nodo nodoActual = nodo(*nodoInicial);
-    nodosVisitados.push_back(nodoActual);
-    while(nodoActual.siguiente != INV){
-        nodoActual = nodo(nodoActual.siguiente);
-        nodosVisitados.push_back(nodoActual);
-    }
+    bool busco = true;
+    int cantVisitados = nodosVisitados.size();
 
-    for(int i = 0; i < nodosVisitados.size(); i++){
-        for(int j = 0; j < nodosVisitados.size(); j++){
-            if(i != j && intercambiarMejora(distanciaTotal, nodosSV, distanciaTotalSV, nodoInicial, nodosVisitados[i], nodosVisitados[j])){
-                encontre = true;
+    for(int i = 0; i < cantVisitados && busco; i++){
+        for(int j = 0; j < cantVisitados && busco; j++){
+            if(i != j && intercambiarMejora(distanciaTotal, nodosVisitados[i], nodosVisitados[j], nodoInicial)){
+                busco = false;
             }
         }
     }
 
-    return encontre;
+    return !busco;
 }
 
-bool Grafo::intercambiarMejora(float distanciaTotal, vector<Nodo>& nodosSV, float* distanciaTotalSV, int* nodoInicial, const Nodo& n1, const Nodo& n2){
+bool Grafo::intercambiarMejora(float distanciaTotal, int n1, int n2, int* nodoInicial){
     bool mejora = false;
 
-    float distanciaNueva = distanciaTotal - distancia(nodo(n1.anterior), n1) - distancia(n2, nodo(n2.siguiente)) + distancia(nodo(n1.anterior), n2) + distancia(n1, nodo(n2.siguiente));
+    Nodo n1Nodo = nodo(n1);
+    Nodo n2Nodo = nodo(n2);
+
+    float distanciaNueva = distanciaTotal;
+    if(n1Nodo.anterior != INV){
+        distanciaNueva = distanciaNueva - distancia(nodo(n1Nodo.anterior), n1Nodo) + distancia(nodo(n1Nodo.anterior), n2Nodo);
+    }
+    if(n2Nodo.siguiente != INV){
+        distanciaNueva = distanciaNueva - distancia(n2Nodo, nodo(n2Nodo.siguiente)) + distancia(n1Nodo, nodo(n2Nodo.siguiente));
+    }
     
     if(distanciaNueva < distanciaTotal){
-        nodo(n1.anterior).siguiente = n2.id;
+        if(n1Nodo.anterior != INV){
+            nodo(n1Nodo.anterior).siguiente = n2;
+        } else{
+            *nodoInicial = n2;
+        }
 
-        nodo(n2.id).anterior = n1.anterior;
-        nodo(n2.id).siguiente = n1.id;
+        nodo(n2).anterior = n1Nodo.anterior;
+        nodo(n2).siguiente = n1;
         
-        nodo(n1.id).anterior = n2.id;
-        nodo(n1.id).siguiente = n2.siguiente;
+        nodo(n1).anterior = n2;
+        nodo(n1).siguiente = n2Nodo.siguiente;
 
-        nodo(n2.siguiente).anterior = n1.id;
-    
+        if(n2Nodo.siguiente != INV){
+            nodo(n2Nodo.siguiente).anterior = n1;
+        }
+
         mejora = true;
     }
     
     return mejora;
 }
 
-bool Grafo::encuentroSolucionVecinaMejor2(float distanciaTotal, vector<Nodo>& nodosSV, float* distanciaTotalSV, int* nodoInicial){
+bool Grafo::encuentroSolucionVecinaMejor2(float distanciaTotal, int* nodoInicial){
     // Opcion: Cambiar los caminos hacia las pokeparadas, considerando tambien las que estan afuera del recorrido original, o sea, el orden de las aristas.
 
     return false;
 }
 
-void Grafo::imprimirSolucion(int nodoInicial, float distanciaTotal, int cantGimnasios){
+void Grafo::imprimirSolucion(float distanciaTotal, int nodoInicial){
     stack<int> camino;
     camino.push(nodoInicial);
     
