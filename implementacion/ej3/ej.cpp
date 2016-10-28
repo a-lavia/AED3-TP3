@@ -1,5 +1,6 @@
 #include "ej.h"
-#include "grafo.h"
+#include "Grafo.h"
+#include "CaminoBL.h"
 
 int main(int argc, char* argv[]){
     int cantGimnasios, cantPokeparadas, tamMochila;    
@@ -9,7 +10,7 @@ int main(int argc, char* argv[]){
 
     int cantNodos = cantGimnasios + cantPokeparadas;
 
-    Grafo grafo(cantNodos);
+    Grafo g(cantNodos);
 
     int nodoActual;
     for(nodoActual = 0; nodoActual < cantGimnasios; nodoActual++){
@@ -19,7 +20,7 @@ int main(int argc, char* argv[]){
         cin >> nodoNuevo.y;
         cin >> nodoNuevo.pociones;  
         nodoNuevo.gimnasio = true;
-        grafo.asignarNodo(nodoNuevo);
+        g.asignarNodo(nodoNuevo);
     }
     while(nodoActual < cantNodos){
         Nodo nodoNuevo;
@@ -28,30 +29,30 @@ int main(int argc, char* argv[]){
         cin >> nodoNuevo.y;
         nodoNuevo.pociones = 3;
         nodoNuevo.gimnasio = false;
-        grafo.asignarNodo(nodoNuevo);
+        g.asignarNodo(nodoNuevo);
         nodoActual++;
     }
 
     for(int i = 0; i < cantNodos; ++i){
         for(int j = 0; j < cantNodos; ++j){
-            Nodo n1 = grafo.nodos()[i];
-            Nodo n2 = grafo.nodos()[j];
-            grafo.asignarDistancia(n1, n2, distanciaNodos(n1, n2));
+            Nodo n1 = g.nodos()[i];
+            Nodo n2 = g.nodos()[j];
+            g.asignarDistancia(n1, n2, distanciaNodos(n1, n2));
         }
     }
 
-    float distanciaTotal = 0;
+    CaminoBL c(g, tamMochila);
 
-    int nodoInicial = grafo.solucionInicial(tamMochila, &distanciaTotal);
+    c.solucionInicial();
 
-    if(nodoInicial != INV){
-        Grafo grafoCopia = grafo;
+    if(c.nodoInicial() != NULL){
+        CaminoBL cCopia = c;
 
         cout << "vecindad1:" << endl;
-        grafo.busquedaLocal(distanciaTotal, nodoInicial, vecindad1);
+        c.busquedaLocal(vecindad1);
 
         cout << endl << "vecindad2:" << endl;
-        grafoCopia.busquedaLocal(distanciaTotal, nodoInicial, vecindad2);
+        cCopia.busquedaLocal(vecindad2);
     } else{
         cout << -1 << endl;
     }

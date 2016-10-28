@@ -73,6 +73,7 @@ bool solucionCasosParticulares(unsigned int mochila_size, vector<struct gym> gim
 		for(int i = 1; i <= gimnasios.size(); i++){
 			cout << " " << i;
 		}
+
 		return true;
 	}
 
@@ -202,9 +203,20 @@ void voyParadaMasCercana(int mochila_size, struct solucion& sol, vector<struct p
 /************************************************************************/
 
 int dameIdxMejorSolucion(vector<solucion>& soluciones){
-	int idx = 0;
-	for(int i = 1; i < soluciones.size(); i++){
-		if(soluciones[i].d < soluciones[idx].d)
+	int idx, c;
+
+	// Busco el primer indice en el que d != -1
+	for(int i = 0; i < soluciones.size(); i++){
+		if(soluciones[i].d != -1){
+			idx = i;
+			c = i;
+			break;
+		}
+	}
+
+	// Comienzo a buscar desde el primer indice que no es -1
+	for(int i = c; i < soluciones.size(); i++){
+		if(soluciones[i].d != -1 && soluciones[i].d < soluciones[idx].d)
 			idx = i;
 	}
 	return idx;
