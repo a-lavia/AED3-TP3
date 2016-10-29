@@ -21,17 +21,15 @@ class CaminoBL{
 
         void busquedaLocal(Vecindad criterio);
         
-        bool encuentroSolucionVecinaMejor1(vector<Nodo*>& nodosVisitados);
+        bool encuentroSolucionVecinaMejor(vector<Nodo*>& nodosVisitados);
         bool intercambiarMejora(Nodo* n1, Nodo* n2);
 
-        bool encuentroSolucionVecinaIgual1(vector<Nodo*>& nodosVisitados);
+        bool encuentroSolucionVecinaIgual(vector<Nodo*>& nodosVisitados);
         bool intercambiarMantieneIgual(Nodo* n1, Nodo* n2);
 
         int distanciaIntercambiar(const Nodo* n1, const Nodo* n2);
         bool puedoIntercambiar(Nodo* n1, Nodo* n2);
         void intercambiar(Nodo* n1, Nodo* n2, int distanciaNueva);
-
-        bool encuentroSolucionVecinaMejor2();
 
         void imprimirSolucion();
 
@@ -93,6 +91,8 @@ void CaminoBL::busquedaLocal(Vecindad criterio){
     assert(nodoInicial() != NULL);
 
     if(criterio == vecindad1){
+        // Intercambia el orden de los nodos del recorrido.
+
         vector<Nodo*> nodosVisitados;
         Nodo* nodoActual = nodoInicial();
         nodosVisitados.push_back(nodoActual);
@@ -104,28 +104,47 @@ void CaminoBL::busquedaLocal(Vecindad criterio){
         bool busco = true;
         bool vengoDeUnaSolucionMejor = true;
         while(busco){
-            while(encuentroSolucionVecinaMejor1(nodosVisitados)){
+            while(encuentroSolucionVecinaMejor(nodosVisitados)){
                 if(!vengoDeUnaSolucionMejor){
                     vengoDeUnaSolucionMejor = true;
                 }
             }
-            if(encuentroSolucionVecinaIgual1(nodosVisitados) && vengoDeUnaSolucionMejor){
+            if(encuentroSolucionVecinaIgual(nodosVisitados) && vengoDeUnaSolucionMejor){
                 vengoDeUnaSolucionMejor = false;
             } else{
                 busco = false;
             }
         }
     } else{
-        while(encuentroSolucionVecinaMejor2()){
-        } 
+        // Intercambia pokeparadas incluyendo las que estan afuera del recorrido original.
+
+        vector<Nodo*> pokeparadas;
+        for(int i = 0; i < grafo().nodos().size(); i++){
+            if(!grafo().nodos()[i].gimnasio){
+                pokeparadas.push_back(&grafo().nodos()[i]);
+            }
+        }
+
+        bool busco = true;
+        bool vengoDeUnaSolucionMejor = true;
+        while(busco){
+            while(encuentroSolucionVecinaMejor(pokeparadas)){
+                if(!vengoDeUnaSolucionMejor){
+                    vengoDeUnaSolucionMejor = true;
+                }
+            }
+            if(encuentroSolucionVecinaIgual(pokeparadas) && vengoDeUnaSolucionMejor){
+                vengoDeUnaSolucionMejor = false;
+            } else{
+                busco = false;
+            }
+        }
     }
 
     imprimirSolucion();
 }
 
-bool CaminoBL::encuentroSolucionVecinaMejor1(vector<Nodo*>& nodosVisitados){
-    // Intercambia el orden de los nodos del recorrido.
-
+bool CaminoBL::encuentroSolucionVecinaMejor(vector<Nodo*>& nodosVisitados){
     bool busco = true;
     int cantVisitados = nodosVisitados.size();
 
@@ -152,7 +171,7 @@ bool CaminoBL::intercambiarMejora(Nodo* n1, Nodo* n2){
     return mejora;
 }
 
-bool CaminoBL::encuentroSolucionVecinaIgual1(vector<Nodo*>& nodosVisitados){
+bool CaminoBL::encuentroSolucionVecinaIgual(vector<Nodo*>& nodosVisitados){
     bool busco = true;
     int cantVisitados = nodosVisitados.size();
 
@@ -235,6 +254,14 @@ void CaminoBL::intercambiar(Nodo* n1, Nodo* n2, int distanciaNueva){
     n1->anterior = n2->anterior;
     n1->siguiente = n2->siguiente;
 
+    if(n1->siguiente != NULL){
+        n1->siguiente->anterior = n2;
+    }
+
+    if(n2->siguiente != NULL){
+        n2->siguiente->anterior = n1;
+    }
+
     if(n1->anterior != NULL){
         n1->anterior->siguiente = n2;
     } else{
@@ -247,21 +274,11 @@ void CaminoBL::intercambiar(Nodo* n1, Nodo* n2, int distanciaNueva){
         asignarNodoInicial(n1);
     }
 
-    if(n1->siguiente != NULL){
-        n1->siguiente->anterior = n2;
-    }
-
-    if(n2->siguiente != NULL){
-        n2->siguiente->anterior = n1;
-    }
-
     asignarDistancia(distanciaNueva);
-}
 
-bool CaminoBL::encuentroSolucionVecinaMejor2(){
-    // Intercambiar pokeparadas incluyendo las que estan afuera del recorrido original.
-
-    return false;
+    bool n1Visitado = n1->visitado;
+    n1->visitado = n2->visitado;
+    n2->visitado = n1Visitado;
 }
 
 void CaminoBL::imprimirSolucion(){
