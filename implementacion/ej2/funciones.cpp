@@ -99,17 +99,15 @@ bool solucionCasosParticulares(unsigned int mochila_size, vector<struct gym> gim
 void solucionCasoGeneral(int idx_comienzo, struct solucion& sol, unsigned int mochila_size, vector<struct gym> gimnasios, 
 						 vector<struct parada> paradas, vector<vector<float>>& matriz_dist){
 
-	// Si puedo ganarle a algún gym voy al de menor distancia.
-
+	// Si puedo ganarle a algún gym, voy al de menor distancia y le gano
+	// Si no hay mas pokeparadas y si gyms -> -1
+	// Si hay pokeparadas y no gyms -> gane
+	
 	// Inicializo variables globales
 	gym_no_recorridos = gimnasios.size();
 	paradas_no_recorridas = paradas.size();
 	cant_gym = gimnasios.size();
 	cant_paradas = paradas.size();
-
-	// Si puedo ganarle a un gym, voy y le gano, sino voy a la pokeparada mas cercana a recargar
-	// Si no hay mas pokeparadas y si gyms -> -1
-	// Si hay pokeparadas y no gyms -> gane
 
 	// Comienzo dependiendo de que es idx_comienzo, si es < que gimnasios.size() entonces es el caso particular
 	// sino es el caso general y comienzo desde una poke parada.
@@ -127,11 +125,10 @@ void solucionCasoGeneral(int idx_comienzo, struct solucion& sol, unsigned int mo
 		paradas_no_recorridas--;
 	}
 
-
 	while(gym_no_recorridos > 0){
-		// Puedo ganarle al gimnasio con menos pociones?
-			// Si y le gano-> pierdo las pociones requeridas, restar gym_no_recorridos, agregar a la cola, sumar distancia.
+
 		if(leGanoAAlgunGym(gimnasios)){
+
 			leGanoAlGymMasCercano(sol, gimnasios, matriz_dist);
 			gym_no_recorridos--;
 
@@ -178,6 +175,7 @@ void leGanoAlGymMasCercano(struct solucion& sol, vector<struct gym>& gimnasios, 
 				idx_gym = i;
 				dist = matriz_dist[idx_actual][i];
 			}
+
 		} else {
 			if(!gimnasios[i].visitado && 
 				mochila >= gimnasios[i].p && 
@@ -207,17 +205,21 @@ void voyParadaMasCercana(int mochila_size, struct solucion& sol, vector<struct p
 		if(idx_parada == -1){
 			if(!paradas[i].visitado)
 				idx_parada = i;
+		
 		} else {
+			if(idx_actual == i+cant_paradas)
+				break;
+
 			if(!paradas[i].visitado && matriz_dist[idx_actual][i+cant_gym] < matriz_dist[idx_actual][idx_parada+cant_gym])
 				idx_parada = i;
 		}
 	}
 
 	mochila = (mochila+3) > mochila_size ? mochila_size : (mochila+3);
-	sol.d += sqrt(matriz_dist[idx_actual][idx_parada]);
-	sol.camino.push(idx_parada + cant_gym);
-	idx_actual = idx_parada + cant_gym;
+	sol.d += sqrt(matriz_dist[idx_actual][idx_parada+cant_gym]);
 	paradas[idx_parada].visitado = true;
+	idx_actual = idx_parada + cant_gym;
+	sol.camino.push(idx_actual);
 
 	return;
 }
@@ -232,7 +234,6 @@ void imprimirSolucion(struct solucion& sol){
 
 	cout << " " << sol.camino.size();
 	imprimirCola(sol.camino);
-
 	cout << endl;
 
 	return;

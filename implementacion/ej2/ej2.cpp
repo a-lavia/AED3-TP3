@@ -55,11 +55,11 @@ int main(int argc, char* argv[]){
 			 } else if(i < cant_gym && j < cant_gym){
 				matriz_dist[i][j] = distancia2(gimnasios[i], gimnasios[j]);
 			} else if(i >= cant_gym && j < cant_gym){
-				matriz_dist[i][j] = distancia2(paradas[cant_gym-i+1], gimnasios[j]);
+				matriz_dist[i][j] = distancia2(paradas[i-cant_gym], gimnasios[j]);
 			} else if(i < cant_gym && j >= cant_gym){
-				matriz_dist[i][j] = distancia2(gimnasios[i], paradas[cant_gym-j+1]);
+				matriz_dist[i][j] = distancia2(gimnasios[i], paradas[j-cant_gym]);
 			} else if(i >= cant_gym && j >= cant_gym){
-				matriz_dist[i][j] = distancia2(paradas[cant_gym-i+1], paradas[cant_gym-j+1]);
+				matriz_dist[i][j] = distancia2(paradas[i-cant_gym], paradas[j-cant_gym]);
 			}
 		}
 	}
