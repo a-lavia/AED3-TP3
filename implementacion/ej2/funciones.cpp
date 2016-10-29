@@ -233,6 +233,8 @@ void imprimirSolucion(struct solucion& sol){
 	cout << " " << sol.camino.size();
 	imprimirCola(sol.camino);
 
+	cout << endl;
+
 	return;
 }
 
