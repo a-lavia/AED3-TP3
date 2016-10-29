@@ -70,7 +70,7 @@ int main(int argc, char* argv[]){
 		ofstream test;
 		test.open("test" + to_string(i) + ".txt");
 
-		test << cantGym << " " << cantParadas << " " << dameRand() << endl;
+		test << cantGym << " " << cantParadas << " " << mochila << endl;
 
 		for(int g = 0; g < cantGym + cantParadas; g++){
 
