@@ -1,0 +1,24 @@
+\section{Introducción}
+
+En este problema, Brian desea convertirse en maestro Pokemon. Se conoce como pokemones a bichos que andan por el mundo donde una persona podría ``capturarlos'' y tenerlos como mascotas o entrenarlos para pelear contra otros pokemones, tanto de otros entrenadores como salvajes (termino para mencionar a un pokemon que no fue capturado). Para convertirse en maestro Pokemon, se debe poder controlar todos los gimasios del juego. Éstos están controlados por otros entrenadores y para poder controlar el gimnasio hay que batallar contra estos entrenadores (con pokemones, por supuesto) y vencerlos a todos. 
+
+Vencer un gimnasio no es fácil, éstos tienen una fuerza y hay que estar preparado para poder estar a la altura y ganar, para esto existen las pociones que curan a nuestros pokemones y así poder seguir batallando. Las pociones se pueden conseguir en estaciones conocidas como poke paradas donde en cada una entregan a los entrenadores tres de éstas. Para llevar las pociones, Brian cuenta con una mochila en la que puede guardar pociones hasta su máximo límite.
+
+El objetivo es encontrar la manera de vencer a todos los gimnasios recorriendo la mínima distancia, sin pasar por un gimnasio o una poke parada más de una vez.
+
+Formalmente, esto es equivalente a: dado dos conjuntos de tuplas en un plano y un número natural, donde uno de los conjuntos es una tripla de tres enteros que representa a los gimnasios donde las primeras dos posiciones de la misma representan las coordenadas del plano y la última representa la cantidad de pociones necesarias para llegar al nodo; el otro conjunto es una tupla de dos enteros que representa a las poke paradas donde los dos enteros representan la coordenada de la misma en el plano; y el natural $q = 0$ que representa a la mochila, donde éste está acotado por otro natural $k$ que representa el límite de peso de la misma, se quiere encontrar un camíno que cubra todos los puntos del conjunto que representa a los gimnasios con distancia mínima entre ellos.
+
+
+\subsection{Caso de ejemplo}
+
+% Un caso simple en un eje de coordenadas
+% Necesito el Backtracking para buscar una solucion optima y mostrarla
+
+
+\subsection{Modelo del problema}
+
+Para resolver este problema lo modelamos en forma de grafo completo donde cada nodo es un gimnasio o una poke parada y cada arista tiene como peso la distancia que hay entre dos nodos. Si el nodo es un gimnasio también posée un atributo que es la cantidad de pociones que se necesita para ser vencido y si es una poke parada no posée nada ya que por cada una se reciben tres pociones.
+
+Entonces el caso de ejemplo quedaría de la siguiente forma:
+
+% Mismo caso pero modelado como si fuera un grafo
