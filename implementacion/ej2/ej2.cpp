@@ -1,7 +1,11 @@
 #include "funciones.h"
 
+vector<solucion> soluciones;
+
 int main(int argc, char* argv[]){
-	cin >> cant_gym;
+	int cant_gym, cant_paradas, mochila;
+
+    cin >> cant_gym;
 	cin >> cant_paradas;
 	cin >> mochila;
 
@@ -32,7 +36,13 @@ int main(int argc, char* argv[]){
 	// imprimirVector(gimnasios);
 	// imprimirVector(paradas);
 
-	solHeuristicaGolosa(mochila, gimnasios, paradas);
+	solucion* mejor_sol = solHeuristicaGolosa(mochila, gimnasios, paradas);
+
+    if(mejor_sol != NULL){
+        imprimirSolucion(*mejor_sol);
+    }
+
+    delete mejor_sol;
 
 	return 0;
 }

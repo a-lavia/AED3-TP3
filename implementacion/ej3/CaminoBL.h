@@ -1,5 +1,5 @@
-#ifndef CAMINO_H_
-#define CAMINO_H_
+#ifndef CAMINOBL_H
+#define CAMINOBL_H
 
 #include "ej.h"
 #include "Grafo.h"
@@ -8,6 +8,10 @@
 class CaminoBL{
     public:
         CaminoBL(Grafo g, int tamMochila);
+        
+        CaminoBL();
+        void leerEntrada();
+
         CaminoBL& operator=(const CaminoBL& otro);
 
         Grafo& grafo();
@@ -50,6 +54,54 @@ CaminoBL::CaminoBL(Grafo g, int tamMochila){
     _distancia = 0;
 }
 
+CaminoBL::CaminoBL(){
+    _nodoInicial = NULL;
+    _distancia = 0;
+}
+
+void CaminoBL::leerEntrada(){
+    int cantGimnasios, cantPokeparadas, tamMochila;    
+    cin >> cantGimnasios;
+    cin >> cantPokeparadas;
+    cin >> tamMochila;
+
+    int cantNodos = cantGimnasios + cantPokeparadas;
+
+    Grafo g(cantNodos);
+
+    int nodoActual;
+    for(nodoActual = 0; nodoActual < cantGimnasios; nodoActual++){
+        Nodo nodoNuevo;
+        nodoNuevo.id = nodoActual + 1;
+        cin >> nodoNuevo.x;
+        cin >> nodoNuevo.y;
+        cin >> nodoNuevo.pociones;  
+        nodoNuevo.gimnasio = true;
+        g.asignarNodo(nodoNuevo);
+    }
+    while(nodoActual < cantNodos){
+        Nodo nodoNuevo;
+        nodoNuevo.id = nodoActual + 1;
+        cin >> nodoNuevo.x;
+        cin >> nodoNuevo.y;
+        nodoNuevo.pociones = POCIONES_POKEPARADA;
+        nodoNuevo.gimnasio = false;
+        g.asignarNodo(nodoNuevo);
+        nodoActual++;
+    }
+
+    for(int i = 0; i < cantNodos; ++i){
+        for(int j = 0; j < cantNodos; ++j){
+            Nodo n1 = g.nodos()[i];
+            Nodo n2 = g.nodos()[j];
+            g.asignarDistancia(n1, n2, distanciaNodos(n1, n2));
+        }
+    }
+
+    this->_grafo = g;
+    this->_tamMochila = tamMochila;
+}
+
 CaminoBL& CaminoBL::operator=(const CaminoBL& otro){
     _grafo = otro._grafo;
     _tamMochila = otro._tamMochila;
@@ -85,9 +137,45 @@ void CaminoBL::asignarDistancia(int distancia){
 void CaminoBL::solucionInicial(){
     assert(nodoInicial() == NULL);
 
-    // Llamar al algoritmo del segundo ejercicio.
-    // Cambia el nodoInicial
+    vector<gym> gimnasios;
+    vector<parada> paradas;
 
+    for(int i = 0; i < grafo().nodos().size(); i++){
+        if(grafo().nodos()[i].gimnasio){
+            gym gymNuevo;
+            gymNuevo.x = grafo().nodos()[i].x;
+            gymNuevo.y = grafo().nodos()[i].y;
+            gymNuevo.p = grafo().nodos()[i].pociones;
+            gymNuevo.visitado = false;
+            gimnasios.push_back(gymNuevo);
+        } else{
+            parada paradaNueva;
+            paradaNueva.x = grafo().nodos()[i].x;
+            paradaNueva.y = grafo().nodos()[i].y;
+            paradaNueva.visitado = false;
+            paradas.push_back(paradaNueva);
+        }
+    }
+
+    solucion* solucionInicial = solHeuristicaGolosa(tamMochila(), gimnasios, paradas);
+
+    asignarDistancia(solucionInicial->d);
+
+    int tamCamino = solucionInicial->camino.size();
+    vector<int> camino(tamCamino);
+    for(int i = 0; i < tamCamino; i++){
+        camino[i] = solucionInicial->camino.front();
+        solucionInicial->camino.pop();
+    }
+
+    asignarNodoInicial(&grafo().nodos()[camino[0]]);
+
+    grafo().nodos()[camino[0]].siguiente = &grafo().nodos()[camino[1]];
+    for(int i = 1; i < tamCamino - 1; i++){
+        grafo().nodos()[camino[i]].anterior = &grafo().nodos()[camino[i-1]];
+        grafo().nodos()[camino[i]].siguiente = &grafo().nodos()[camino[i+1]];
+    }
+    grafo().nodos()[camino[tamCamino - 1]].anterior = &grafo().nodos()[camino[tamCamino - 2]];
 }
 
 void CaminoBL::busquedaLocal(Vecindad criterio){
@@ -279,16 +367,16 @@ void CaminoBL::imprimirSolucion(){
     stack<int> camino;
     camino.push(nodoInicial()->id);
     
-    int nodosRecorridos = 1;
+    int tamCamino = 1;
 
     Nodo* nodoActual = nodoInicial();
     while(nodoActual->siguiente != NULL){
         camino.push(nodoActual->siguiente->id);
-        nodosRecorridos++;
+        tamCamino++;
         nodoActual = nodoActual->siguiente;
     }
 
-    cout << distancia() << " " << nodosRecorridos;
+    cout << distancia() << " " << tamCamino;
     while(!camino.empty()){
         cout << " " << camino.top() + 1;
         camino.pop();

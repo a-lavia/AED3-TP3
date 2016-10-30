@@ -1,6 +1,13 @@
 #include "funciones.h"
 
-void solHeuristicaGolosa(unsigned int mochila_size, vector<struct gym>& gimnasios, vector<struct parada>& paradas)
+int idx_actual;
+int mochila = 0;
+int gym_no_recorridos;
+int paradas_no_recorridas;
+int cant_gym;
+int cant_paradas;
+
+solucion* solHeuristicaGolosa(unsigned int mochila_size, vector<struct gym>& gimnasios, vector<struct parada>& paradas)
 {
 	cant_gym = gimnasios.size();
 	cant_paradas = paradas.size();
@@ -38,28 +45,26 @@ void solHeuristicaGolosa(unsigned int mochila_size, vector<struct gym>& gimnasio
 	// Caso: (No hay pokeparadas o mochila_size == 0) y los gimnasios tienen p=0 => Gane
 	// Si es uno de estos casos lo soluciona, imprime y termina.
 	if(solucionCasosParticulares(mochila_size, gimnasios, paradas, matriz_dist))
-		return;
+		return NULL;
 
 
 	// Busco la mejor solución comenzando por cada parada y cada una de estas soluciones la guardo en el vector soluciones.
-	struct solucion mejor_sol;
-	mejor_sol.d = -1;
+	solucion* mejor_sol = new solucion;
+	mejor_sol->d = -1;
 
 	for(int i = gimnasios.size(); i < paradas.size() + gimnasios.size(); i++){
 		struct solucion sol_nueva;
 		sol_nueva.d = 0;
 		solucionCasoGeneral(i, sol_nueva, mochila_size, gimnasios, paradas, matriz_dist);
 
-		if((mejor_sol.d == -1 && sol_nueva.d != -1) || 
-			(sol_nueva.d != -1 && sol_nueva.d < mejor_sol.d))
+		if((mejor_sol->d == -1 && sol_nueva.d != -1) || 
+			(sol_nueva.d != -1 && sol_nueva.d < mejor_sol->d))
 		{
-			mejor_sol = sol_nueva;
+			*mejor_sol = sol_nueva;
 		}
 	}
 
-	imprimirSolucion(mejor_sol);
-
-	return;
+    return mejor_sol;
 }
 
 /************************************************************************/

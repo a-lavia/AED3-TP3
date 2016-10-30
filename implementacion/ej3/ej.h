@@ -1,5 +1,5 @@
-#ifndef EJ_H_
-#define EJ_H_
+#ifndef EJ_H
+#define EJ_H
 
 #include <iostream>
 #include <vector>

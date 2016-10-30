@@ -1,5 +1,5 @@
-#ifndef FUNCIONESEJ2_H_
-#define FUNCIONESEJ2_H_
+#ifndef FUNCIONES_H
+#define FUNCIONES_H
 
 #include <iostream>
 #include <stdio.h>
@@ -30,15 +30,7 @@ struct solucion {
 	queue<int> camino;
 };
 
-int idx_actual;
-int mochila = 0;
-int gym_no_recorridos;
-int paradas_no_recorridas;
-int cant_gym;
-int cant_paradas;
-vector<solucion> soluciones;
-
-void solHeuristicaGolosa(unsigned int mochila_size, vector<struct gym>& gimnasios, 
+solucion* solHeuristicaGolosa(unsigned int mochila_size, vector<struct gym>& gimnasios, 
 							vector<struct parada>& paradas);
 
 bool solucionCasosParticulares(unsigned int mochila_size, vector<struct gym> gimnasios, 
