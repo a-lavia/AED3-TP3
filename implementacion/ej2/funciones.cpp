@@ -208,7 +208,7 @@ void voyParadaMasCercana(int mochila_size, struct solucion& sol, vector<struct p
 		
 		} else {
 			if(idx_actual == i+cant_paradas)
-				break;
+				continue;
 
 			if(!paradas[i].visitado && matriz_dist[idx_actual][i+cant_gym] < matriz_dist[idx_actual][idx_parada+cant_gym])
 				idx_parada = i;
