@@ -40,34 +40,7 @@ int main(int argc, char* argv[]){
 	// imprimirVector(gimnasios);
 	// imprimirVector(paradas);
 
-	// Genero Matriz de distancias
-	int fila = cant_paradas + cant_gym;
-	vector<vector<float>> matriz_dist(fila, vector<float>(fila) );
-
-	for(int i = 0; i < fila; i++)
-		matriz_dist[i] = vector<float>(fila);
-
-	for(int i = 0; i < fila; i++){
-		for(int j = 0; j < fila; j++){
-			// Primero los gym y luego las paradas
-			if(i == j){
-				matriz_dist[i][j] = 0.0;
-			 } else if(i < cant_gym && j < cant_gym){
-				matriz_dist[i][j] = distancia2(gimnasios[i], gimnasios[j]);
-			} else if(i >= cant_gym && j < cant_gym){
-				matriz_dist[i][j] = distancia2(paradas[i-cant_gym], gimnasios[j]);
-			} else if(i < cant_gym && j >= cant_gym){
-				matriz_dist[i][j] = distancia2(gimnasios[i], paradas[j-cant_gym]);
-			} else if(i >= cant_gym && j >= cant_gym){
-				matriz_dist[i][j] = distancia2(paradas[i-cant_gym], paradas[j-cant_gym]);
-			}
-		}
-	}
-
-	// Imprimo la matriz_dist
-	// imprimirMatriz(matriz_dist);
-
-	solHeuristicaGolosa(mochila, gimnasios, paradas, matriz_dist);
+	solHeuristicaGolosa(mochila, gimnasios, paradas);
 
 	return 0;
 }

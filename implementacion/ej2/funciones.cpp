@@ -8,9 +8,38 @@ int cant_gym;
 int cant_paradas;
 
 
-void solHeuristicaGolosa(unsigned int mochila_size, vector<struct gym>& gimnasios, vector<struct parada>& paradas, 
-							vector<vector<float>>& matriz_dist)
+void solHeuristicaGolosa(unsigned int mochila_size, vector<struct gym>& gimnasios, vector<struct parada>& paradas)
 {
+	cant_gym = gimnasios.size();
+	cant_paradas = paradas.size();
+
+	// Genero Matriz de distancias
+	int fila = cant_paradas + cant_gym;
+	vector<vector<float>> matriz_dist(fila, vector<float>(fila) );
+
+	for(int i = 0; i < fila; i++)
+		matriz_dist[i] = vector<float>(fila);
+
+	for(int i = 0; i < fila; i++){
+		for(int j = 0; j < fila; j++){
+			// Primero los gym y luego las paradas
+			if(i == j){
+				matriz_dist[i][j] = 0.0;
+			 } else if(i < cant_gym && j < cant_gym){
+				matriz_dist[i][j] = distancia2(gimnasios[i], gimnasios[j]);
+			} else if(i >= cant_gym && j < cant_gym){
+				matriz_dist[i][j] = distancia2(paradas[i-cant_gym], gimnasios[j]);
+			} else if(i < cant_gym && j >= cant_gym){
+				matriz_dist[i][j] = distancia2(gimnasios[i], paradas[j-cant_gym]);
+			} else if(i >= cant_gym && j >= cant_gym){
+				matriz_dist[i][j] = distancia2(paradas[i-cant_gym], paradas[j-cant_gym]);
+			}
+		}
+	}
+
+	// Imprimo la matriz_dist
+	// imprimirMatriz(matriz_dist);
+
 	// Caso: No hay gimnasios => Gane
 	// Caso: Si la cantidad de paradas*3 < suma total de pociones para ganarle a todos los gimasios => -1
 	// Caso: (No hay pokeparadas o mochila_size == 0) y al menos un gimnasio tiene p>0 => -1
@@ -58,7 +87,7 @@ bool solucionCasosParticulares(unsigned int mochila_size, vector<struct gym> gim
 	}
 
 	// Caso: Si la cantidad de paradas*3 < suma total de pociones para ganarle a todos los gimasios => -1
-	// Caso: (No hay pokeparadas o mochila_size == 0) y al menos un gimnasio tiene p>0 => -1
+	// Caso: (No hay pokeparadas o mochila_size == 0) y al menos un gimnasio tiene p > 0 => -1
 	if((suma_total_pociones > paradas.size()*3) || 
 	   ((paradas.size() == 0 || mochila_size == 0) && suma_total_pociones > 0))
 	{
@@ -66,10 +95,10 @@ bool solucionCasosParticulares(unsigned int mochila_size, vector<struct gym> gim
 		return true;
 	}
 
-	// Caso:(No hay pokeparadas o mochila_size==0) y los gimnasios tienen p=0 => Gane
+	// Caso: Todos los gimnasios tienen p=0 => Gane
 	// Comienzo desde todos los gimnasios con este algoritmo y me quedo con la mejor solución
 	int d = 0;
-	if((paradas.size() == 0 || mochila_size == 0) && suma_total_pociones == 0){
+	if(suma_total_pociones == 0){
 		struct solucion mejor_sol;
 		mejor_sol.d = -1;
 
@@ -106,8 +135,6 @@ void solucionCasoGeneral(int idx_comienzo, struct solucion& sol, unsigned int mo
 	// Inicializo variables globales
 	gym_no_recorridos = gimnasios.size();
 	paradas_no_recorridas = paradas.size();
-	cant_gym = gimnasios.size();
-	cant_paradas = paradas.size();
 
 	// Comienzo dependiendo de que es idx_comienzo, si es < que gimnasios.size() entonces es el caso particular
 	// sino es el caso general y comienzo desde una poke parada.

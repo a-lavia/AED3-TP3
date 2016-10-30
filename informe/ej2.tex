@@ -21,7 +21,7 @@ Por otra parte, analisamos una serie de casos particulares por separado al comie
 
 \item Si no hay poke paradas o la mochila tiene capacidad $0$ y existe al menos un gimnasio donde su cantidad de pociones necesaria para ganarle es mayor que $0$: No hay solución. Se devuelve $-1$.
 
-\item Si no hay poke paradas o la mochila tiene capacidad $0$ pero en este caso en todos los gimnasios la cantidad de pociones necesarias para ganarles es de $0$: Hay solución. En este caso corremos el mismo algorimo que detallamos antes pero, en vez de comenzar en poke paradas, comenzamos en gimnasios. Tomamos todas las soluciones y devolvemos la mejor.
+\item Si en todos los gimnasios la cantidad de pociones necesarias para ganarles es de $0$: Hay solución. En este caso corremos el mismo algorimo que detallamos antes pero, en vez de comenzar en poke paradas, comenzamos en gimnasios. Tomamos todas las soluciones y devolvemos la mejor.
 
 \end{itemize}
 
@@ -47,7 +47,7 @@ Con todo esto descripto anteriormente, el pseudo-código del algoritmo propuesto
 	\State Terminar
 \EndIf
 
-\If{(esVacio(paradas) ó mochila $== 0$) y SumaTodasLasPociones(gimnasios) $== 0$}
+\If{SumaTodasLasPociones(gimnasios) $== 0$}
 
 	\State Conj(solucion) c $\leftarrow$ Vacio()
 

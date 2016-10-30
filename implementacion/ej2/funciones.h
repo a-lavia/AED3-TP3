@@ -29,7 +29,7 @@ struct solucion {
 
 
 void solHeuristicaGolosa(unsigned int mochila_size, vector<struct gym>& gimnasios, 
-							vector<struct parada>& paradas, vector<vector<float>>& matriz_dist);
+							vector<struct parada>& paradas);
 
 bool solucionCasosParticulares(unsigned int mochila_size, vector<struct gym> gimnasios, 
 								vector<struct parada> paradas, vector<vector<float>>& matriz_dist);
