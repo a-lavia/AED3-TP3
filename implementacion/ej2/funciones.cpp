@@ -66,8 +66,8 @@ bool solucionCasosParticulares(unsigned int mochila_size, vector<struct gym> gim
 		return true;
 	}
 
-	// Caso: No hay pokeparadas y los gimnasios tienen p=0 => Gane
-	// Estoy devolviendo una solución lineal, o sea, por como ingresan
+	// Caso:(No hay pokeparadas o mochila_size==0) y los gimnasios tienen p=0 => Gane
+	// Comienzo desde todos los gimnasios con este algoritmo y me quedo con la mejor solución
 	int d = 0;
 	if((paradas.size() == 0 || mochila_size == 0) && suma_total_pociones == 0){
 		struct solucion mejor_sol;

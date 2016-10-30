@@ -1,0 +1,153 @@
+\subsection{Heurística Constructiva Golosa}
+
+En el problema dado, Brian necesita conocer el camino con el menor recorrido para vencer a todos los gimnasios. Cómo sabe que buscar la solución óptima puede ser muy costosa se decide por generar una heurística para tener de forma más rápida una solución que, si bien no es la óptima, va a estar cercana a ella.
+
+
+\subsubsection{Algoritmo}
+
+La \textbf{heurística constructiva golosa} propuesta para obtener una solución es la de ir siempre al vecino más cercano. Cómo la mochila comienza vacía, siempre se comienza desde una poke parada. Entonces desde allí se pregunta si puede ganarle a algún gimnasio con las pociones que ya tiene, si puede ganarle se acerca hasta el gimnasio más cercano de los que puede ganar, guardandose la distancia y descartandose las pociones necesarias para derrotarlo; si no puede ganarle a ningún gimnasio se acerca hasta poke parada más cercana y agrega otras tres pociones a la mochila, si ésta lo permite, sino hasta llenarla. Luego, vuelve a preguntarse si puede ganarle a algún gimnasio y realiza los mismos pasos anteriores.
+
+El algoritmo termina si no puede ganarle a ningún gimnasio y tiene la mochila llena, devolviendo $-1$; si no puede ganarle a ningún gimnasio y recorrió todas las poke paradas, también devolviendo $-1$; o si le ganó a todos los gimnasios, en ese caso devolviendo la distancia recorrida, la cantidad de gimnasios y poke paradas que recorrió y el camino recorrido.
+
+Ahora bien, cómo comenzamos el algoritmo desde cualquier poke parada ésta podría generar una solución menos óptima que si comenzamos desde otra. Por ello, éste algoritmo se ejecuta una vez por cada poke parada comenzando siempre por alguna distinta y guardando la solución. Luego, se devuelve la mejor solución de las guardadas. 
+
+Por otra parte, analisamos una serie de casos particulares por separado al comienzo del algoritmo propuesto. Estos son casos donde ya se sabe de ante mano cual va a ser la solución y se puede llegar a ella con una complejidad menor, por ello las separamos y realizamos desde un comienzo. Los casos son los siguientes:
+
+\begin{itemize}
+
+\item Si no hay gimnasios: no hace falta recorrer nada. Se devuelve $0 0$.
+
+\item Si $cantidadParadas*3 < sumaTotalDePocionesDeGimnasios$: No hay solución en este caso. Se devuelve $-1$.
+
+\item Si no hay poke paradas o la mochila tiene capacidad $0$ y existe al menos un gimnasio donde su cantidad de pociones necesaria para ganarle es mayor que $0$: No hay solución. Se devuelve $-1$.
+
+\item Si no hay poke paradas o la mochila tiene capacidad $0$ pero en este caso en todos los gimnasios la cantidad de pociones necesarias para ganarles es de $0$: Hay solución. En este caso corremos el mismo algorimo que detallamos antes pero, en vez de comenzar en poke paradas, comenzamos en gimnasios. Tomamos todas las soluciones y devolvemos la mejor.
+
+\end{itemize}
+
+Con todo esto descripto anteriormente, el pseudo-código del algoritmo propuesto es el siguiente:
+
+\begin{algorithm}[H]
+\label{}
+\caption{\textbf{SolucionHeuristicaGolosa}(\textbf{mochila}: entero, \textbf{gimnasios}: vector(gym), \textbf{paradas}: vector(parada))}
+\begin{algorithmic}[1]
+
+\If{esVacio(gimnasios)}
+	\State Devolver $0$ $0$
+	\State Terminar
+\EndIf
+
+\If{(cantidad(paradas)*3 $<$ SumaTodasLasPociones(gimnasios))}
+	\State Devolver $-1$
+	\State Terminar
+\EndIf
+
+\If{(esVacio(paradas) ó mochila $== 0$) y SumaTodasLasPociones(gimnasios) $> 0$}
+	\State Devolver $-1$
+	\State Terminar
+\EndIf
+
+\If{(esVacio(paradas) ó mochila $== 0$) y SumaTodasLasPociones(gimnasios) $== 0$}
+
+	\State Conj(solucion) c $\leftarrow$ Vacio()
+
+	\For{cada g gimnasio en gimnasios}
+
+		\State solucion s $\leftarrow$ SolucionCasoGeneral(g, mochila, paradas, gimnasios)
+
+		\State Agregar(c,s)
+
+	\EndFor
+
+	\State DevolverMejorSolucion(c)
+	\State Terminar
+\EndIf
+
+\State
+\State // Fin de los casos particulares
+\State
+
+\State Conj(solucion) c $\leftarrow$ Vacio()
+
+\For{cada p parada en paradas}
+
+	\State solucion s $\leftarrow$ SolucionCasoGeneral(p, mochila, paradas, gimnasios)
+
+\EndFor
+
+\State DevolverMejorSolucion(c)
+\State Terminar
+
+\medskip
+\Statex \underline{}
+\end{algorithmic}
+\end{algorithm}
+% \Statex \underline{Salida}:
+
+Cómo se puede apreciar en el algoritmo, utilizamos un conjunto de soluciones pero no mencionamos nada de ellas. Para que se entienda mejor, para nosotros una solución es una tupla (entero, cola), donde el entero representa la distancia recorrida total y la cola es el camino recorrido.
+
+También, gimnasio y parada son las tuplas mencionadas ya antes en la introducción pero a efectos de entender este pseudo código mejor repetiremos. Gimnasio es una tupla de la forma (x, y, pociones) y parada es una tupla de la forma de la forma (x, y). Los valores x e y son enteros que determinan la posición; pociones es un entero que referencia a la cantidad de pociones necesarias para ganarle al gimnasio; y visitado es un bool en
+
+Ahora presentamos el pseudo código de la función SolucionCasoGeneral:
+
+\begin{algorithm}[H]
+\label{}
+\caption{\textbf{SolucionCasoGeneral}(\textbf{nodoComienzo}: nodo, \textbf{mochila}: entero, \textbf{gimnasios}: vector(gym), \textbf{paradas}: vector(parada))}
+\begin{algorithmic}[1]
+
+\State solucion s $\leftarrow$ \{0, Vacia()\}
+
+\If{nodoComienzo es un gimnasio}
+
+	\State m $\leftarrow$ 0  // Valor de la mochila
+	\State Marcar nodoComienzo como visitado en gimnasios
+
+\Else
+
+	\State m $\leftarrow$ 3  // Valor de la mochila
+	\State Marcar nodoComienzo como visitado en paradas
+
+\EndIf
+
+\State Encolar(s.cola, nodoComienzo)
+
+\For{Mientras no se hayan visitado todos los gimnasios}
+
+	\If{Si le gano a algún gimnasio con las pociones que tengo}
+		\State g $\leftarrow$ DameGimnasioMasCercanoQueGano(gimnasios)
+		\State m $\leftarrow$ m - g.pociones
+		\State ActualizarDistancia(s.distancia, g.distancia)
+		\State Encolar(s.cola, g)
+		\State Marcar a g como visitado en gimnasios
+
+	\ElsIf{Si la mochila esta llena ó todas las paradas estan recorridas}
+		\State // Aquí no le gano a ningún gimnasio
+		\State s.distancia $\leftarrow$ $-1$
+		\State Retornar s
+	
+	\Else
+
+		\State p $\leftarrow$ DameParadaMasCercana(paradas)
+		\State ActualizarDistancia(s.distancia, p.distancia)
+		\State Encolar(s.cola, p)
+		\State Marcar a p como visitado en paradas
+
+	\EndIf
+
+\EndFor
+
+\State retornar s
+
+\medskip
+\Statex \underline{}
+\end{algorithmic}
+\end{algorithm}
+% \Statex \underline{Salida}:
+
+Y con esto termina nuestro algoritmo propuesto con una \textbf{heurística constructiva golosa}.
+
+Para no agobiar con tanto código, en esta sección no ahondaremos en el resto de las funciones auxiliares, que consideramos de por si declarativas, pero si haremos un analisis profundo de ellas en la siguiente sección donde analizaremos la complejidad del código.
+
+
+\subsubsection{Complejidad}
+
