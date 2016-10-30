@@ -19,13 +19,21 @@ class CaminoBL{
         float distancia() const;
         int tamMochila() const;
 
-        void asignarNodoInicial(Nodo* nodoInicial);
-        void asignarDistancia(int distancia);
-
         void solucionInicial();
 
         void busquedaLocal(Vecindad criterio);
 
+        void imprimirSolucion();
+
+    private: 
+        Grafo _grafo;
+        int _tamMochila;
+        Nodo* _nodoInicial;
+        float _distancia;
+
+        void asignarNodoInicial(Nodo* nodoInicial);
+        void asignarDistancia(int distancia);
+        
         void buscoSolucionVecinaMejor(vector<Nodo*>& nodosIntercambiables);
         
         bool encuentroSolucionVecinaMejor(vector<Nodo*>& nodosIntercambiables);
@@ -37,14 +45,6 @@ class CaminoBL{
         int distanciaIntercambiar(const Nodo* n1, const Nodo* n2);
         bool puedoIntercambiar(Nodo* n1, Nodo* n2);
         void intercambiar(Nodo* n1, Nodo* n2, int distanciaNueva);
-
-        void imprimirSolucion();
-
-    private: 
-        Grafo _grafo;
-        int _tamMochila;
-        Nodo* _nodoInicial;
-        float _distancia;
 };
 
 CaminoBL::CaminoBL(Grafo g, int tamMochila){
@@ -159,23 +159,27 @@ void CaminoBL::solucionInicial(){
 
     solucion* solucionInicial = solHeuristicaGolosa(tamMochila(), gimnasios, paradas);
 
-    asignarDistancia(solucionInicial->d);
+    if(solucionInicial != NULL){
+        asignarDistancia(solucionInicial->d);
 
-    int tamCamino = solucionInicial->camino.size();
-    vector<int> camino(tamCamino);
-    for(int i = 0; i < tamCamino; i++){
-        camino[i] = solucionInicial->camino.front();
-        solucionInicial->camino.pop();
+        int tamCamino = solucionInicial->camino.size();
+        vector<int> camino(tamCamino);
+        for(int i = 0; i < tamCamino; i++){
+            camino[i] = solucionInicial->camino.front();
+            solucionInicial->camino.pop();
+        }
+
+        asignarNodoInicial(&grafo().nodos()[camino[0]]);
+
+        if(tamCamino > 1){
+            grafo().nodos()[camino[0]].siguiente = &grafo().nodos()[camino[1]];
+            for(int i = 1; i < tamCamino - 1; i++){
+                grafo().nodos()[camino[i]].anterior = &grafo().nodos()[camino[i-1]];
+                grafo().nodos()[camino[i]].siguiente = &grafo().nodos()[camino[i+1]];
+            }
+            grafo().nodos()[camino[tamCamino - 1]].anterior = &grafo().nodos()[camino[tamCamino - 2]];
+        }
     }
-
-    asignarNodoInicial(&grafo().nodos()[camino[0]]);
-
-    grafo().nodos()[camino[0]].siguiente = &grafo().nodos()[camino[1]];
-    for(int i = 1; i < tamCamino - 1; i++){
-        grafo().nodos()[camino[i]].anterior = &grafo().nodos()[camino[i-1]];
-        grafo().nodos()[camino[i]].siguiente = &grafo().nodos()[camino[i+1]];
-    }
-    grafo().nodos()[camino[tamCamino - 1]].anterior = &grafo().nodos()[camino[tamCamino - 2]];
 }
 
 void CaminoBL::busquedaLocal(Vecindad criterio){

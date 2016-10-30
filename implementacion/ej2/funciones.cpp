@@ -44,37 +44,38 @@ solucion* solHeuristicaGolosa(unsigned int mochila_size, vector<struct gym>& gim
 	// Caso: (No hay pokeparadas o mochila_size == 0) y al menos un gimnasio tiene p>0 => -1
 	// Caso: (No hay pokeparadas o mochila_size == 0) y los gimnasios tienen p=0 => Gane
 	// Si es uno de estos casos lo soluciona, imprime y termina.
-	if(solucionCasosParticulares(mochila_size, gimnasios, paradas, matriz_dist))
-		return NULL;
+    solucion* mejor_sol = new solucion;
 
+	if(!solucionCasosParticulares(mochila_size, gimnasios, paradas, matriz_dist, mejor_sol)){
+    	// Busco la mejor solución comenzando por cada parada y cada una de estas soluciones la guardo en el vector soluciones.
+    	mejor_sol->d = -1;
 
-	// Busco la mejor solución comenzando por cada parada y cada una de estas soluciones la guardo en el vector soluciones.
-	solucion* mejor_sol = new solucion;
-	mejor_sol->d = -1;
+    	for(int i = gimnasios.size(); i < paradas.size() + gimnasios.size(); i++){
+    		struct solucion sol_nueva;
+    		sol_nueva.d = 0;
+    		solucionCasoGeneral(i, sol_nueva, mochila_size, gimnasios, paradas, matriz_dist);
 
-	for(int i = gimnasios.size(); i < paradas.size() + gimnasios.size(); i++){
-		struct solucion sol_nueva;
-		sol_nueva.d = 0;
-		solucionCasoGeneral(i, sol_nueva, mochila_size, gimnasios, paradas, matriz_dist);
-
-		if((mejor_sol->d == -1 && sol_nueva.d != -1) || 
-			(sol_nueva.d != -1 && sol_nueva.d < mejor_sol->d))
-		{
-			*mejor_sol = sol_nueva;
-		}
-	}
-
+    		if((mejor_sol->d == -1 && sol_nueva.d != -1) || 
+    			(sol_nueva.d != -1 && sol_nueva.d < mejor_sol->d))
+    		{
+    			*mejor_sol = sol_nueva;
+    		}
+    	}
+    }
+ 
     return mejor_sol;
 }
 
 /************************************************************************/
 
-bool solucionCasosParticulares(unsigned int mochila_size, vector<struct gym> gimnasios, 
-								vector<struct parada> paradas, vector<vector<float>>& matriz_dist)
+bool solucionCasosParticulares(unsigned int mochila_size, vector<struct gym> gimnasios, vector<struct parada> paradas, 
+                                vector<vector<float>>& matriz_dist, solucion*& mejor_sol)
 {
 	// Caso: No hay gimnasios => Gane
 	if(gimnasios.size() == 0){
-		cout << "0 0";
+		cout << "0 0" << endl;
+        delete mejor_sol;
+        mejor_sol = NULL;
 		return true;
 	}
 
@@ -88,7 +89,9 @@ bool solucionCasosParticulares(unsigned int mochila_size, vector<struct gym> gim
 	if((suma_total_pociones > paradas.size()*3) || 
 	   ((paradas.size() == 0 || mochila_size == 0) && suma_total_pociones > 0))
 	{
-		cout << "-1";
+		cout << -1 << endl;
+        delete mejor_sol;
+        mejor_sol = NULL;
 		return true;
 	}
 
@@ -96,22 +99,19 @@ bool solucionCasosParticulares(unsigned int mochila_size, vector<struct gym> gim
 	// Comienzo desde todos los gimnasios con este algoritmo y me quedo con la mejor solución
 	int d = 0;
 	if(suma_total_pociones == 0){
-		struct solucion mejor_sol;
-		mejor_sol.d = -1;
+		mejor_sol->d = -1;
 
 		for(int i = 0; i < gimnasios.size(); i++){
 			struct solucion sol_nueva;
 			sol_nueva.d = 0;
 			solucionCasoGeneral(i, sol_nueva, mochila_size, gimnasios, paradas, matriz_dist);
 
-			if((mejor_sol.d == -1 && sol_nueva.d != -1) || 
-				(sol_nueva.d != -1 && sol_nueva.d < mejor_sol.d))
+			if((mejor_sol->d == -1 && sol_nueva.d != -1) || 
+				(sol_nueva.d != -1 && sol_nueva.d < mejor_sol->d))
 			{
-				mejor_sol = sol_nueva;
+				*mejor_sol = sol_nueva;
 			}
 		}
-
-		imprimirSolucion(mejor_sol);
 
 		return true;
 	}
@@ -253,8 +253,10 @@ void voyParadaMasCercana(int mochila_size, struct solucion& sol, vector<struct p
 void imprimirSolucion(struct solucion& sol){
 	// Imprimo soluciones
 	cout << sol.d;
-	if(sol.d == -1)
+	if(sol.d == -1){
+        cout << endl;
 		return;
+    }
 
 	cout << " " << sol.camino.size();
 	imprimirCola(sol.camino);
