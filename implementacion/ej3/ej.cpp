@@ -48,11 +48,13 @@ int main(int argc, char* argv[]){
     if(c.nodoInicial() != NULL){
         CaminoBL cCopia = c;
 
-        cout << "vecindad1:" << endl;
-        c.busquedaLocal(vecindad1);
+        cout << "Intercambia el orden de los nodos del recorrido original:" << endl;
+        c.busquedaLocal(intercambiaNodosVisitados);
+        c.imprimirSolucion();
 
-        cout << endl << "vecindad2:" << endl;
-        cCopia.busquedaLocal(vecindad2);
+        cout << endl << "Intercambia pokeparadas incluyendo las que estan afuera del recorrido original:" << endl;
+        cCopia.busquedaLocal(intercambiaPokeparadas);
+        cCopia.imprimirSolucion();
     } else{
         cout << -1 << endl;
     }

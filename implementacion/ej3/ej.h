@@ -29,8 +29,8 @@ struct Nodo{
 };
 
 enum Vecindad{
-    vecindad1,  // Nombres provisorios
-    vecindad2
+    intercambiaNodosVisitados,
+    intercambiaPokeparadas
 };
 
 float distanciaNodos(Nodo n1, Nodo n2){

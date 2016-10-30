@@ -1,3 +1,6 @@
+#ifndef FUNCIONESEJ2_H_
+#define FUNCIONESEJ2_H_
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,6 +30,13 @@ struct solucion {
 	queue<int> camino;
 };
 
+int idx_actual;
+int mochila = 0;
+int gym_no_recorridos;
+int paradas_no_recorridas;
+int cant_gym;
+int cant_paradas;
+vector<solucion> soluciones;
 
 void solHeuristicaGolosa(unsigned int mochila_size, vector<struct gym>& gimnasios, 
 							vector<struct parada>& paradas);
@@ -47,4 +57,6 @@ void imprimirMatriz(vector<vector<float>>& matriz_dist);
 void imprimirVector(vector<struct gym>& gimnasios);
 void imprimirVector(vector<struct parada>& paradas);
 
-float distancia2(const nodo &n1, const nodo &n2);
+float distancia(const nodo &n1, const nodo &n2);
+
+#endif

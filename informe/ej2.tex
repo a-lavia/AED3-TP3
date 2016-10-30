@@ -1,9 +1,8 @@
-\subsection{Heurística Constructiva Golosa}
+\section{Ejercicio II: Heurística constructiva golosa}
 
 En el problema dado, Brian necesita conocer el camino con el menor recorrido para vencer a todos los gimnasios. Cómo sabe que buscar la solución óptima puede ser muy costosa se decide por generar una heurística para tener de forma más rápida una solución que, si bien no es la óptima, va a estar cercana a ella.
 
-
-\subsubsection{Algoritmo}
+\subsection{Algoritmo}
 
 La \textbf{heurística constructiva golosa} propuesta para obtener una solución es la de ir siempre al vecino más cercano. Cómo la mochila comienza vacía, siempre se comienza desde una poke parada. Entonces desde allí se pregunta si puede ganarle a algún gimnasio con las pociones que ya tiene, si puede ganarle se acerca hasta el gimnasio más cercano de los que puede ganar, guardandose la distancia y descartandose las pociones necesarias para derrotarlo; si no puede ganarle a ningún gimnasio se acerca hasta poke parada más cercana y agrega otras tres pociones a la mochila, si ésta lo permite, sino hasta llenarla. Luego, vuelve a preguntarse si puede ganarle a algún gimnasio y realiza los mismos pasos anteriores.
 
@@ -149,5 +148,4 @@ Y con esto termina nuestro algoritmo propuesto con una \textbf{heurística const
 Para no agobiar con tanto código, en esta sección no ahondaremos en el resto de las funciones auxiliares, que consideramos de por si declarativas, pero si haremos un analisis profundo de ellas en la siguiente sección donde analizaremos la complejidad del código.
 
 
-\subsubsection{Complejidad}
-
+\subsection{Complejidad}

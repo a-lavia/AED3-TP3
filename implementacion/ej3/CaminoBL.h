@@ -3,6 +3,7 @@
 
 #include "ej.h"
 #include "Grafo.h"
+#include "../ej2/funciones.h"
 
 class CaminoBL{
     public:
@@ -20,11 +21,13 @@ class CaminoBL{
         void solucionInicial();
 
         void busquedaLocal(Vecindad criterio);
+
+        void buscoSolucionVecinaMejor(vector<Nodo*>& nodosIntercambiables);
         
-        bool encuentroSolucionVecinaMejor(vector<Nodo*>& nodosVisitados);
+        bool encuentroSolucionVecinaMejor(vector<Nodo*>& nodosIntercambiables);
         bool intercambiarMejora(Nodo* n1, Nodo* n2);
 
-        bool encuentroSolucionVecinaIgual(vector<Nodo*>& nodosVisitados);
+        bool encuentroSolucionVecinaIgual(vector<Nodo*>& nodosIntercambiables);
         bool intercambiarMantieneIgual(Nodo* n1, Nodo* n2);
 
         int distanciaIntercambiar(const Nodo* n1, const Nodo* n2);
@@ -90,67 +93,58 @@ void CaminoBL::solucionInicial(){
 void CaminoBL::busquedaLocal(Vecindad criterio){
     assert(nodoInicial() != NULL);
 
-    if(criterio == vecindad1){
-        // Intercambia el orden de los nodos del recorrido.
-
-        vector<Nodo*> nodosVisitados;
+    if(criterio == intercambiaNodosVisitados){
+        vector<Nodo*>* nodosVisitados = new vector<Nodo*>;
+        
         Nodo* nodoActual = nodoInicial();
-        nodosVisitados.push_back(nodoActual);
+        nodosVisitados->push_back(nodoActual);
         while(nodoActual->siguiente != NULL){
             nodoActual = nodoActual->siguiente;
-            nodosVisitados.push_back(nodoActual);
+            nodosVisitados->push_back(nodoActual);
         }
 
-        bool busco = true;
-        bool vengoDeUnaSolucionMejor = true;
-        while(busco){
-            while(encuentroSolucionVecinaMejor(nodosVisitados)){
-                if(!vengoDeUnaSolucionMejor){
-                    vengoDeUnaSolucionMejor = true;
-                }
-            }
-            if(encuentroSolucionVecinaIgual(nodosVisitados) && vengoDeUnaSolucionMejor){
-                vengoDeUnaSolucionMejor = false;
-            } else{
-                busco = false;
-            }
-        }
+        buscoSolucionVecinaMejor(*nodosVisitados);
+
+        delete nodosVisitados;
     } else{
-        // Intercambia pokeparadas incluyendo las que estan afuera del recorrido original.
+        vector<Nodo*>* pokeparadas = new vector<Nodo*>;
 
-        vector<Nodo*> pokeparadas;
         for(int i = 0; i < grafo().nodos().size(); i++){
             if(!grafo().nodos()[i].gimnasio){
-                pokeparadas.push_back(&grafo().nodos()[i]);
+                pokeparadas->push_back(&grafo().nodos()[i]);
             }
         }
 
-        bool busco = true;
-        bool vengoDeUnaSolucionMejor = true;
-        while(busco){
-            while(encuentroSolucionVecinaMejor(pokeparadas)){
-                if(!vengoDeUnaSolucionMejor){
-                    vengoDeUnaSolucionMejor = true;
-                }
-            }
-            if(encuentroSolucionVecinaIgual(pokeparadas) && vengoDeUnaSolucionMejor){
-                vengoDeUnaSolucionMejor = false;
-            } else{
-                busco = false;
-            }
-        }
+        buscoSolucionVecinaMejor(*pokeparadas);
+        
+        delete pokeparadas;
     }
-
-    imprimirSolucion();
 }
 
-bool CaminoBL::encuentroSolucionVecinaMejor(vector<Nodo*>& nodosVisitados){
+void CaminoBL::buscoSolucionVecinaMejor(vector<Nodo*>& nodosIntercambiables){
     bool busco = true;
-    int cantVisitados = nodosVisitados.size();
+    bool vengoDeUnaSolucionMejor = true;
+    while(busco){
+        while(encuentroSolucionVecinaMejor(nodosIntercambiables)){
+            if(!vengoDeUnaSolucionMejor){
+                vengoDeUnaSolucionMejor = true;
+            }
+        }
+        if(encuentroSolucionVecinaIgual(nodosIntercambiables) && vengoDeUnaSolucionMejor){
+            vengoDeUnaSolucionMejor = false;
+        } else{
+            busco = false;
+        }
+    }
+}
 
-    for(int i = 0; i < cantVisitados && busco; i++){
-        for(int j = 0; j < cantVisitados && busco; j++){
-            if(i != j && intercambiarMejora(nodosVisitados[i], nodosVisitados[j])){
+bool CaminoBL::encuentroSolucionVecinaMejor(vector<Nodo*>& nodosIntercambiables){
+    bool busco = true;
+    int cantNodos = nodosIntercambiables.size();
+
+    for(int i = 0; i < cantNodos && busco; i++){
+        for(int j = 0; j < cantNodos && busco; j++){
+            if(i != j && intercambiarMejora(nodosIntercambiables[i], nodosIntercambiables[j])){
                 busco = false;
             }
         }
@@ -171,13 +165,13 @@ bool CaminoBL::intercambiarMejora(Nodo* n1, Nodo* n2){
     return mejora;
 }
 
-bool CaminoBL::encuentroSolucionVecinaIgual(vector<Nodo*>& nodosVisitados){
+bool CaminoBL::encuentroSolucionVecinaIgual(vector<Nodo*>& nodosIntercambiables){
     bool busco = true;
-    int cantVisitados = nodosVisitados.size();
+    int cantNodos = nodosIntercambiables.size();
 
-    for(int i = 0; i < cantVisitados && busco; i++){
-        for(int j = 0; j < cantVisitados && busco; j++){
-            if(i != j && intercambiarMantieneIgual(nodosVisitados[i], nodosVisitados[j])){
+    for(int i = 0; i < cantNodos && busco; i++){
+        for(int j = 0; j < cantNodos && busco; j++){
+            if(i != j && intercambiarMantieneIgual(nodosIntercambiables[i], nodosIntercambiables[j])){
                 busco = false;
             }
         }

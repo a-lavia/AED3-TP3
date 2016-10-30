@@ -1,13 +1,5 @@
 #include "funciones.h"
 
-int idx_actual;
-int mochila = 0;
-int gym_no_recorridos;
-int paradas_no_recorridas;
-int cant_gym;
-int cant_paradas;
-
-
 void solHeuristicaGolosa(unsigned int mochila_size, vector<struct gym>& gimnasios, vector<struct parada>& paradas)
 {
 	cant_gym = gimnasios.size();
@@ -26,13 +18,13 @@ void solHeuristicaGolosa(unsigned int mochila_size, vector<struct gym>& gimnasio
 			if(i == j){
 				matriz_dist[i][j] = 0.0;
 			 } else if(i < cant_gym && j < cant_gym){
-				matriz_dist[i][j] = distancia2(gimnasios[i], gimnasios[j]);
+				matriz_dist[i][j] = distancia(gimnasios[i], gimnasios[j]);
 			} else if(i >= cant_gym && j < cant_gym){
-				matriz_dist[i][j] = distancia2(paradas[i-cant_gym], gimnasios[j]);
+				matriz_dist[i][j] = distancia(paradas[i-cant_gym], gimnasios[j]);
 			} else if(i < cant_gym && j >= cant_gym){
-				matriz_dist[i][j] = distancia2(gimnasios[i], paradas[j-cant_gym]);
+				matriz_dist[i][j] = distancia(gimnasios[i], paradas[j-cant_gym]);
 			} else if(i >= cant_gym && j >= cant_gym){
-				matriz_dist[i][j] = distancia2(paradas[i-cant_gym], paradas[j-cant_gym]);
+				matriz_dist[i][j] = distancia(paradas[i-cant_gym], paradas[j-cant_gym]);
 			}
 		}
 	}
@@ -317,7 +309,7 @@ void imprimirVector(vector<struct parada>& paradas){
 
 /************************************************************************/
 
-float distancia2(const nodo &n1, const nodo &n2){
+float distancia(const nodo &n1, const nodo &n2){
 	float x = n2.x - n1.x;
 	float y = n2.y - n1.y;
 

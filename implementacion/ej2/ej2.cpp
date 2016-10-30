@@ -1,14 +1,6 @@
 #include "funciones.h"
 
-
-vector<solucion> soluciones;
-
-
 int main(int argc, char* argv[]){
-	int cant_gym;
-	int cant_paradas;
-	int mochila;
-
 	cin >> cant_gym;
 	cin >> cant_paradas;
 	cin >> mochila;

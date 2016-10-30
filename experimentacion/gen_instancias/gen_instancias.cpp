@@ -1,3 +1,29 @@
+/*  AYUDA DE ENTRADA
+ *  
+ *  ./gen_instancias tipoTest cantTestAleat cantGym cantParadas minRand maxRand mochila rangoPociones
+ *  
+ *  Si tipoTest == 0 entonces la entrada es: 
+ *  
+ *              ./gen_instancias 0 cantTestAleat cantGym cantParadas
+ *  
+ *  Y se generan tests con posiciones/pociones/mochila randomizados con un rango entre min_val y max_val
+ *
+ *
+ *  Si tipoTest == 1 entonces la entrada es: 
+ *
+ *              ./gen_instancias 1 cantTestAleat cantGym cantParadas minRand maxRand mochila rangoPociones
+ *
+ *  Y se puede agregar también el rango de valores random, el valor de la mochila a mano, 
+ *  y el rango de valores de pociones [0;rangoPociones], para tener mayor control sobre el test.
+ *
+ *
+ *  Si tipoTest == 2 entonces la entrada es: 
+ *
+ *              ./gen_instancias 1 cantTestAleat cantGym cantParadas minRand maxRand mochila pocionesFija
+ *
+ *  Igual que el test anterior pero con la diferencia que las pociones tienen el valor fijo.
+ */
+
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
@@ -7,47 +33,17 @@
 
 using namespace std;
 
-
-int min_val	= 0;
-int max_val	= 100;
-
+int min_val = 0;
+int max_val = 100;
 
 int dameRand();
 
 int main(int argc, char* argv[]){
-
-	/*								AYUDA DE ENTRADA
-	 *	
-	 *	./gentest tipoTest cantTestAleat cantGym cantParadas minRand maxRand mochila rangoPociones
-	 *	
-	 *	Si tipoTest == 0 entonces la entrada es: 
-	 *	
-	 *				./gentest 0 cantTestAleat cantGym cantParadas
-	 *	
-	 *	Y se generan tests con posiciones/pociones/mochila randomizados con un rango entre 0 y 100
-	 *
-	 *
-	 *	Si tipoTest == 1 entonces la entrada es: 
-	 *
-	 *				./gentest 1 cantTestAleat cantGym cantParadas minRand maxRand mochila rangoPociones
-	 *
-	 *	Y se puede agregar también el rango de valores random, el valor de la mochila a mano, 
-	 *	y el rango de valores de pociones [0;rangoPociones], para tener mayor control sobre el test.
-	 *
-	 *
-	 *	Si tipoTest == 2 entonces la entrada es: 
-	 *
-	 *				./gentest 1 cantTestAleat cantGym cantParadas minRand maxRand mochila pocionesFija
-	 *
-	 *	Igual que el test anterior pero con la diferencia que las pociones tienen el valor fijo.
-	 */
-
-
 	int tipoTest = atoi(argv[1]);
 	
 	if(tipoTest != 0 && tipoTest != 1 && tipoTest != 2){
 		cout << argv[1] << endl;
-		cout << "Tipo de test no correcto leer ayuda en código." << endl;
+		cout << "Tipo de test incorrecto, leer la ayuda en el código." << endl;
 		return 0;
 	}
 
