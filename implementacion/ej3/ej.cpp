@@ -8,7 +8,11 @@ int main(int argc, char* argv[]){
 
     c.solucionInicial();
 
-    if(c.nodoInicial() != NULL){
+    if(c.encontreSolucion()){
+        cout << "Solucion inicial:" << endl;
+        c.imprimirSolucion();
+        cout << endl;
+
         CaminoBL cCopia = c;
 
         cout << "Intercambia el orden de los nodos del recorrido original:" << endl;
