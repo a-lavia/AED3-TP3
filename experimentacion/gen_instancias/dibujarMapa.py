@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 #Constantes
+tamNodoInicial = 200
 tamNodoGym = 100
 tamNodoParada = 60
 tamBordeNodo = 0.5
@@ -61,7 +62,7 @@ while x < mapaPokeParadas:
 #distancia = float(camino[0])
 if dibujarCamino:
 	nodosRecorridos = int(camino[1])
-
+	nodosTam[int(camino[2])-1] = tamNodoInicial
 	x=0
 	while x < nodosRecorridos-1:
 		G.add_edge(int(camino[x+2]), int(camino[2+x+1]))
@@ -69,4 +70,5 @@ if dibujarCamino:
 
 #Dibujamos
 nx.draw(G, nodosPos, node_color=nodosColor, node_size=nodosTam, linewidths=tamBordeNodo, font_size=tamFuente, with_labels=mostrarEtiqueta, edge_color=colorArista, alpha=alphaArista, width=tamArista)
+plt.savefig("mapa.png")
 plt.savefig("mapa.pdf")
