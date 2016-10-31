@@ -15,11 +15,13 @@ class CaminoBL{
         CaminoBL& operator=(const CaminoBL& otro);
 
         Grafo& grafo();
+        int tamMochila() const;
         Nodo* nodoInicial();
         float distancia() const;
-        int tamMochila() const;
 
         void solucionInicial();
+
+        bool encontreSolucion();
 
         void busquedaLocal(Vecindad criterio);
 
@@ -32,7 +34,7 @@ class CaminoBL{
         float _distancia;
 
         void asignarNodoInicial(Nodo* nodoInicial);
-        void asignarDistancia(int distancia);
+        void asignarDistancia(float distancia);
         
         void buscoSolucionVecinaMejor(vector<Nodo*>& nodosIntercambiables);
         
@@ -42,9 +44,9 @@ class CaminoBL{
         bool encuentroSolucionVecinaIgual(vector<Nodo*>& nodosIntercambiables);
         bool intercambiarMantieneIgual(Nodo* n1, Nodo* n2);
 
-        int distanciaIntercambiar(const Nodo* n1, const Nodo* n2);
-        bool puedoIntercambiar(Nodo* n1, Nodo* n2);
-        void intercambiar(Nodo* n1, Nodo* n2, int distanciaNueva);
+        float distanciaIntercambiar(const Nodo* n1, const Nodo* n2);
+        bool intercambiarSiPuedo(Nodo* n1, Nodo* n2);
+        void intercambiar(Nodo* n1, Nodo* n2);
 };
 
 CaminoBL::CaminoBL(Grafo g, int tamMochila){
@@ -55,11 +57,14 @@ CaminoBL::CaminoBL(Grafo g, int tamMochila){
 }
 
 CaminoBL::CaminoBL(){
+    _tamMochila = INV;
     _nodoInicial = NULL;
     _distancia = 0;
 }
 
 void CaminoBL::leerEntrada(){
+    assert(_tamMochila == INV);
+
     int cantGimnasios, cantPokeparadas, tamMochila;    
     cin >> cantGimnasios;
     cin >> cantPokeparadas;
@@ -130,12 +135,12 @@ void CaminoBL::asignarNodoInicial(Nodo* nodoInicial){
     _nodoInicial = nodoInicial;
 }
 
-void CaminoBL::asignarDistancia(int distancia){
+void CaminoBL::asignarDistancia(float distancia){
     _distancia = distancia;
 }
 
 void CaminoBL::solucionInicial(){
-    assert(nodoInicial() == NULL);
+    assert(!encontreSolucion());
 
     vector<gym> gimnasios;
     vector<parada> paradas;
@@ -182,35 +187,35 @@ void CaminoBL::solucionInicial(){
     }
 }
 
+bool CaminoBL::encontreSolucion(){
+    return nodoInicial() != NULL;
+}
+
 void CaminoBL::busquedaLocal(Vecindad criterio){
-    assert(nodoInicial() != NULL);
+    assert(encontreSolucion());
 
     if(criterio == intercambiaNodosVisitados){
-        vector<Nodo*>* nodosVisitados = new vector<Nodo*>;
+        vector<Nodo*> nodosVisitados;
         
         Nodo* nodoActual = nodoInicial();
-        nodosVisitados->push_back(nodoActual);
+        nodosVisitados.push_back(nodoActual);
         while(nodoActual->siguiente != NULL){
             nodoActual = nodoActual->siguiente;
-            nodosVisitados->push_back(nodoActual);
+            nodosVisitados.push_back(nodoActual);
         }
 
-        buscoSolucionVecinaMejor(*nodosVisitados);
-
-        delete nodosVisitados;
+        buscoSolucionVecinaMejor(nodosVisitados);
     } else{
-        vector<Nodo*>* pokeparadas = new vector<Nodo*>;
+        vector<Nodo*> pokeparadas;
 
         for(int i = 0; i < grafo().nodos().size(); i++){
             if(!grafo().nodos()[i].gimnasio){
-                pokeparadas->push_back(&grafo().nodos()[i]);
+                pokeparadas.push_back(&grafo().nodos()[i]);
             }
         }
 
-        buscoSolucionVecinaMejor(*pokeparadas);
-        
-        delete pokeparadas;
-    }
+        buscoSolucionVecinaMejor(pokeparadas);
+        }
 }
 
 void CaminoBL::buscoSolucionVecinaMejor(vector<Nodo*>& nodosIntercambiables){
@@ -249,8 +254,10 @@ bool CaminoBL::intercambiarMejora(Nodo* n1, Nodo* n2){
     bool mejora = false;
     float distanciaNueva = distanciaIntercambiar(n1, n2);
     
-    if(distanciaNueva < distancia() && puedoIntercambiar(n1, n2)){  
-        intercambiar(n1, n2, distanciaNueva);
+    cout << "Distancia actual = " << distancia() << " y distancia nueva = " << distanciaNueva << endl;
+    
+    if(distanciaNueva < distancia() && intercambiarSiPuedo(n1, n2)){ 
+        asignarDistancia(distanciaNueva);
         mejora = true;
     }
     
@@ -276,15 +283,15 @@ bool CaminoBL::intercambiarMantieneIgual(Nodo* n1, Nodo* n2){
     bool mantiene = false;
     float distanciaNueva = distanciaIntercambiar(n1, n2);
     
-    if(distanciaNueva == distancia() && puedoIntercambiar(n1, n2)){  
-        intercambiar(n1, n2, distanciaNueva);
+    if(distanciaNueva == distancia() && intercambiarSiPuedo(n1, n2)){  
+        asignarDistancia(distanciaNueva);
         mantiene = true;
     }
     
     return mantiene;
 }
 
-int CaminoBL::distanciaIntercambiar(const Nodo* n1, const Nodo* n2){
+float CaminoBL::distanciaIntercambiar(const Nodo* n1, const Nodo* n2){
     float distanciaNueva = distancia();
 
     if(n1->anterior != NULL){
@@ -310,8 +317,10 @@ int CaminoBL::distanciaIntercambiar(const Nodo* n1, const Nodo* n2){
     return distanciaNueva;
 }
 
-bool CaminoBL::puedoIntercambiar(Nodo* n1, Nodo* n2){
+bool CaminoBL::intercambiarSiPuedo(Nodo* n1, Nodo* n2){
     int pocionesDisponibles = 0;
+
+    intercambiar(n1, n2);
 
     Nodo* nodoActual = nodoInicial();
     while(pocionesDisponibles >= 0 && nodoActual != NULL){
@@ -320,47 +329,89 @@ bool CaminoBL::puedoIntercambiar(Nodo* n1, Nodo* n2){
         } else{
             pocionesDisponibles += POCIONES_POKEPARADA;
         }
-
-        if(nodoActual == n1->anterior && nodoActual != NULL){
-            nodoActual = n2;
-        }
-
-        if(nodoActual == n2->anterior && nodoActual != NULL){
-            nodoActual = n1;
-        }
+        nodoActual = nodoActual->siguiente;
     }
 
-    return pocionesDisponibles >= 0;
+    cout << "Pociones disponibles si intercambio = " << pocionesDisponibles << endl;
+
+    if(pocionesDisponibles >= 0){
+        
+        cout << "Orden actual: " << nodoInicial()->id << " " << nodoInicial()->siguiente->id << " " << nodoInicial()->siguiente->siguiente->id << " " << nodoInicial()->siguiente->siguiente->siguiente->id << endl;
+
+        return true;
+    } else{
+        intercambiar(n1, n2);
+        
+        cout << "Orden actual: " << nodoInicial()->id << " " << nodoInicial()->siguiente->id << " " << nodoInicial()->siguiente->siguiente->id << " " << nodoInicial()->siguiente->siguiente->siguiente->id << endl;
+
+        return false;
+    }
 }
 
-void CaminoBL::intercambiar(Nodo* n1, Nodo* n2, int distanciaNueva){
-    n2->anterior = n1->anterior;
-    n2->siguiente = n1->siguiente;
+void CaminoBL::intercambiar(Nodo* n1, Nodo* n2){
     
-    n1->anterior = n2->anterior;
-    n1->siguiente = n2->siguiente;
+    cout << "Intercambio " << n1->id << " " << n2->id << endl;
 
-    if(n1->siguiente != NULL){
-        n1->siguiente->anterior = n2;
-    }
+    if(n1->siguiente == n2){
+        if(n2->siguiente != NULL){
+            n2->siguiente->anterior = n1;
+        }
 
-    if(n2->siguiente != NULL){
-        n2->siguiente->anterior = n1;
-    }
+        if(n1->anterior != NULL){
+            n1->anterior->siguiente = n2;
+        } else{
+            asignarNodoInicial(n2);
+        }
 
-    if(n1->anterior != NULL){
-        n1->anterior->siguiente = n2;
+        Nodo* n1AnteriorCopia = n1->anterior;
+        n1->anterior = n2;
+        n1->siguiente = n2->siguiente;
+        n2->anterior = n1AnteriorCopia;
+        n2->siguiente = n1;
+    } else if(n2->siguiente == n1){
+        if(n1->siguiente != NULL){
+            n1->siguiente->anterior = n2;
+        }
+
+        if(n2->anterior != NULL){
+            n2->anterior->siguiente = n1;
+        } else{
+            asignarNodoInicial(n1);
+        }
+
+        Nodo* n1SiguienteCopia = n1->siguiente;
+        n1->anterior = n2->anterior;
+        n1->siguiente = n2;
+        n2->anterior = n1;
+        n2->siguiente = n1SiguienteCopia;
     } else{
-        asignarNodoInicial(n2);
-    }
+        if(n1->siguiente != NULL){
+            n1->siguiente->anterior = n2;
+        }
 
-    if(n2->anterior != NULL){
-        n2->anterior->siguiente = n1;
-    } else{
-        asignarNodoInicial(n1);
-    }
+        if(n2->siguiente != NULL){
+            n2->siguiente->anterior = n1;
+        }
 
-    asignarDistancia(distanciaNueva);
+        if(n1->anterior != NULL){
+            n1->anterior->siguiente = n2;
+        } else{
+            asignarNodoInicial(n2);
+        }
+
+        if(n2->anterior != NULL){
+            n2->anterior->siguiente = n1;
+        } else{
+            asignarNodoInicial(n1);
+        }
+
+        Nodo* n1AnteriorCopia = n1->anterior;
+        Nodo* n1SiguienteCopia = n1->siguiente;
+        n1->anterior = n2->anterior;
+        n1->siguiente = n2->siguiente;
+        n2->anterior = n1AnteriorCopia;
+        n2->siguiente = n1SiguienteCopia;
+    }
 
     bool n1Visitado = n1->visitado;
     n1->visitado = n2->visitado;
@@ -368,7 +419,9 @@ void CaminoBL::intercambiar(Nodo* n1, Nodo* n2, int distanciaNueva){
 }
 
 void CaminoBL::imprimirSolucion(){
-    stack<int> camino;
+    assert(encontreSolucion());
+
+    queue<int> camino;
     camino.push(nodoInicial()->id);
     
     int tamCamino = 1;
@@ -382,9 +435,10 @@ void CaminoBL::imprimirSolucion(){
 
     cout << distancia() << " " << tamCamino;
     while(!camino.empty()){
-        cout << " " << camino.top() + 1;
+        cout << " " << camino.front();
         camino.pop();
     }
+    cout << endl;
 }
 
 #endif

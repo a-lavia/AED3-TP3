@@ -73,9 +73,7 @@ bool solucionCasosParticulares(unsigned int mochila_size, vector<struct gym> gim
 {
 	// Caso: No hay gimnasios => Gane
 	if(gimnasios.size() == 0){
-		cout << "0 0" << endl;
-        delete mejor_sol;
-        mejor_sol = NULL;
+		mejor_sol->d = 0;
 		return true;
 	}
 
@@ -89,9 +87,7 @@ bool solucionCasosParticulares(unsigned int mochila_size, vector<struct gym> gim
 	if((suma_total_pociones > paradas.size()*3) || 
 	   ((paradas.size() == 0 || mochila_size == 0) && suma_total_pociones > 0))
 	{
-		cout << -1 << endl;
-        delete mejor_sol;
-        mejor_sol = NULL;
+		mejor_sol->d = -1;
 		return true;
 	}
 
