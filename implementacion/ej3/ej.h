@@ -4,11 +4,11 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
-#include <stack>
-#include <map>
+#include <queue>
 #include <cassert>
 
 #define POCIONES_POKEPARADA 3
+#define INV -1
 
 using namespace std;
     
@@ -34,8 +34,8 @@ enum Vecindad{
 };
 
 float distanciaNodos(Nodo n1, Nodo n2){
-    int x = n1.x - n2.x;
-    int y = n1.y - n2.y;
+    float x = n1.x - n2.x;
+    float y = n1.y - n2.y;
     return sqrt((x*x) + (y*y));
 }
 
