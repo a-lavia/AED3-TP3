@@ -6,6 +6,7 @@
 #include <math.h>
 #include <queue>
 #include <cassert>
+#include <map>
 
 #define POCIONES_POKEPARADA 3
 #define INV -1

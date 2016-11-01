@@ -41,7 +41,7 @@ class CaminoBL{
         bool encuentroSolucionVecinaMejor(vector<Nodo*>& nodosIntercambiables);
         bool intercambiarMejora(Nodo* n1, Nodo* n2);
 
-        bool encuentroSolucionVecinaIgual(vector<Nodo*>& nodosIntercambiables);
+        bool encuentroSolucionVecinaIgual(vector<Nodo*>& nodosIntercambiables, map<Nodo*, Nodo*>& nodosIntercambiados);
         bool intercambiarMantieneIgual(Nodo* n1, Nodo* n2);
 
         float distanciaIntercambiar(const Nodo* n1, const Nodo* n2);
@@ -220,19 +220,23 @@ void CaminoBL::busquedaLocal(Vecindad criterio){
 
 void CaminoBL::buscoSolucionVecinaMejor(vector<Nodo*>& nodosIntercambiables){
     bool busco = true;
-    bool vengoDeUnaSolucionMejor = true;
+    map<Nodo*, Nodo*> nodosIntercambiados;
 
     cout << "Distancia actual = " << distancia() << endl;
 
     while(busco){
+
+        cout << "   Busco una solucion mejor:" << endl;
+
         while(encuentroSolucionVecinaMejor(nodosIntercambiables)){
-            if(!vengoDeUnaSolucionMejor){
-                vengoDeUnaSolucionMejor = true;
+            if(nodosIntercambiados.size() > 0){
+                nodosIntercambiados.clear();
             }
         }
-        if(encuentroSolucionVecinaIgual(nodosIntercambiables) && vengoDeUnaSolucionMejor){
-            vengoDeUnaSolucionMejor = false;
-        } else{
+
+        cout << "   Bueno una solucion igual:" << endl;
+
+        if(!encuentroSolucionVecinaIgual(nodosIntercambiables, nodosIntercambiados)){
             busco = false;
         }
     }
@@ -257,7 +261,7 @@ bool CaminoBL::intercambiarMejora(Nodo* n1, Nodo* n2){
     bool mejora = false;
     float distanciaNueva = distanciaIntercambiar(n1, n2);
     
-    cout << "   Posible distancia nueva = " << distanciaNueva << endl;
+    cout << "       Distancia si intercambio " << n1->id << " con " << n2->id << " = " << distanciaNueva << endl;
     
     if(distanciaNueva < distancia() && intercambiarSiPuedo(n1, n2)){ 
         asignarDistancia(distanciaNueva);
@@ -271,14 +275,17 @@ bool CaminoBL::intercambiarMejora(Nodo* n1, Nodo* n2){
     return mejora;
 }
 
-bool CaminoBL::encuentroSolucionVecinaIgual(vector<Nodo*>& nodosIntercambiables){
+bool CaminoBL::encuentroSolucionVecinaIgual(vector<Nodo*>& nodosIntercambiables, map<Nodo*, Nodo*>& nodosIntercambiados){
     bool busco = true;
     int cantNodos = nodosIntercambiables.size();
 
     for(int i = 0; i < cantNodos && busco; i++){
         for(int j = 0; j < cantNodos && busco; j++){
             if(i != j && intercambiarMantieneIgual(nodosIntercambiables[i], nodosIntercambiables[j])){
-                busco = false;
+                if(!(nodosIntercambiados.count(nodosIntercambiables[i]) > 0 && nodosIntercambiados[nodosIntercambiables[i]] == nodosIntercambiables[j])){
+                    busco = false;
+                    nodosIntercambiados[nodosIntercambiables[i]] = nodosIntercambiables[j];
+                }
             }
         }
     }
@@ -290,7 +297,7 @@ bool CaminoBL::intercambiarMantieneIgual(Nodo* n1, Nodo* n2){
     bool mantiene = false;
     float distanciaNueva = distanciaIntercambiar(n1, n2);
 
-    cout << "   Posible distancia nueva = " << distanciaNueva << endl;
+    cout << "       Distancia si intercambio " << n1->id << " con " << n2->id << " = " << distanciaNueva << endl;
     
     if(distanciaNueva == distancia() && intercambiarSiPuedo(n1, n2)){  
         asignarDistancia(distanciaNueva);
@@ -349,7 +356,7 @@ bool CaminoBL::intercambiarSiPuedo(Nodo* n1, Nodo* n2){
         nodoActual = nodoActual->siguiente;
     }
 
-    cout << "   Pociones disponibles si intercambio = " << pocionesDisponibles << endl;
+    cout << "       Pociones disponibles si intercambio = " << pocionesDisponibles << endl;
 
     if(pocionesDisponibles >= 0){
         return true;
