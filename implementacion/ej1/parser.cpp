@@ -1,9 +1,9 @@
 #include "parser.h"
 
-void leerEntrada(int& cantGimnasios, int& cantPokeparadas, /*vector<vector<float>>& matrizDistancias,*/ list<Nodo>& nodos){
+void leerEntrada(int& cantGimnasios, int& cantPokeparadas, list<Nodo>& nodos, int& mochila){
     cin >> cantGimnasios;
     cin >> cantPokeparadas;
-
+    cin >> mochila;
     int cantNodos = cantGimnasios + cantPokeparadas;
     //nodos.resize(cantNodos);
  
