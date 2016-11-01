@@ -18,8 +18,9 @@ int main(int argc, char* argv[]){
         cout << "Intercambia el orden de los nodos del recorrido original:" << endl;
         c.busquedaLocal(intercambiaNodosVisitados);
         c.imprimirSolucion();
-
-        cout << endl << "Intercambia pokeparadas incluyendo las que estan afuera del recorrido original:" << endl;
+        cout << endl;
+        
+        cout << "Intercambia pokeparadas incluyendo las que estan afuera del recorrido original:" << endl;
         cCopia.busquedaLocal(intercambiaPokeparadas);
         cCopia.imprimirSolucion();
     } else{
