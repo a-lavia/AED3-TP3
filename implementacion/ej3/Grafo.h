@@ -31,6 +31,16 @@ Grafo::Grafo(int cantNodos){
 
 Grafo& Grafo::operator=(const Grafo& otro){
     _nodos = otro._nodos;
+    int cantNodos = _nodos.size();
+    for(int i = 0; i < cantNodos; i++){
+        if(otro._nodos[i].anterior != NULL){
+            _nodos[i].anterior = &nodo(otro._nodos[i].anterior->id);
+        }
+        if(otro._nodos[i].siguiente != NULL){
+            _nodos[i].siguiente = &nodo(otro._nodos[i].siguiente->id);
+        }
+    }
+
     _distancias = otro._distancias;
     return *this;
 }
