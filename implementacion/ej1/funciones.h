@@ -19,7 +19,24 @@ using namespace std;
         }
     };
 
+    struct Solucion{
+        list<Nodo> camino;
+        float distanciaRecorrida;
+        void showMe(){
+            if(distanciaRecorrida == -8){
+                cout << -1 << endl;;
+            }else{
+                cout << distanciaRecorrida << " " << camino.size() << " ";
+                for(list<Nodo>::iterator it = camino.begin(), end = camino.end(); it != end; it++){
+                    cout << it->id << " ";
+                }
+                cout << endl;
+            }
+        }
+    };
+
     float distancia(Nodo& n1, Nodo& n2);
-    void magicBacktracking(int cantGimnasios, list<Nodo>& visitados, list<Nodo>& noVisitados, int& gimnasiosVencidos);
+    void magicBacktracking(int& cantGimnasios, list<Nodo>& visitados, list<Nodo>& noVisitados, int gimnasiosVencidos, int pociones, int& mochila, float distanciaRecorrida, Solucion& mejorSolucionActual);
+    bool subsolucionFactible(int pociones, float distanciaRecorrida, float mejorDistanciaActual);
 
 #endif
