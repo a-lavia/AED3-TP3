@@ -16,13 +16,13 @@ int main(int argc, char* argv[]){
         Camino cCopia;
         cCopia = c;
 
-        cout << "Intercambia el orden de los nodos del recorrido original:" << endl;
-        c.busquedaLocal(intercambiaNodosVisitados);
+        cout << "Busqueda local con vecindad = permutaCamino:" << endl;
+        c.busquedaLocal(permutaCamino);
         c.imprimirSolucion();
         cout << endl;
 
-        cout << "Intercambia pokeparadas incluyendo las que estan afuera del recorrido original:" << endl;
-        cCopia.busquedaLocal(intercambiaPokeparadas);
+        cout << "Busqueda local con vecindad = permutaYReemplazaPokeparadas:" << endl;
+        cCopia.busquedaLocal(permutaYReemplazaPokeparadas);
         cCopia.imprimirSolucion();
     } else{
         cout << -1 << endl;

@@ -29,8 +29,8 @@ struct Nodo{
 };
 
 enum Vecindad{
-    intercambiaNodosVisitados,
-    intercambiaPokeparadas
+    permutaCamino,
+    permutaYReemplazaPokeparadas
 };
 
 float distanciaNodos(Nodo n1, Nodo n2){

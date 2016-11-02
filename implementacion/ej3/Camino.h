@@ -36,22 +36,22 @@ class Camino{
         void asignarNodoInicial(Nodo* nodoInicial);
         void asignarDistancia(float distancia);
         
-        void buscoSolucionVecinaMejor(vector<Nodo*>& nodosIntercambiables);
+        void buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados);
         
-        bool encuentroSolucionVecinaMejor(vector<Nodo*>& nodosIntercambiables);
+        bool encuentroSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados);
         bool cambiarMejora(Nodo* n1, Nodo* n2);
 
-        bool encuentroSolucionVecinaIgual(vector<Nodo*>& nodosIntercambiables, map<Nodo*, Nodo*>& nodosIntercambiados);
+        bool encuentroSolucionVecinaIgual(vector<Nodo*>& nodosConsiderados, map<int, int>& nodosCambiados);
         bool cambiarMantieneIgual(Nodo* n1, Nodo* n2);
 
         bool cambiarSiPuedo(Nodo* n1, Nodo* n2);
 
-        bool estaEnElCamino(const Nodo* n1);
+        bool estaEnElCamino(const Nodo* n);
 
         float distanciaPermutar(const Nodo* n1, const Nodo* n2);
-        float distanciaReemplazar(const Nodo* n1, const Nodo* n2);
+        float distanciaReemplazar(const Nodo* nodoViejo, const Nodo* nodoNuevo);
         void permutar(Nodo* n1, Nodo* n2);
-        void reemplazar(Nodo* n1, Nodo* n2);
+        void reemplazar(Nodo* nodoViejo, Nodo* nodoNuevo);
 };
 
 Camino::Camino(Grafo g, int tamMochila){
@@ -167,7 +167,7 @@ void Camino::solucionGolosa(){
 
     solucion* solucionInicial = solHeuristicaGolosa(tamMochila(), gimnasios, paradas);
 
-    if(solucionInicial != NULL && solucionInicial->d != -1){
+    if(solucionInicial != NULL && solucionInicial->d != INV){
         asignarDistancia(solucionInicial->d);
 
         int tamCamino = solucionInicial->camino.size();
@@ -197,7 +197,7 @@ bool Camino::encontreSolucion(){
 void Camino::busquedaLocal(Vecindad criterio){
     assert(encontreSolucion());
 
-    if(criterio == intercambiaNodosVisitados){
+    if(criterio == permutaCamino){
         vector<Nodo*> nodosVisitados;
         
         Nodo* nodoActual = nodoInicial();
@@ -221,9 +221,9 @@ void Camino::busquedaLocal(Vecindad criterio){
     }
 }
 
-void Camino::buscoSolucionVecinaMejor(vector<Nodo*>& nodosIntercambiables){
+void Camino::buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
     bool busco = true;
-    map<Nodo*, Nodo*> nodosIntercambiados;
+    map<int, int> nodosCambiados;
 
     cout << "Distancia actual = " << distancia() << endl;
 
@@ -231,27 +231,27 @@ void Camino::buscoSolucionVecinaMejor(vector<Nodo*>& nodosIntercambiables){
 
         cout << "   Busco una solucion mejor:" << endl;
 
-        while(encuentroSolucionVecinaMejor(nodosIntercambiables)){
-            if(nodosIntercambiados.size() > 0){
-                nodosIntercambiados.clear();
+        while(encuentroSolucionVecinaMejor(nodosConsiderados)){
+            if(nodosCambiados.size() > 0){
+                nodosCambiados.clear();
             }
         }
 
         cout << "   Bueno una solucion igual:" << endl;
 
-        if(!encuentroSolucionVecinaIgual(nodosIntercambiables, nodosIntercambiados)){
+        if(!encuentroSolucionVecinaIgual(nodosConsiderados, nodosCambiados)){
             busco = false;
         }
     }
 }
 
-bool Camino::encuentroSolucionVecinaMejor(vector<Nodo*>& nodosIntercambiables){
+bool Camino::encuentroSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
     bool busco = true;
-    int cantNodos = nodosIntercambiables.size();
+    int cantNodos = nodosConsiderados.size();
 
     for(int i = 0; i < cantNodos && busco; i++){
         for(int j = 0; j < cantNodos && busco; j++){
-            if(i != j && (estaEnElCamino(nodosIntercambiables[i]) || estaEnElCamino(nodosIntercambiables[j])) && cambiarMejora(nodosIntercambiables[i], nodosIntercambiables[j])){
+            if(i != j && (estaEnElCamino(nodosConsiderados[i]) || estaEnElCamino(nodosConsiderados[j])) && cambiarMejora(nodosConsiderados[i], nodosConsiderados[j])){
                 busco = false;
             }
         }
@@ -286,17 +286,17 @@ bool Camino::cambiarMejora(Nodo* n1, Nodo* n2){
     return mejora;
 }
 
-bool Camino::encuentroSolucionVecinaIgual(vector<Nodo*>& nodosIntercambiables, map<Nodo*, Nodo*>& nodosIntercambiados){
+bool Camino::encuentroSolucionVecinaIgual(vector<Nodo*>& nodosConsiderados, map<int, int>& nodosCambiados){
     bool busco = true;
-    int cantNodos = nodosIntercambiables.size();
+    int cantNodos = nodosConsiderados.size();
 
     for(int i = 0; i < cantNodos && busco; i++){
         for(int j = 0; j < cantNodos && busco; j++){
-            if(i != j && (estaEnElCamino(nodosIntercambiables[i]) || estaEnElCamino(nodosIntercambiables[j])) && cambiarMantieneIgual(nodosIntercambiables[i], nodosIntercambiables[j])){
-                if(!(nodosIntercambiados.count(nodosIntercambiables[i]) > 0 && nodosIntercambiados[nodosIntercambiables[i]] == nodosIntercambiables[j])){
-                    busco = false;
-                    nodosIntercambiados[nodosIntercambiables[i]] = nodosIntercambiables[j];
-                }
+            if(i != j && (estaEnElCamino(nodosConsiderados[i]) || estaEnElCamino(nodosConsiderados[j]))
+                      && !(nodosCambiados.count(nodosConsiderados[i]->id) > 0 && nodosCambiados[nodosConsiderados[i]->id] == nodosConsiderados[j]->id)
+                      && cambiarMantieneIgual(nodosConsiderados[i], nodosConsiderados[j])){
+                nodosCambiados[nodosConsiderados[i]->id] = nodosConsiderados[j]->id;
+                busco = false;
             }
         }
     }
@@ -367,8 +367,8 @@ bool Camino::cambiarSiPuedo(Nodo* n1, Nodo* n2){
     }
 }
 
-bool Camino::estaEnElCamino(const Nodo* n1){
-    return n1->anterior != NULL || n1->siguiente != NULL;
+bool Camino::estaEnElCamino(const Nodo* n){
+    return n->anterior != NULL || n->siguiente != NULL;
 }
 
 float Camino::distanciaPermutar(const Nodo* n1, const Nodo* n2){
