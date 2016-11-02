@@ -119,7 +119,7 @@ Ahora presentamos el pseudo código de la función SolucionCasoGeneral:
 		\State Encolar(s.cola, g)
 		\State Marcar a g como visitado en gimnasios
 
-	\ElsIf{Si la mochila esta llena ó todas las paradas estan recorridas}
+	\ElsIf{Si la mochila esta llena ó todas las paradas están recorridas}
 		\State // Aquí no le gano a ningún gimnasio
 		\State s.distancia $\leftarrow$ $-1$
 		\State Retornar s
@@ -148,26 +148,314 @@ Y con esto termina nuestro algoritmo propuesto con una \textbf{heurística const
 Para no agobiar con tanto código, en esta sección no ahondaremos en el resto de las funciones auxiliares, que consideramos de por si declarativas, pero si haremos un analisis profundo de ellas en la siguiente sección donde analizaremos la complejidad del código.
 
 
-\subsection{Complejidad}
+\subsection{Calculo de complejidad}
 
 En esta sección analizaremos en profundidad nuestra implementación del pseudo código presentado.
 
 Antes de comenzar a hacer un analisis exahustivo del mismo, y para que no generar repeticiones, hablaremos de las estructuras utilizadas en nuestra implementación.
 
-% Estructuras c++
+\subsubsection{Estructuras utilizadas de la \textit{Standard Template Library} de C++}
 
-Para nuestra implementación utilizamos dos estructuras de la \textit{Standard Template Library} de C++: \emph{queue}\footnote{\url{http://www.cplusplus.com/reference/queue/queue/}} y \emph{vector}\footnote{\url{http://www.cplusplus.com/reference/vector/vector/}}.
+En nuestra implementación utilizamos dos estructuras de la \textit{Standard Template Library} de C++: \emph{queue}\footnote{\url{http://www.cplusplus.com/reference/queue/queue/}} y \emph{vector}\footnote{\url{http://www.cplusplus.com/reference/vector/vector/}}.
 
-De la estructura \emph{queue}, las funciones que utilizaremos con sus respectivas complejidades son:
+De la estructura \emph{queue}, las funciones que utilizaremos son: push\footnote{\url{http://www.cplusplus.com/reference/queue/queue/push/}}, pop\footnote{\url{http://www.cplusplus.com/reference/queue/queue/pop/}}, front\footnote{\url{http://www.cplusplus.com/reference/queue/queue/front/}} y size\footnote{\url{http://www.cplusplus.com/reference/queue/queue/size/}}, donde la complejidad de las mismas es de tiempo constante.
 
-\begin{itemzie}
+De la estructura \emph{vector}, las funciones que utilizaremos son: el constructor que toma el tamaño como parametro de entrada\footnote{\url{http://www.cplusplus.com/reference/vector/vector/vector/}}, size\footnote{\url{http://www.cplusplus.com/reference/vector/vector/size/}} y el operador [] que devuelve el elemento i-ésimo\footnote{\url{http://www.cplusplus.com/reference/vector/vector/operator[]/}}. Las complejidades de size y el operador [] son constantes y la del constructor es lineal sobre el tamaño que se pasa como parametro.
 
-\item \textbf{push}:
+% No me gusta este titulo
+\subsubsection{Estructuras creadas por nosotros}
 
-\item \textbf{pop}:
+Hemos creado tres tipos de estructuras para ayudarnos en nuestra implementación, las cuales son: \textbf{gym} que tiene dos float que representan la posición, un entero que representa la cantidad de pociones necesarias para ganarle y un booleano para saber si el nodo fue visitado o no; \textbf{parada} que tiene dos float que representan la posicion y un booleano para saber si fue visitado; y \textbf{solucion} que tiene un float que representa la distancia recorrida hasta el momento y una cola donde guardamos el camino recorrido de dicha distancia.
 
-\item \textbf{front}:
 
-\item \textbf{size}:
+% No me gusta como están dispuestos los titulos, modificar
+\subsubsection{Analisis de complejidad}
+
+
+Ahora si pasamos a hacer un examen exhaustivo para el cálculo de la complejidad de nuestra implementación. Para realizarlo comenzaremos primero con la función \textbf{SolucionCasoGeneral} para luego obtener mejor la complejidad de la función \textbf{SolucionHeuristicaGolosa}.
+
+Cabe aclarar desde un comienzo que, como el grafo modelado es completo, generamos desde un comienzo una matriz de adyacencia con el peso de la arista en cada nodo (o sea, la distancia entre dos nodos). De ésta matriz hablaremos, junto con su complejidad, cuando analisemos la función \textbf{SolucionHeuristicaGolosa} pero mencionamos ahora porque utilizamos ésta matriz para obtener la distancia entre dos nodos en $\mathcal{O}(1)$.
+
+
+\subsubsection{Función SolucionCasoGeneral}
+
+Analizaremos con detalle cada parte de esta función. Para esto, iremos tomando porciones del pseudo código enunciado antes y explicando como funcionan en nuestra implementación, así obtener la complejidad. Algo que cabe destacar es la aridad de ésta función en nuestra implementación. La misma es: 
+
+~
+\textbf{SolucionCasoGeneral}(\textbf{nodoComienzo}: nodo, \textbf{s} solucion, \textbf{mochila}: entero, \textbf{gimnasios}: vector(gym), \textbf{paradas}: vector(parada)) $\rightarrow$ \textit{void}
+~
+
+Donde la solución es la estructura comentada anteriormente que pasamos por referencia. Ésta viene con distancia cero y la cola vacía.
+
+Comencemos el analisis de la complejidad:
+
+\begin{algorithm}[H]
+\label{}
+\begin{algorithmic}[]
+
+\State solucion s $\leftarrow$ \{0, Vacia()\}
+
+\If{nodoComienzo es un gimnasio}
+
+	\State m $\leftarrow$ 0  // Valor de la mochila
+	\State Marcar nodoComienzo como visitado en gimnasios
+
+\Else
+
+	\State m $\leftarrow$ 3  // Valor de la mochila
+	\State Marcar nodoComienzo como visitado en paradas
+
+\EndIf
+
+\State Encolar(s.cola, nodoComienzo)
+
+\medskip
+\Statex \underline{}
+\end{algorithmic}
+\end{algorithm}
+
+
+Lo que primero que realiza el pseudo código es generar la estructura solución vacia, pero como ésta se recibe como parametro no realizamos la operación en nuestra implementación.
+
+Luego, observamos si el nodoComienzo es un gimnasio o una parada. nodoComienzo es el índice de entrada del nodo (la entrada toma primero 1..n nodos gimnasios y, luego, (n+1)..m nodos paradas). Si es menor que n es un gimnasio y si es mayor es una parada. Saber esto es $\mathcal{O}(1)$.
+
+Cómo cada nodoComienzo es un ínidice, podemos marcar al mismo cómo visitado poniendo \textit{true} en su vector, con una complejidad constante, y luego le asignamos un número al m que representa la mochila. Ésto lo hace tanto en la rama del \textit{if} como en la del \textit{else}, por lo tanto la complejidad de ambas ramas es la misma.
+
+Por último, se encola el elemento en la cola de la solución que, como vimos anteriormente tiene complejidad constante.
+
+Entonces, mostramos un pseudo código más cercano a nuestra implementación con la complejidad de la parte analizada:
+
+\begin{algorithm}[H]
+\label{}
+\begin{algorithmic}[]
+
+\State solucion s $\leftarrow$ \{0, Vacia()\} \Comment{$\mathcal{O}(1)$}
+
+\If{nodoComienzo es un gimnasio} \Comment{$\mathcal{O}(1)$}
+
+	\State m $\leftarrow$ 0  \Comment{$\mathcal{O}(1)$}
+	\State gimnasios[nodoComienzo].visitado $\leftarrow$ true \Comment{$\mathcal{O}(1)$}
+\Else
+
+	\State m $\leftarrow$ 3  \Comment{$\mathcal{O}(1)$}
+	\State paradas[nodoComienzo].visitado $\leftarrow$ true \Comment{$\mathcal{O}(1)$}
+
+\EndIf
+
+\State Encolar(s.cola, nodoComienzo) \Comment{$\mathcal{O}(1)$}
+
+\medskip
+\Statex \underline{Complejidad: $\mathcal{O}(1) + \mathcal{O}(1) + \mathcal{O}(1) + \mathcal{O}(1) + \mathcal{O}(1) = \mathcal{O}(1)$}
+\end{algorithmic}
+\end{algorithm}
+
+
+Seguimos con la siguiente parte del código:
+
+\begin{algorithm}[H]
+\label{}
+\begin{algorithmic}[]
+
+\For{Mientras no se hayan visitado todos los gimnasios}
+
+	\If{Si le gano a algún gimnasio con las pociones que tengo}
+		\State g $\leftarrow$ DameGimnasioMasCercanoQueGano(gimnasios)
+		\State m $\leftarrow$ m - g.pociones
+		\State ActualizarDistancia(s.distancia, g.distancia)
+		\State Encolar(s.cola, g)
+		\State Marcar a g como visitado en gimnasios
+
+	\ElsIf{Si la mochila esta llena ó todas las paradas estan recorridas}
+		\State // Aquí no le gano a ningún gimnasio
+		\State s.distancia $\leftarrow$ $-1$
+		\State Retornar s
+	
+	\Else
+
+		\State p $\leftarrow$ DameParadaMasCercana(paradas)
+		\State ActualizarDistancia(s.distancia, p.distancia)
+		\State Encolar(s.cola, p)
+		\State Marcar a p como visitado en paradas
+
+	\EndIf
+
+\EndFor
+
+\State retornar s
+
+\medskip
+\Statex \underline{}
+\end{algorithmic}
+\end{algorithm}
+
+
+En ésta porción del código hay partes que no son triviales, por ende iremos analizandolas una por una con sumo detalle.
+
+En la guarda del For dice \textit{Mientras no se hayan visitado todos los gimnasios}. Para esto tenemos un entero llamado \emph{gym\_no\_recorridos} que se inicializa desde un comienzo con la cantidad de gimnasios y cada vez que se visita alguno se actualiza restandole uno. Por lo tanto, saber si se visitaron todos los gimnasios tiene como complejidad $\mathcal{O}(1)$.
+
+Analicemos cada condición del if:
+
+La primera guarda dice \textit{Si le gano a algún gimnasio con las pociones que tengo}. Para esta guarda generamos una función que se llama \textbf{leGanoAAlgunGym}, que toma por referencia al vector gimnasios, en donde recorre linealmente al vector mirando si alguno no fue visitado y en tal caso, si le puedo ganar con la cantidad de pociones que tengo. Si encuentra alguno devuelve true, sino false.
+Un pseudo código de la función sería de esta forma:
+\[
+	\text{\textbf{Función} leGanoAAlgunGym:}
+\]
+\[
+	\text{\textbf{return: }} \exists (i \leftarrow |gimnasios|) \neg gimnasios[i].visitado \land gimnasios[i].p \leq mochila
+\]
+
+Como recorre de forma lineal el vector de gimnasios, su complejidad es $\mathcal{O}(|gimnasios|)$.
+
+Si ésta devuelve verdadero, entra en el bloque donde  se busca el gimnasio más al que se le puede ganar y se actualizan todas las variables relacionadas. Para esta parte generamos una función llamada \textbf{leGanoAlGymMasCercano}, que toma por referencia a la solución, el vector de gimnasios y la matriz de distancias; y donde realiza todas estas operaciones en conjunto de la siguiente forma:
+
+\begin{itemize}
+	\item Recorro de forma lineal los gimnasios buscando un gimnasio que no haya sido visitado, al que le pueda ganar y sea el más cercano. Esto se hace obteniendo un gimnasio que es el mejor en el momento y, si encuentramos otro que cumpla con esto y sea más cercano, lo cambiamos por el que teniamos, y continuamos con esta operatoria hasta recorrerlos a todos. Saber si fue visitado o si le puedo ganar tiene como complejidad $\mathcal{O}(1)$ y la distancia entre dos nodos también es $\mathcal{O}(1)$. Por lo tanto, su complejidad es $\mathcal{O}(|gimnasios|)$.
+	\item Una vez que obtengo el gimnasio, actualizo la mochila $\mathcal{O}(1)$.
+	\item Actualizo la distancia de la solución $\mathcal{O}(1)$.
+	\item Meto en la cola de la solución el nodo del gimnasio $\mathcal{O}(1)$.
+	\item Marcamos como visitado al gimnasio en el vector, asignandole true al flag de visitado. $\mathcal{O}(1)$
+	\item Restamos uno a la variable \emph{gym\_no\_recorridos}.
+\end{itemize}
+
+Por lo tanto, la complejidad de este bloque de código es: $\mathcal{O}(|gimnasios|) + \mathcal{O}(1) + \mathcal{O}(1) + \mathcal{O}(1) + \mathcal{O}(1) = \mathcal{O}(|gimnasios|)$.
+
+La segunda guarda del if dice \textit{Si la mochila esta llena ó todas las paradas están recorridas}. Esta guarda tiene complejidad $\mathcal{O}(1)$ ya que el valor de la mochila es un entero y puedo saber si llegó al máximo valor con una simple comparación. Para saber si las paradas fueron visitadas, cómo hicimos con los gimnasios, tenemos un entero llamado \emph{paradas\_no\_recorridas}, donde al comienzo de la función se le asigna la cantidad de paradas y cada vez que se pasa por alguna se le resta uno. Entonces, para saber si recorrí todas las paradas es una saber si \emph{paradas\_no\_recorridas} es igual que cero y la complejidad es $\mathcal{O}(1)$. Por lo tanto, la complejidad de la guarda es $\mathcal{O}(1)$.
+
+Si esta segunda guarda tiene como resultado verdadero, entra a un bloque donde se le asigna a la distancia de la solución el valor de $-1$ y termina la ejecución del programa. Por lo tanto, este bloque tiene como complejidad $\mathcal{O}(1)$.
+
+Por último, si las guardas anteriores dan falso, entra al bloque del else. Dentro lo que hace es obtener la parada más cercana, actualizar la distancia, encolar la parada y marcarla como visitada. Para realizar esto creamos una función llamada \textbf{voyParadaMasCercana}, que toma una referencia a la estructura solución, una referencia al vector de paradas, el valor límite de la mochila y una referencia a la matriz de distancias. La forma de realizar estas operaciones es la siguiente:
+
+\begin{itemize}
+
+	\item Para obtener la parada más cercana realizamos una operación similar a la de la función \textbf{leGanoAlGymMasCercano}. Recorremos en forma lineal al vector de paradas buscado una parada que no haya sido visitada y que su distancia sea la más cercana. Cuando obtenemos una, seguimos buscando hasta el final para ver si se puede mejorar y cambiarla por la mejor. Por lo tanto, su complejidad es $\mathcal{O}(|paradas|)$
+	\item Una vez obtenida la parada mas cercana, actualizamos la mochila sumandole tres, o lo necesario para llegar hasta el tope. $\mathcal{O}(1)$
+	\item Sumamos la distancia a la solución. $\mathcal{O}(1)$
+	\item Marcamos la parada como visitada en el vector. $\mathcal{O}(1)$
+	\item Restamos en uno a la variable \emph{paradas\_no\_recorridas}. $\mathcal{O}(1)$
 
 \end{itemize}
+
+Sumando todas las complejidades de esta función queda la siguiente complejidad: $\mathcal{O}(|paradas|) + \mathcal{O}(1) + \mathcal{O}(1) + \mathcal{O}(1) + \mathcal{O}(1) = \mathcal{O}(|paradas|)$.
+
+Por lo tanto, la parte de código analisada con sus complejidades quedaría de la siguiente forma:
+
+\begin{algorithm}[H]
+\label{}
+\begin{algorithmic}[]
+
+\While{gym\_no\_recorridos $> 0$} \Comment{$\mathcal{O}(1)$}
+
+	\If{leGanoAAlgunGym(gimnasios)} \Comment{$\mathcal{O}(|gimnasios|)$}
+
+		\State leGanoAlGymMasCercano(s, gimnasios, matriz) \Comment{$\mathcal{O}(|gimnasios|)$}
+
+	\ElsIf{m == mochila $\land$ paradas\_no\_recorridas == 0} \Comment{$\mathcal{O}(1)$}
+		\State s.distancia $\leftarrow$ $-1$ \Comment{$\mathcal{O}(1)$}
+		\State Retornar \Comment{$\mathcal{O}(1)$}
+	
+	\Else
+
+		\State voyParadaMasCercana(mochila, s, paradas, matriz) \Comment{$\mathcal{O}(|Paradas|)$}
+
+	\EndIf
+
+\EndWhile
+
+\State Retornar \Comment{$\mathcal{O}(1)$}
+
+\medskip
+\Statex \underline{}
+\end{algorithmic}
+\end{algorithm}
+
+En peor caso esta porción de código correría tantas veces como cantidad de gimnasios, entonces la complejidad sería: $\mathcal{O}(|gimnasios|)* ( 2*\mathcal{O}(|gimnasios|) + \mathcal{O}(1) + \mathcal{O}(|paradas|) = \mathcal{O}(|gimnasios|) * (\mathcal{O}(|gimnasios|) + \mathcal{O}(|paradas|))$.
+
+Cómo $\mathcal{O}(|gimnasios|) + \mathcal{O}(|paradas|) = \mathcal{O}(N)$, siendo $N$ la cantidad de nodos del grafo. Entonces la complejidad sería: $\mathcal{O}(|gimnasios|) * (\mathcal{O}(|gimnasios|) + \mathcal{O}(|paradas|)) = \mathcal{O}(|gimnasios|) * \mathcal{O}(N)$.
+
+Para finalizar el analisis de ésta función, unamos la complejidad de las dos partes para obtener la complejidad total de la misma: Por la primera parte tenemos $\mathcal{O}(1)$ y por la última $\mathcal{O}(|gimnasios|) * \mathcal{O}(N)$. Por lo tanto, la complejidad total de la función está dada por la última parte.
+
+Complejidad de la función \textbf{SolucionCasoGeneral} es de: $\mathcal{O}(|gimnasios|) * \mathcal{O}(N)$.
+
+
+\subsubsection{Función SolucionHeuristicaGolosa}
+
+
+En ésta función haremos el analisis de la misma forma que la anterior, iremos tomando porciones de código y analisandolas en detalle y por separado obteniendo la complejidad de cada una de ellas, para luego unir las complejidades y obtener así la complejidad total de la función.
+
+Antes de comenzar, cabe aclarar que difiere un poco la descripción de la función que haremos a la implementación real, pero no así en complejidad. Con esto nos referimos a que agregaremos una funcionalidad más hacia el final de la misma que es imprimir la solución. En nuestra implementación lo que hacemos es devolver la estructura solución e imprimirla por fuera, esto es para poder utilizarla en los siguientes ejercicios de este trabajo y como es la única operación que hacemos por fuera nos parece razonable incluirla dentro y hacer este comentario.
+
+Comencemos el analisis.
+
+Lo primero que realiza nuestra implementación, y que no está en el pseudo código, es generar una matriz de adyacencias donde en sus coordenadas tenemos la distancia entre los nodos. Generamos ésta matriz para optimizar un poco este calculo. Un pseudo código de la creación de la misma es:
+
+\[
+	\text{\textbf{return}:  } M \text{ donde } M \in \mathbb{R}^{NxN} \text{ y } (\forall i \in \text{filas($M$)})(\forall j \in \text{columnas($M$)}) M[i,j] = distancia(nodo[i], nodo[j])
+\]
+
+Siendo $N$ la cantidad total de nodos del grafo y nodo[] reprenta a cada nodo del mismo, pudiendo ser tanto un gimnasio como una parada. Generar ésta matriz tiene un costo de $\mathcal{O}(N^2)$.
+
+Esto es lo único distinto en el comienzo de nuestro pseudo código con la implementación original. Continuemos con el analisis de la primera parte del algoritmo:
+
+\begin{algorithm}[H]
+\label{}
+\begin{algorithmic}[]
+
+\If{esVacio(gimnasios)}
+	\State Devolver $0$ $0$
+	\State Terminar
+\EndIf
+
+\If{(cantidad(paradas)*3 $<$ SumaTodasLasPociones(gimnasios))}
+	\State Devolver $-1$
+	\State Terminar
+\EndIf
+
+\If{(esVacio(paradas) ó mochila $== 0$) y SumaTodasLasPociones(gimnasios) $> 0$}
+	\State Devolver $-1$
+	\State Terminar
+\EndIf
+
+\If{SumaTodasLasPociones(gimnasios) $== 0$}
+
+	\State Conj(solucion) c $\leftarrow$ Vacio()
+
+	\For{cada g gimnasio en gimnasios}
+
+		\State solucion s $\leftarrow$ SolucionCasoGeneral(g, mochila, paradas, gimnasios)
+
+		\State Agregar(c,s)
+
+	\EndFor
+
+	\State DevolverMejorSolucion(c)
+	\State Terminar
+\EndIf
+
+\medskip
+\Statex \underline{}
+\end{algorithmic}
+\end{algorithm}
+
+Para toda esta primera parte del pseudo código generamos una función que se llama \textbf{SolucionCasosParticulares} donde encapsula todas estas operaciones. Ésta tiene como parametros la máxima cantidad de pociones que puede llevar la mochila, el vector gimnasios, el vector paradas, la matriz de adyacencias y una solución.
+
+Lo primero que realiza es ver si la cantidad de gimnasios es $0$, esto se realiza con la función size del tipo vector que tiene como complejidad $\mathcal{O}(1)$. Si esto es verdadero, lo que hace es devolver $0 0$ y salir, en la implementación le asignamos a la distancia un $0$ y terminamos la ejecución. Complejidad de este if con su boque es $\mathcal{O}(1)$.
+
+Luego, observamos si la cantidad de paradas por tres es menor estricto que la suma de las pociones necesarias de los gimnasios para ganarles. Si ocurre esto, el caso no tiene solución. Saber cual es la cantidad de paradas lo hacemos utilizando la función size en $\mathcal{O}(1)$. Saber cual es la suma de las pociones necesarias para ganarle a los gimnasios ya no es trivial, debemos recorrerlos a todos. Por ello lo calculamos antes en nuestra implementación. Un pseudo código del calculo sería:
+
+\[
+	\text{\textbf{return: }} \sum_{i \in |gimnasios|} gimnasios[i].p
+\]
+Éste calcuo tiene complejidad $\mathcal{O}(|gimnasios|)$.
+
+Entonces si ésta guarda es verdadera, realiza una operación parecida a la del if anterior con la diferencia de que, como este caso no tiene solución, asignamos a la distancia un $-1$ y terminamos la ejecución. Complejidad de éste segundo if con el bloque es $\mathcal{O}(|gimnasios|) + \mathcal{O}(1) = \mathcal{O}(|gimnasios|)$.
+
+El siguiente if es parecido al recién visto, si no hay paradas o la mochila tiene una capacidad nula para las pociones y hay algún gimnasio en el que se requiere como mínimo una poción para ganarle entonces no hay solución y el bloque del if es el mismo que el anterior. Saber si no hay paradas con la función size tiene complejidad $\mathcal{O}(1)$, saber si la mochila tiene capacidad nula también es $\mathcal{O}(1)$ y la suma de las pociones necesarias de los gimnasios para ganarles ya fue calculada, por lo tanto la complejidad del if con el bloque es de $\mathcal{O}(1)$.
+
+
+
+
+
+
+
+
+
