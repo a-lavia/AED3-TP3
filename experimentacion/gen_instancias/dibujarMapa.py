@@ -70,5 +70,10 @@ if dibujarCamino:
 
 #Dibujamos
 nx.draw(G, nodosPos, node_color=nodosColor, node_size=nodosTam, linewidths=tamBordeNodo, font_size=tamFuente, with_labels=mostrarEtiqueta, edge_color=colorArista, alpha=alphaArista, width=tamArista)
-plt.savefig("mapa.png")
-plt.savefig("mapa.pdf")
+
+if dibujarCamino:
+	plt.savefig(sys.argv[1]+"-"+sys.argv[2]+".png")
+	plt.savefig(sys.argv[1]+"-"+sys.argv[2]+".pdf")
+else:
+	plt.savefig(sys.argv[1]+".png")
+	plt.savefig(sys.argv[1]+".pdf")
