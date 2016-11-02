@@ -224,12 +224,16 @@ void Camino::busquedaLocal(Vecindad criterio){
 void Camino::buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
     bool busco = true;
     map<int, int> nodosCambiados;
-
-    cout << "Distancia actual = " << distancia() << endl;
+    
+    #ifdef DEBUG
+        cout << "Distancia actual = " << distancia() << endl;
+    #endif
 
     while(busco){
 
-        cout << "   Busco una solucion mejor:" << endl;
+        #ifdef DEBUG
+            cout << "   Busco una solucion mejor:" << endl;
+        #endif
 
         while(encuentroSolucionVecinaMejor(nodosConsiderados)){
             if(nodosCambiados.size() > 0){
@@ -237,7 +241,9 @@ void Camino::buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
             }
         }
 
-        cout << "   Bueno una solucion igual:" << endl;
+        #ifdef DEBUG
+            cout << "   Bueno una solucion igual:" << endl;
+        #endif
 
         if(!encuentroSolucionVecinaIgual(nodosConsiderados, nodosCambiados)){
             busco = false;
@@ -251,7 +257,8 @@ bool Camino::encuentroSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
 
     for(int i = 0; i < cantNodos && busco; i++){
         for(int j = 0; j < cantNodos && busco; j++){
-            if(i != j && (estaEnElCamino(nodosConsiderados[i]) || estaEnElCamino(nodosConsiderados[j])) && cambiarMejora(nodosConsiderados[i], nodosConsiderados[j])){
+            if(i != j && (estaEnElCamino(nodosConsiderados[i]) || estaEnElCamino(nodosConsiderados[j]))
+                      && cambiarMejora(nodosConsiderados[i], nodosConsiderados[j])){
                 busco = false;
             }
         }
@@ -272,15 +279,19 @@ bool Camino::cambiarMejora(Nodo* n1, Nodo* n2){
         distanciaNueva = distanciaPermutar(n1,n2);
     }
     
-    cout << "       Distancia si cambio " << n1->id << " con " << n2->id << " = " << distanciaNueva << endl;
-    
+    #ifdef DEBUG
+        cout << "       Distancia si cambio " << n1->id << " con " << n2->id << " = " << distanciaNueva << endl;
+    #endif
+
     if(distanciaNueva < distancia() && cambiarSiPuedo(n1, n2)){ 
         asignarDistancia(distanciaNueva);
         mejora = true;
 
-        cout << "¡MEJORE!" << endl;
-        cout << "Cambie " << n1->id << " por " << n2->id << endl;
-        imprimirSolucion();
+        #ifdef DEBUG
+            cout << "¡MEJORE!" << endl;
+            cout << "Cambie " << n1->id << " por " << n2->id << endl;
+            imprimirSolucion();
+        #endif
     }
     
     return mejora;
@@ -316,15 +327,19 @@ bool Camino::cambiarMantieneIgual(Nodo* n1, Nodo* n2){
         distanciaNueva = distanciaPermutar(n1,n2);
     }
 
-    cout << "       Distancia si cambio " << n1->id << " con " << n2->id << " = " << distanciaNueva << endl;
-    
+    #ifdef DEBUG
+        cout << "       Distancia si cambio " << n1->id << " con " << n2->id << " = " << distanciaNueva << endl;
+    #endif
+
     if(distanciaNueva == distancia() && cambiarSiPuedo(n1, n2)){  
         asignarDistancia(distanciaNueva);
         mantiene = true;
 
-        cout << "CAMBIE POR UNA DISTANCIA IGUAL" << endl;
-        cout << "Cambie " << n1->id << " por " << n2->id << endl;
-        imprimirSolucion();
+        #ifdef DEBUG
+            cout << "CAMBIE POR UNA DISTANCIA IGUAL" << endl;
+            cout << "Cambie " << n1->id << " por " << n2->id << endl;
+            imprimirSolucion();
+        #endif
     }
     
     return mantiene;
@@ -350,7 +365,9 @@ bool Camino::cambiarSiPuedo(Nodo* n1, Nodo* n2){
         nodoActual = nodoActual->siguiente;
     }
 
-    cout << "       Pociones disponibles si intercambio = " << pocionesDisponibles << endl;
+    #ifdef DEBUG
+        cout << "       Pociones disponibles si intercambio = " << pocionesDisponibles << endl;
+    #endif
 
     if(pocionesDisponibles >= 0){  
         return true;

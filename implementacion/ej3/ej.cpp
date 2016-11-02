@@ -9,10 +9,12 @@ int main(int argc, char* argv[]){
     c.solucionGolosa();
 
     if(c.encontreSolucion()){
-        cout << "Solucion golosa:" << endl;
-        c.imprimirSolucion();
-        cout << endl;
-
+        #ifdef DEBUG
+            cout << "Solucion golosa:" << endl;
+            c.imprimirSolucion();
+            cout << endl;
+        #endif
+            
         Camino cCopia;
         cCopia = c;
 

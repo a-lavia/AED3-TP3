@@ -10,6 +10,7 @@
 
 #define POCIONES_POKEPARADA 3
 #define INV -1
+// #define DEBUG   // Descomentando esta linea se imprimen por pantalla datos intermedios de la busqueda local.
 
 using namespace std;
     
