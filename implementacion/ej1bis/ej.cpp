@@ -2,29 +2,22 @@
 #include <utility> //pair
 #include <math.h>  //sqrt min
 #include <queue>
-
-#define FLOAT_MAX 3.4028234664e+38
+#include "heuristica.h"
 
 using namespace std;
 
 //CONSTANTES GLOBALES
-vector<pair<int, int>> posiciones;
+vector<pos> posiciones;
 vector<int> gimnasiosPoder;
 int mochila;
 
 //VARIABLES GLOBALES
-float mejorDistancia = FLOAT_MAX;
+float mejorDistancia;
 queue<int> mejorRecorrido;
 
 //FUNCIONES AUXILIARES
 bool esGimnasio(int id) {
 	return id < gimnasiosPoder.size();
-}
-
-float distancia(pair<int, int>& a, pair<int, int>& b){
-    int x = a.first - b.first;
-    int y = a.second - b.second;
-    return sqrt((x*x) + (y*y));
 }
 
 //BACKTRACK
@@ -64,6 +57,7 @@ void backTrack(float distanciaActual, int pociones, int gimnasiosPorVisitar, que
 
 int main(int argc, char* argv[]) {
 
+	//Parseo la entrada
 	int n;
 	cin >> n;
 	int m;
@@ -71,33 +65,50 @@ int main(int argc, char* argv[]) {
 
 	cin >> mochila;
 
-	posiciones.resize(n+m);
+	vector<pos> gimnasios(n);
+	vector<pos> paradas(m);
 	gimnasiosPoder.resize(n);
 
 	for(int i = 0; i < n; i++) {
-		cin >> posiciones[i].first;
-		cin >> posiciones[i].second;
+		cin >> gimnasios[i].first;
+		cin >> gimnasios[i].second;
 		cin >> gimnasiosPoder[i];
 	}
 	for(int i = 0; i < m; i++) {
-		cin >> posiciones[i+n].first;
-		cin >> posiciones[i+n].second;
+		cin >> paradas[i].first;
+		cin >> paradas[i].second;
 	}
 
-	queue<int> restantes; 	//Agrego todos los nodos por verificar a una cola
+    posiciones.insert(posiciones.end(), gimnasios.begin(), gimnasios.end());
+    posiciones.insert(posiciones.end(), paradas.begin(), paradas.end());
+
+	//Obtengo algun recorrido de una solución heuristica
+	mejorRecorrido = solucionHeuristica(gimnasios, gimnasiosPoder, paradas, mochila);
+
+	if(mejorRecorrido.size() != 0)
+		mejorDistancia = distanciaCamino(mejorRecorrido, gimnasios, paradas);
+	else
+		mejorDistancia = FLOAT_MAX;
+
+	//Preparamos los parametros del backtracking, agrego todos los nodos por verificar a una cola
+	queue<int> restantes;
 	for(int i = 0; i < n+m ; i++)
 		restantes.push(i);
 
-	queue<int> recorridos; //Inicialmente no recorri nada
+	 //Inicialmente no recorri nada
+	queue<int> recorridos;
 
+	//Corremos el backtracking
 	backTrack(0, 0, gimnasiosPoder.size(), restantes, recorridos);
 
-	//Imprimo (sumo uno porque la salida pide enumerarlos desde el 1)
-	cout << mejorDistancia << ' ' << mejorRecorrido.size() << ' ';
-	while(!mejorRecorrido.empty()) {
-		cout << (mejorRecorrido.front()+1) << ' ';
-		mejorRecorrido.pop();
-	}
-	cout << endl;
+	if(mejorRecorrido.size() != 0) {
+		cout << mejorDistancia << ' ' << mejorRecorrido.size() << ' ';
+		while(!mejorRecorrido.empty()) {
+			cout << (mejorRecorrido.front()+1) << ' '; //La salida pide enumerarlos desde el 1
+			mejorRecorrido.pop();
+		}
+		cout << endl;
+	} else cout << -1 << endl;
 
+	return 0;
 }
