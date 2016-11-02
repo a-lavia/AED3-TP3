@@ -20,11 +20,10 @@ struct Nodo{
     int pociones;   
     bool gimnasio;
 
-    bool visitado;
     Nodo* anterior;
     Nodo* siguiente;
 
-    Nodo() : visitado(false), anterior(NULL), siguiente(NULL){
+    Nodo() : anterior(NULL), siguiente(NULL){
 
     }
 };

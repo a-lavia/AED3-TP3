@@ -1,28 +1,24 @@
 #include "ej.h"
-#include "CaminoBL.h"
+#include "Camino.h"
 
 int main(int argc, char* argv[]){
-    CaminoBL c;
+    Camino c;
 
     c.leerEntrada();
 
-    c.solucionInicial();
+    c.solucionGolosa();
 
     if(c.encontreSolucion()){
-        cout << "Solucion inicial:" << endl;
+        cout << "Solucion golosa:" << endl;
         c.imprimirSolucion();
         cout << endl;
 
-        CaminoBL cCopia;
+        Camino cCopia;
         cCopia = c;
 
         cout << "Intercambia el orden de los nodos del recorrido original:" << endl;
         c.busquedaLocal(intercambiaNodosVisitados);
         c.imprimirSolucion();
-        cout << endl;
-        
-        cout << "Solucion inicial:" << endl;
-        cCopia.imprimirSolucion();
         cout << endl;
 
         cout << "Intercambia pokeparadas incluyendo las que estan afuera del recorrido original:" << endl;
