@@ -110,7 +110,7 @@ void CaminoBL::leerEntrada(){
 CaminoBL& CaminoBL::operator=(const CaminoBL& otro){
     _grafo = otro._grafo;
     _tamMochila = otro._tamMochila;
-    _nodoInicial = otro._nodoInicial;
+    _nodoInicial = &_grafo.nodo(otro._nodoInicial->id);
     _distancia = otro._distancia;
     return *this;
 }
@@ -269,7 +269,7 @@ bool CaminoBL::intercambiarMejora(Nodo* n1, Nodo* n2){
 
         cout << "¡MEJORE!" << endl;
         cout << "Intercambie " << n1->id << " con " << n2->id << endl;
-        cout << "Distancia nueva = " << distanciaNueva << endl;
+        imprimirSolucion();
     }
     
     return mejora;
@@ -305,7 +305,7 @@ bool CaminoBL::intercambiarMantieneIgual(Nodo* n1, Nodo* n2){
 
         cout << "CAMBIE POR UNA DISTANCIA IGUAL" << endl;
         cout << "Intercambie " << n1->id << " con " << n2->id << endl;
-        cout << "Distancia actual = " << distanciaNueva << endl;
+        imprimirSolucion();
     }
     
     return mantiene;
