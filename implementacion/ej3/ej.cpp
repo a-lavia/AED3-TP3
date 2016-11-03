@@ -6,7 +6,7 @@ int main(int argc, char* argv[]){
 
     c.leerEntrada();
 
-    c.solucionGolosa();
+    c.solucionGolosaJ();
 
     if(c.encontreSolucion()){
         #ifdef DEBUG

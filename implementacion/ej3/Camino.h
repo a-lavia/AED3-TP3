@@ -4,6 +4,7 @@
 #include "ej.h"
 #include "Grafo.h"
 #include "../ej2/funciones.h"
+#include "../ej1bis/heuristica.h"
 
 class Camino{
     public:
@@ -19,7 +20,9 @@ class Camino{
         Nodo* nodoInicial();
         float distancia() const;
 
-        void solucionGolosa();
+        void solucionGolosaJ();
+
+        void solucionGolosaA();
 
         bool encontreSolucion();
 
@@ -35,6 +38,7 @@ class Camino{
 
         void asignarNodoInicial(Nodo* nodoInicial);
         void asignarDistancia(float distancia);
+        void asignarCamino(queue<int>& caminoCola);
         
         void buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados);
         
@@ -144,7 +148,27 @@ void Camino::asignarDistancia(float distancia){
     _distancia = distancia;
 }
 
-void Camino::solucionGolosa(){
+void Camino::asignarCamino(queue<int>& caminoCola){
+    int tamCamino = caminoCola.size();
+    vector<int> camino(tamCamino);
+    for(int i = 0; i < tamCamino; i++){
+        camino[i] = caminoCola.front();
+        caminoCola.pop();
+    }
+
+    asignarNodoInicial(&grafo().nodos()[camino[0]]);
+
+    if(tamCamino > 1){
+        grafo().nodos()[camino[0]].siguiente = &grafo().nodos()[camino[1]];
+        for(int i = 1; i < tamCamino - 1; i++){
+            grafo().nodos()[camino[i]].anterior = &grafo().nodos()[camino[i-1]];
+            grafo().nodos()[camino[i]].siguiente = &grafo().nodos()[camino[i+1]];
+        }
+        grafo().nodos()[camino[tamCamino - 1]].anterior = &grafo().nodos()[camino[tamCamino - 2]];
+    }
+}
+
+void Camino::solucionGolosaJ(){
     assert(!encontreSolucion());
 
     vector<gym> gimnasios;
@@ -169,24 +193,34 @@ void Camino::solucionGolosa(){
 
     if(solucionInicial != NULL && solucionInicial->d != INV){
         asignarDistancia(solucionInicial->d);
+        asignarCamino(solucionInicial->camino);
+    }
+}
 
-        int tamCamino = solucionInicial->camino.size();
-        vector<int> camino(tamCamino);
-        for(int i = 0; i < tamCamino; i++){
-            camino[i] = solucionInicial->camino.front();
-            solucionInicial->camino.pop();
+void Camino::solucionGolosaA(){
+    assert(!encontreSolucion());
+
+    vector<pos> gimnasios;
+    vector<int> gimnasiosPoder;
+    vector<pos> paradas;
+    
+    for(int i = 0; i < grafo().nodos().size(); i++){
+        pos posNueva;
+        posNueva.first = grafo().nodos()[i].x;
+        posNueva.second = grafo().nodos()[i].y;
+        if(grafo().nodos()[i].gimnasio){
+            gimnasios.push_back(posNueva);
+            gimnasiosPoder.push_back(grafo().nodos()[i].pociones);
+        } else{
+            paradas.push_back(posNueva);
         }
+    }
 
-        asignarNodoInicial(&grafo().nodos()[camino[0]]);
+    queue<int> caminoCola = solucionHeuristica(gimnasios, gimnasiosPoder, paradas, tamMochila());
 
-        if(tamCamino > 1){
-            grafo().nodos()[camino[0]].siguiente = &grafo().nodos()[camino[1]];
-            for(int i = 1; i < tamCamino - 1; i++){
-                grafo().nodos()[camino[i]].anterior = &grafo().nodos()[camino[i-1]];
-                grafo().nodos()[camino[i]].siguiente = &grafo().nodos()[camino[i+1]];
-            }
-            grafo().nodos()[camino[tamCamino - 1]].anterior = &grafo().nodos()[camino[tamCamino - 2]];
-        }
+    if(caminoCola.size() != 0){
+        asignarDistancia(distanciaCamino(caminoCola, gimnasios, paradas));
+        asignarCamino(caminoCola);
     }
 }
 
