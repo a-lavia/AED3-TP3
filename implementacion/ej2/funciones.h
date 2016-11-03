@@ -13,7 +13,6 @@ using namespace std;
 struct nodo {
 	float x;
 	float y;
-	int indice;
 };
 
 struct gym : nodo {
