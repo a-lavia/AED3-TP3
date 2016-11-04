@@ -1,4 +1,4 @@
-#include "ej.h"
+#include "aux.h"
 #include "Camino.h"
 
 int main(int argc, char* argv[]){

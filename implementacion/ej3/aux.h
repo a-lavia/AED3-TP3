@@ -1,11 +1,11 @@
-#ifndef EJ_H
-#define EJ_H
+#ifndef AUX_EJ3_H
+#define AUX_EJ3_H
 
 #include <iostream>
-#include <vector>
-#include <math.h>
-#include <queue>
 #include <cassert>
+#include <math.h>
+#include <vector>
+#include <queue>
 #include <map>
 
 #define POCIONES_POKEPARADA 3
@@ -34,10 +34,6 @@ enum Vecindad{
     permutaYReemplazaPokeparadas
 };
 
-float distanciaNodos(Nodo n1, Nodo n2){
-    float x = n1.x - n2.x;
-    float y = n1.y - n2.y;
-    return sqrt((x*x) + (y*y));
-}
+float distanciaNodos(Nodo n1, Nodo n2);
 
 #endif
