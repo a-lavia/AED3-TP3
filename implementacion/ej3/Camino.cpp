@@ -90,7 +90,9 @@ void Camino::asignarDistancia(float distancia){
     _distancia = distancia;
 }
 
-void Camino::asignarCamino(queue<int>& caminoCola){
+void Camino::asignarSolucion(float distancia, queue<int>& caminoCola){
+    asignarDistancia(distancia);
+
     int tamCamino = caminoCola.size();
     vector<int> camino(tamCamino);
     for(int i = 0; i < tamCamino; i++){
@@ -110,9 +112,7 @@ void Camino::asignarCamino(queue<int>& caminoCola){
     }
 }
 
-void Camino::solucionGolosaJ(){
-    assert(!encontreSolucion());
-
+void Camino::asignarSolucionGolosaJ(){
     vector<gym> gimnasios;
     vector<parada> paradas;
 
@@ -134,14 +134,11 @@ void Camino::solucionGolosaJ(){
     solucion* solucionInicial = solHeuristicaGolosa(tamMochila(), gimnasios, paradas);
 
     if(solucionInicial != NULL && solucionInicial->d != INV){
-        asignarDistancia(solucionInicial->d);
-        asignarCamino(solucionInicial->camino);
+        asignarSolucion(solucionInicial->d, solucionInicial->camino);
     }
 }
 
-void Camino::solucionGolosaA(){
-    assert(!encontreSolucion());
-
+void Camino::asignarSolucionGolosaA(){
     vector<pos> gimnasios;
     vector<int> gimnasiosPoder;
     vector<pos> paradas;
@@ -161,8 +158,7 @@ void Camino::solucionGolosaA(){
     queue<int> caminoCola = solucionHeuristica(gimnasios, gimnasiosPoder, paradas, tamMochila());
 
     if(caminoCola.size() != 0){
-        asignarDistancia(distanciaCamino(caminoCola, gimnasios, paradas));
-        asignarCamino(caminoCola);
+        asignarSolucion(distanciaCamino(caminoCola, gimnasios, paradas), caminoCola);
     }
 }
 
@@ -511,4 +507,17 @@ void Camino::imprimirSolucion(){
         camino.pop();
     }
     cout << endl;
+}
+
+float Camino::devolverSolucion(queue<int>& camino){
+    assert(encontreSolucion() && camino.empty());
+
+    camino.push(nodoInicial()->id);
+    Nodo* nodoActual = nodoInicial();
+    while(nodoActual->siguiente != NULL){
+        camino.push(nodoActual->siguiente->id);
+        nodoActual = nodoActual->siguiente;
+    }
+
+    return distancia();
 }

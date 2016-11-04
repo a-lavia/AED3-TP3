@@ -9,7 +9,7 @@
 class Camino{
     public:
         Camino(Grafo g, int tamMochila);
-        
+
         Camino();
         void leerEntrada();
 
@@ -20,14 +20,16 @@ class Camino{
         Nodo* nodoInicial();
         float distancia() const;
 
-        void solucionGolosaJ();
-        void solucionGolosaA();
+        void asignarSolucion(float distancia, queue<int>& caminoCola);
+        void asignarSolucionGolosaJ();
+        void asignarSolucionGolosaA();
 
         bool encontreSolucion();
 
         void busquedaLocal(Vecindad criterio);
 
         void imprimirSolucion();
+        float devolverSolucion(queue<int>& camino);
 
     private: 
         Grafo _grafo;
@@ -37,7 +39,6 @@ class Camino{
 
         void asignarNodoInicial(Nodo* nodoInicial);
         void asignarDistancia(float distancia);
-        void asignarCamino(queue<int>& caminoCola);
         
         void buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados);
         
