@@ -46,9 +46,10 @@ Con todo esto descripto anteriormente, el pseudo-código del algoritmo propuesto
 	\State Terminar
 \EndIf
 
+\State Conj(solucion) c $\leftarrow$ Vacio()
+
 \If{SumaTodasLasPociones(gimnasios) $== 0$}
 
-	\State Conj(solucion) c $\leftarrow$ Vacio()
 
 	\For{cada g gimnasio en gimnasios}
 
@@ -60,19 +61,17 @@ Con todo esto descripto anteriormente, el pseudo-código del algoritmo propuesto
 
 	\State DevolverMejorSolucion(c)
 	\State Terminar
+\Else
+
+	\For{cada p parada en paradas}
+
+		\State solucion s $\leftarrow$ SolucionCasoGeneral(p, mochila, paradas, gimnasios)
+
+		\State Agregar(c,s)
+
+	\EndFor
+
 \EndIf
-
-\State
-\State // Fin de los casos particulares
-\State
-
-\State Conj(solucion) c $\leftarrow$ Vacio()
-
-\For{cada p parada en paradas}
-
-	\State solucion s $\leftarrow$ SolucionCasoGeneral(p, mochila, paradas, gimnasios)
-
-\EndFor
 
 \State DevolverMejorSolucion(c)
 \State Terminar
@@ -415,28 +414,12 @@ Esto es lo único distinto en el comienzo de nuestro pseudo código con la imple
 	\State Terminar
 \EndIf
 
-\If{SumaTodasLasPociones(gimnasios) $== 0$}
-
-	\State Conj(solucion) c $\leftarrow$ Vacio()
-
-	\For{cada g gimnasio en gimnasios}
-
-		\State solucion s $\leftarrow$ SolucionCasoGeneral(g, mochila, paradas, gimnasios)
-
-		\State Agregar(c,s)
-
-	\EndFor
-
-	\State DevolverMejorSolucion(c)
-	\State Terminar
-\EndIf
-
 \medskip
 \Statex \underline{}
 \end{algorithmic}
 \end{algorithm}
 
-Para toda esta primera parte del pseudo código generamos una función que se llama \textbf{SolucionCasosParticulares} donde encapsula todas estas operaciones. Ésta tiene como parametros la máxima cantidad de pociones que puede llevar la mochila, el vector gimnasios, el vector paradas, la matriz de adyacencias y una solución.
+Para toda esta primera parte del pseudo código generamos una función que se llama \textbf{SolucionCasosParticulares} donde encapsula todas estas operaciones más el siguiente if de la función que lo analisamos con la siguiente parte. Ésta tiene como parametros la máxima cantidad de pociones que puede llevar la mochila, el vector gimnasios, el vector paradas, la matriz de adyacencias y una solución.
 
 Lo primero que realiza es ver si la cantidad de gimnasios es $0$, esto se realiza con la función size del tipo vector que tiene como complejidad $\mathcal{O}(1)$. Si esto es verdadero, lo que hace es devolver $0 0$ y salir, en la implementación le asignamos a la distancia un $0$ y terminamos la ejecución. Complejidad de este if con su boque es $\mathcal{O}(1)$.
 
@@ -449,11 +432,141 @@ Luego, observamos si la cantidad de paradas por tres es menor estricto que la su
 
 Entonces si ésta guarda es verdadera, realiza una operación parecida a la del if anterior con la diferencia de que, como este caso no tiene solución, asignamos a la distancia un $-1$ y terminamos la ejecución. Complejidad de éste segundo if con el bloque es $\mathcal{O}(|gimnasios|) + \mathcal{O}(1) = \mathcal{O}(|gimnasios|)$.
 
-El siguiente if es parecido al recién visto, si no hay paradas o la mochila tiene una capacidad nula para las pociones y hay algún gimnasio en el que se requiere como mínimo una poción para ganarle entonces no hay solución y el bloque del if es el mismo que el anterior. Saber si no hay paradas con la función size tiene complejidad $\mathcal{O}(1)$, saber si la mochila tiene capacidad nula también es $\mathcal{O}(1)$ y la suma de las pociones necesarias de los gimnasios para ganarles ya fue calculada, por lo tanto la complejidad del if con el bloque es de $\mathcal{O}(1)$.
+El siguiente if es parecido al recién visto en terminos de complejidad, si no hay paradas o la mochila tiene una capacidad nula para las pociones y hay algún gimnasio en el que se requiere como mínimo una poción para ganarle entonces no hay solución y el bloque del if es el mismo que el anterior. Saber si no hay paradas con la función size tiene complejidad $\mathcal{O}(1)$, saber si la mochila tiene capacidad nula también es $\mathcal{O}(1)$ y la suma de las pociones necesarias de los gimnasios para ganarles ya fue calculada, por lo tanto la complejidad del if con el bloque es de $\mathcal{O}(1)$.
+
+Por lo tanto, un pseudo código  más cerca de la realidad junto con la complejidad sería:
+
+\begin{algorithm}[H]
+\label{}
+\begin{algorithmic}[]
+
+\If{esVacio(gimnasios)} \Comment{$\mathcal{O}(1)$}
+	\State sol.d $\leftarrow 0$ \Comment{$\mathcal{O}(1)$}
+	\State Terminar \Comment{$\mathcal{O}(1)$}
+\EndIf
+
+\State suma $\leftarrow$ SumaTodasLasPociones(gimnasios) \Comment{$\mathcal{O}(|gimnasios|)$}
+
+\If{cantidad(paradas)*3 $<$ suma} \Comment{$\mathcal{O}(1)$}
+	\State sol.d $\leftarrow -1$ \Comment{$\mathcal{O}(1)$}
+	\State Terminar
+\EndIf
+
+\If{(esVacio(paradas) ó mochila $== 0$) y suma $> 0$} \Comment{$\mathcal{O}(1)$}
+	\State Devolver $-1$ \Comment{$\mathcal{O}(1)$}
+	\State Terminar
+\EndIf
+
+\medskip
+\Statex \underline{Complejidad: $\mathcal{O}(1) + \mathcal{O}(|gimnasios|) + \mathcal{O}(1) + \mathcal{O}(1) = \mathcal{O}(|gimnasios|)$}
+\end{algorithmic}
+\end{algorithm}
+
+Ahora analisemos la segunda y última parte del código:
+
+\begin{algorithm}[H]
+\label{}
+\begin{algorithmic}[]
+
+\State Conj(solucion) c $\leftarrow$ Vacio()
+
+\If{SumaTodasLasPociones(gimnasios) $== 0$}
+
+	\For{cada g gimnasio en gimnasios}
+
+		\State solucion s $\leftarrow$ SolucionCasoGeneral(g, mochila, paradas, gimnasios)
+
+		\State Agregar(c,s)
+
+	\EndFor
+
+\Else
+
+	\For{cada p parada en paradas}
+
+		\State solucion s $\leftarrow$ SolucionCasoGeneral(p, mochila, paradas, gimnasios)
+
+		\State Agregar(c,s)
+
+	\EndFor
+
+\EndIf
+
+\State DevolverMejorSolucion(c)
+\State Terminar
+
+\medskip
+\Statex \underline{}
+\end{algorithmic}
+\end{algorithm}
+
+Como podemos observar, se realiza casi el mismo código así que iremos analisando al mismo tiempo.
+
+Lo primero es la complejidad de la guarda del if, como la suma de las pociones de todos los gimnasios la tenemos calculada de un principio, ésta es $\mathcal{O}(1)$.
+
+Luego, cada for itera sobre la cantidad de gimnasios en el primer bloque o paradas en el segundo y, como cada una de estas es un índice, la complejidad de la guarda en cada una de las iteraciones es $\mathcal{O}(1)$.
+
+Dentro de cada for se hace un llamado a la función \textbf{SolucionCasoGeneral}, por cada gimnasio o parada dependiendo en que bloque corra, y donde la complejidad ya fue calculada: $\mathcal{O}(|gimnasios|) * \mathcal{O}(N)$ siendo $N$ la cantidad de nodos, y se la misma en el conjunto de solución creado.
+
+En nuestra implementación no tenemos un conjunto de soluciones sino que tenemos un puntero a solución que comparamos con la que devuelve la función \textbf{SolucionCasoGeneral}, si es mejor que la que tenemos la cambiamos, sino seguimos buscando hasta el final, la comparación se hace con respecto a la distancia recorrida, por lo tanto ésta es $\mathcal{O}(1)$ y, como es un puntero, simplemente intercambiar punteros también es $\mathcal{O}(1)$.
+
+Analisemos que cambios tiene la complejidad si la guarda del if es verdadera o falsa, ya que el código casi el mismo. Si la guarda es verdadera, quiere decir que no se necesitan ninguna poción para ganarle a ningún gimnasio, por ende, corremos la función \textbf{SolucionCasoGeneral} desde todos los gimnasios buscando la mínima distancia. Por como esta hecha la función, siempre va a encontrar un gimnasio al que ganarle y avanzaría hasta el más cercano, nunca pasaria por las poke paradas. Esto hace que la complejidad de la función no sea $\mathcal{O}(|gimnasios|) * \mathcal{O}(N)$, sino $\mathcal{O}(|gimnasios|) * \mathcal{O}(|gimnasios|) = \mathcal{O}(|gimnasios|^2)$. Y, cómo esta función se realiza por cada gimnasio, la complejidad de éste bloque es: $\mathcal{O}(|gimnasios|)* \mathcal{O}(|gimnasios|^2) = \mathcal{O}(|gimnasios|^3)$.
+
+Si la guarda es falsa, entonces necesitaria, como mínimo, pasar por una poke parada para poder ir a algún gimnasio. Por lo tanto, la complejidad de la función \textbf{SolucionCasoGeneral} es la calculada previamente $\mathcal{O}(|gimnasios|) * \mathcal{O}(N)$. Y, cómo esta función se realiza por cada parada, la complejidad de éste bloque es: $\mathcal{O}(|paradas|) * \mathcal{O}(|gimnasios|) * \mathcal{O}(N)$.
+
+Por último, despues de obtener la mejor solución, y cómo dijimos en un principio que lo haciamos por fuera pero lo agregamos aquí a sólo hecho del cálculo de la complejidad, es imprimir esa solución. Para imprimir generamos la función \textbf{imprimirSolucion} donde imprimimos la distancia y luego vamos desencolando e imprimiendo el indice de cada nodo. Cómo en peor caso se recorren todos los nodos, la complejidad de ésta función es $\mathcal{O}(N)$, siendo $N$ la cantidad de nodos.
+
+Un pseudo código más cercano a la realidad y con las complejidades seria de la siguiente forma:
+
+\begin{algorithm}[H]
+\label{}
+\begin{algorithmic}[]
+
+\State solucion* mejor\_sol \Comment{$\mathcal{O}(1)$}
+
+\If{SumaTodasLasPociones(gimnasios) $== 0$} \Comment{$\mathcal{O}(1)$}
+
+	\For{cada g gimnasio en gimnasios} \Comment{$\mathcal{O}(1)$}
+
+		\State solucion s $\leftarrow$ SolucionCasoGeneral(g, mochila, paradas, gimnasios) \Comment{$\mathcal{O}(|gimnasios|^2)$}
+
+		\If{s.d < mejor\_sol.d} \Comment{$\mathcal{O}(1)$}
+			\State mejor\_sol = s \Comment{$\mathcal{O}(1)$}
+		\EndIf
+	
+	\EndFor
+	\Comment{Complejidad total del for $\mathcal{O}(|gimnasios|^3)$}
+
+\Else
+
+	\For{cada p parada en paradas} \Comment{$\mathcal{O}(1)$}
+
+		\State solucion s $\leftarrow$ SolucionCasoGeneral(p, mochila, paradas, gimnasios) \Comment{$\mathcal{O}(|gimnasios|) * \mathcal{O}(N)$}
+
+		\If{s.d < mejor\_sol.d} \Comment{$\mathcal{O}(1)$}
+			\State mejor\_sol = s \Comment{$\mathcal{O}(1)$}
+		\EndIf
+
+	\EndFor
+	\Comment{Complejidad total del for $\mathcal{O}(|paradas|) * \mathcal{O}(|gimnasios|) * \mathcal{O}(N)$}
 
 
+\EndIf
 
+\State imprimirSolucion(mejor\_sol) \Comment{$\mathcal{O}(N)$}
+\State Terminar
 
+\medskip
+\Statex \underline{Complejidad: $\mathcal{O}(|gimnasios|^3) + \mathcal{O}(|paradas|) * \mathcal{O}(|gimnasios|) * \mathcal{O}(N) + \mathcal{O}(N) = $}
+\Statex \underline{$ = \mathcal{O}(|gimnasios|^3) + \mathcal{O}(|paradas|) * \mathcal{O}(|gimnasios|) * \mathcal{O}(N)$}
+\end{algorithmic}
+\end{algorithm}
+
+Por lo tanto, la complejidad de la función, y total de la solución propuesta, es de $\mathcal{O}(|gimnasios|^3) + \mathcal{O}(|paradas|) * \mathcal{O}(|gimnasios|) * \mathcal{O}(N)$.
+
+Podríamos obtener una cota superior de la misma acotando la cantidad de gimnasios y cantidad de paradas por la cantidad total de nodos ya que $|gimnasios| \leq N$ y $|paradas| \leq N$. De esta forma obtendríamos la siguiente complejidad: $\mathcal{O}(|gimnasios|^3) + \mathcal{O}(|paradas|) * \mathcal{O}(|gimnasios|) * \mathcal{O}(N) = \mathcal{O}(N^3) + \mathcal{O}(N) * \mathcal{O}(N) * \mathcal{O}(N) = \mathcal{O}(N^3) + \mathcal{O}(N^3) = \mathcal{O}(N^3)$.
+
+De esta manera, podemos observar como la complejidad está acotada por $\mathcal{O}(N^3)$.
 
 
 
