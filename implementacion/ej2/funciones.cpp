@@ -45,14 +45,16 @@ solucion* solHeuristicaGolosa(unsigned int mochila_size, vector<struct gym>& gim
 	// Caso: (No hay pokeparadas o mochila_size == 0) y los gimnasios tienen p=0 => Gane
 	// Si es uno de estos casos lo soluciona, imprime y termina.
     solucion* mejor_sol = new solucion;
-
+ 
 	if(!solucionCasosParticulares(mochila_size, gimnasios, paradas, matriz_dist, mejor_sol)){
     	// Busco la mejor solución comenzando por cada parada y cada una de estas soluciones la guardo en el vector soluciones.
+
     	mejor_sol->d = -1;
 
     	for(int i = gimnasios.size(); i < paradas.size() + gimnasios.size(); i++){
     		struct solucion sol_nueva;
     		sol_nueva.d = 0;
+
     		solucionCasoGeneral(i, sol_nueva, mochila_size, gimnasios, paradas, matriz_dist);
 
     		if((mejor_sol->d == -1 && sol_nueva.d != -1) || 

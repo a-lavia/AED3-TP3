@@ -24,7 +24,7 @@ struct Nodo{
     Nodo* anterior;
     Nodo* siguiente;
 
-    Nodo() : anterior(NULL), siguiente(NULL){
+    Nodo() : id(INV), anterior(NULL), siguiente(NULL){
 
     }
 };

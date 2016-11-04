@@ -5,7 +5,7 @@
 
 class Grafo{
     public:
-        Grafo();
+        Grafo() = default;
         Grafo(int cantNodos);
         Grafo& operator=(const Grafo& otro);
 
@@ -13,7 +13,6 @@ class Grafo{
         Nodo& nodo(int id);
         float distancia(const Nodo& n1, const Nodo& n2);
 
-        void asignarDistancia(const Nodo& n1, const Nodo& n2, float distancia);
         void asignarNodo(const Nodo& n);
 
     private: 

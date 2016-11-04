@@ -4,13 +4,13 @@ Camino::Camino(Grafo g, int tamMochila){
     _grafo = g;
     _tamMochila = tamMochila;
     _nodoInicial = NULL;
-    _distancia = 0;
+    _distancia = INV;
 }
 
 Camino::Camino(){
     _tamMochila = INV;
     _nodoInicial = NULL;
-    _distancia = 0;
+    _distancia = INV;
 }
 
 void Camino::leerEntrada(){
@@ -44,14 +44,6 @@ void Camino::leerEntrada(){
         nodoNuevo.gimnasio = false;
         g.asignarNodo(nodoNuevo);
         nodoActual++;
-    }
-
-    for(int i = 0; i < cantNodos; ++i){
-        for(int j = 0; j < cantNodos; ++j){
-            Nodo n1 = g.nodos()[i];
-            Nodo n2 = g.nodos()[j];
-            g.asignarDistancia(n1, n2, distanciaNodos(n1, n2));
-        }
     }
 
     _grafo = g;
