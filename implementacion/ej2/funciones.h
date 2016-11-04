@@ -13,15 +13,14 @@ using namespace std;
 struct nodo {
 	float x;
 	float y;
+	bool visitado;
 };
 
 struct gym : nodo {
 	int p;
-	bool visitado;
 };
 
 struct parada : nodo {
-	bool visitado;
 };
 
 struct solucion {

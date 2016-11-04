@@ -296,7 +296,7 @@ void imprimirMatriz(vector<vector<float>>& matriz_dist){
 
 void imprimirVector(vector<struct gym>& gimnasios){
 	cout << endl << "Gimnasios" << endl;
-	for(int i = 0; i < cant_gym; i++){
+	for(int i = 0; i < gimnasios.size(); i++){
 		cout << gimnasios[i].x << " " << gimnasios[i].y << " " << gimnasios[i].p << " " << gimnasios[i].visitado << endl;
 	}
 	return;
@@ -306,7 +306,7 @@ void imprimirVector(vector<struct gym>& gimnasios){
 
 void imprimirVector(vector<struct parada>& paradas){
 	cout << endl << "Paradas" << endl;
-	for(int i = 0; i < cant_paradas; i++){
+	for(int i = 0; i < paradas.size(); i++){
 		cout << paradas[i].x << " " << paradas[i].y << " " << paradas[i].visitado << endl;
 	}
 	return;
