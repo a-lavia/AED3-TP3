@@ -114,11 +114,13 @@ void Camino::asignarSolucionGolosaJ(){
             gymNuevo.x = grafo().nodos()[i].x;
             gymNuevo.y = grafo().nodos()[i].y;
             gymNuevo.p = grafo().nodos()[i].pociones;
+            gymNuevo.visitado = false;
             gimnasios.push_back(gymNuevo);
         } else{
             parada paradaNueva;
             paradaNueva.x = grafo().nodos()[i].x;
             paradaNueva.y = grafo().nodos()[i].y;
+            paradaNueva.visitado = false;
             paradas.push_back(paradaNueva);
         }
     }
