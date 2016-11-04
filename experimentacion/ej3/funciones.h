@@ -17,7 +17,7 @@ void generarGrafosOpMejor(vector<Grafo>& grafos);
 
 void generarCaminos(vector<Grafo>& grafos, vector<int> tamMochilas, vector<Camino>& caminos);
 
-void medirTiempos(vector<Camino>& caminos, ofstream& salida);
+void generarSalida(vector<Camino>& caminos, Vecindad criterio, ofstream& salida);
 
 void expAleat(ofstream& salida);
 void expOpAleat(ofstream& salida);

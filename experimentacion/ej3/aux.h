@@ -6,17 +6,17 @@
 #include <chrono>
 #include <vector>
 
-#define CANT_GIMNASIOS_MAX 12
-#define CANT_POKEPARADAS_MAX 12
-#define TAM_MOCHILA_MAX 20
+#define CANT_NODOS_OP_MAX 10
+#define CANT_NODOS_MAX 1000
+#define TAM_MOCHILA_MAX 50
 #define X_MAX 1000
 #define Y_MAX 1000
-#define POCIONES_MAX 20
+#define POCIONES_MAX 50
 
-#define CANT_MEDICIONES 30
+#define CANT_MEDICIONES 50
 
 #define RELOJ chrono::high_resolution_clock::now
-#define CANT_REPETICIONES 1000
+#define CANT_REPETICIONES 100
 
 using namespace std;
 
