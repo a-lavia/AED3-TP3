@@ -17,14 +17,19 @@ int main(int argc, char* argv[]){
             
         Camino cCopia;
         cCopia = c;
-
+        int cantCambios;
+        
         cout << "Busqueda local con vecindad = permutaCamino:" << endl;
-        c.busquedaLocal(permutaCamino);
+        if(c.encontreCamino()){
+            cantCambios = c.busquedaLocal(permutaCamino);
+        }
         c.imprimirSolucion();
         cout << endl;
 
         cout << "Busqueda local con vecindad = permutaYReemplazaPokeparadas:" << endl;
-        cCopia.busquedaLocal(permutaYReemplazaPokeparadas);
+        if(cCopia.encontreCamino()){
+            cantCambios = cCopia.busquedaLocal(permutaYReemplazaPokeparadas);
+        }
         cCopia.imprimirSolucion();
     } else{
         cout << -1 << endl;

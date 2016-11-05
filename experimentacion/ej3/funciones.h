@@ -10,12 +10,8 @@ int aleatEnRango(int min, int max);
 int max(int a, int b);  
 int min(int a, int b);
 
-void generarGrafosAleat(vector<Grafo>& grafos);
-void generarGrafosOpAleat(vector<Grafo>& grafos);
-void generarGrafosMejor(vector<Grafo>& grafos);
-void generarGrafosOpMejor(vector<Grafo>& grafos);
-
-void generarCaminos(vector<Grafo>& grafos, vector<int>& tamMochilas, vector<Camino>& caminos);
+// Todos los caminos generados en estas funciones tienen una solucion hallable por medio de una heuristica golosa:
+void generarCaminosAleat(vector<Camino>& caminos, bool paraCompOp);
 
 void generarSalida(vector<Camino>& caminos, Vecindad criterio, ofstream& salida);
 

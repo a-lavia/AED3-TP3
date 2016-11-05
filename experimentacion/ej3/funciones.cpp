@@ -20,13 +20,24 @@ int min(int a, int b){
     }
 }
 
-void generarGrafosAleat(vector<Grafo>& grafos){
-    assert(grafos.size() == CANT_MEDICIONES);
+void generarCaminosAleat(vector<Camino>& caminos, bool paraCompOp){
+    assert(caminos.size() == CANT_CASOS);
 
-    cout << "   Generando grafos aleatorios... ";
+    int cantGimnasiosMax;
+    if(paraCompOp){
+        cantGimnasiosMax = CANT_GIMNASIOS_MAX_OP;
+    } else{
+        cantGimnasiosMax = CANT_GIMNASIOS_MAX;
+    }
 
-    for(int m = 0; m < CANT_MEDICIONES; m++){
-        int cantGimnasios = aleatEnRango(0, CANT_GIMNASIOS_MAX);        
+    cout << "   Generando caminos... " << endl;
+
+    cout << "       Generando grafos aleatorios... ";
+
+    vector<Grafo> grafos(CANT_CASOS);
+
+    for(int m = 0; m < CANT_CASOS; m++){
+        int cantGimnasios = aleatEnRango(0, cantGimnasiosMax);        
         
         // Asumo que voy a usar estos grafos con mochilas lo suficientemente grandes:
         int cantPokeparadas = (POCIONES_MAX*cantGimnasios)/3 + 1;
@@ -43,6 +54,7 @@ void generarGrafosAleat(vector<Grafo>& grafos){
             nodoNuevo.y = aleatEnRango(0, Y_MAX);
             nodoNuevo.gimnasio = true;
             nodoNuevo.pociones = aleatEnRango(0, POCIONES_MAX);
+            g.asignarNodo(nodoNuevo);
         }
 
         for( ; n < cantNodos; n++){
@@ -52,133 +64,46 @@ void generarGrafosAleat(vector<Grafo>& grafos){
             nodoNuevo.y = aleatEnRango(0, Y_MAX);
             nodoNuevo.gimnasio = false;
             nodoNuevo.pociones = POCIONES_POKEPARADA;
+            g.asignarNodo(nodoNuevo);
         }
 
         grafos[m] = g;
     }
 
     cout << "Listo" << endl;
-}
 
-void generarGrafosOpAleat(vector<Grafo>& grafos){
-    // Modificar para que tenga solucion
-    assert(grafos.size() == CANT_MEDICIONES);
+    cout << "       Definiendo tamaños de mochilas... ";
 
-    for(int m = 0; m < CANT_MEDICIONES; m++){
-        int cantNodos = aleatEnRango(0, CANT_NODOS_OP_MAX);
-        Grafo g(cantNodos);
-
-        for(int n = 0; n < cantNodos; n++){
-            Nodo nodoNuevo;
-            nodoNuevo.id = n + 1;
-            nodoNuevo.x = aleatEnRango(0, X_MAX);
-            nodoNuevo.y = aleatEnRango(0, Y_MAX);
-            if(rand() % 2 == 0){
-                nodoNuevo.gimnasio = true;
-                nodoNuevo.pociones = aleatEnRango(0, POCIONES_MAX);
-            } else{
-                nodoNuevo.gimnasio = true;
-                nodoNuevo.pociones = POCIONES_POKEPARADA;
-            }
-        }
-        
-        grafos[m] = g;
+    vector<int> tamMochilas(CANT_CASOS);
+    for(int i = 0; i < CANT_CASOS; i++){
+        tamMochilas[i] = TAM_MOCHILA;
     }
-}
 
-void generarGrafosMejor(vector<Grafo>& grafos){
-    // Modificar para que tenga solucion
-    assert(grafos.size() == CANT_MEDICIONES);
+    cout << "Listo" << endl;
 
-    for(int m = 0; m < CANT_MEDICIONES; m++){
-        int cantNodos = aleatEnRango(0, CANT_NODOS_MAX);
-        Grafo g(cantNodos);
-
-        for(int n = 0; n < cantNodos / 2; n++){
-            Nodo nodoNuevo;
-            nodoNuevo.id = n + 1;
-            nodoNuevo.x = aleatEnRango(0, X_MAX / 2);
-            nodoNuevo.y = aleatEnRango(0, Y_MAX / 2);
-            nodoNuevo.gimnasio = true;
-            nodoNuevo.pociones = POCIONES_POKEPARADA;
-        }
-
-        for(int n = cantNodos / 2; n < cantNodos; n++){
-            Nodo nodoNuevo;
-            nodoNuevo.id = n + 1;
-            nodoNuevo.x = aleatEnRango(X_MAX / 2, X_MAX);
-            nodoNuevo.y = aleatEnRango(Y_MAX / 2, Y_MAX);
-            nodoNuevo.gimnasio = true;
-            nodoNuevo.pociones = aleatEnRango(0, POCIONES_MAX);
-        }
-
-        grafos[m] = g;
-    }
-}
-
-void generarGrafosOpMejor(vector<Grafo>& grafos){
-    // Modificar para que tenga solucion
-    assert(grafos.size() == CANT_MEDICIONES);
-
-    for(int m = 0; m < CANT_MEDICIONES; m++){
-        int cantNodos = aleatEnRango(0, CANT_NODOS_OP_MAX);
-        Grafo g(cantNodos);
-
-        for(int n = 0; n < cantNodos / 2; n++){
-            Nodo nodoNuevo;
-            nodoNuevo.id = n + 1;
-            nodoNuevo.x = aleatEnRango(0, X_MAX / 2);
-            nodoNuevo.y = aleatEnRango(0, Y_MAX / 2);
-            nodoNuevo.gimnasio = true;
-            nodoNuevo.pociones = POCIONES_POKEPARADA;
-        }
-
-        for(int n = cantNodos / 2; n < cantNodos; n++){
-            Nodo nodoNuevo;
-            nodoNuevo.id = n + 1;
-            nodoNuevo.x = aleatEnRango(X_MAX / 2, X_MAX);
-            nodoNuevo.y = aleatEnRango(Y_MAX / 2, Y_MAX);
-            nodoNuevo.gimnasio = true;
-            nodoNuevo.pociones = aleatEnRango(0, POCIONES_MAX);
-        }
-
-        grafos[m] = g;
-    }
-}
-
-void generarCaminos(vector<Grafo>& grafos, vector<int>& tamMochilas, vector<Camino>& caminos){
-    assert(grafos.size() == CANT_MEDICIONES && tamMochilas.size() == CANT_MEDICIONES && caminos.size() == CANT_MEDICIONES);
-
-    cout << "   Generando caminos... ";
-
-    int cantCaminos = grafos.size();
-    for(int i = 0; i < cantCaminos; i++){
+    for(int i = 0; i < CANT_CASOS; i++){
         Camino c(grafos[i], tamMochilas[i]);
         caminos[i] = c;
     }
 
-    cout << "Listo" << endl;
+    cout << "   Listo" << endl;
 }
 
 void generarSalida(vector<Camino>& caminos, Vecindad criterio, ofstream& salida){
-    assert(caminos.size() == CANT_MEDICIONES);
+    assert(caminos.size() == CANT_CASOS);
 
     cout << "   Generando salida... " << endl;
 
-    salida << "cantGimnasios,cantPokeparadas,tamMochila,criterio,distancia,tamCamino,tiempo" << endl;
-    // cant iteraciones <--------------------------------------------------------------------------------------------------
+    salida << "cantGimnasios,cantPokeparadas,tamMochila,distancia,tamCamino,cantCambios,tiempo" << endl;
     
     int cantCaminos = caminos.size();
     double cantCiclosTotal;
-    int cantGimnasios, cantPokeparadas, tamMochila, distancia, tamCamino, cantNodos;
+    int cantGimnasios, cantPokeparadas, tamMochila, distancia, tamCamino, cantCambios, cantNodos;
     queue<int> caminoCola, caminoColaVacia;
     Camino caminoCopia;
     
     for(int c = 0; c < cantCaminos; c++){
-
-        cout << "       Procesando camino " << c + 1 << " de " << cantCaminos << "... ";
-
-        tamMochila = caminos[c].tamMochila();
+        cout << "       Procesando camino " << c + 1 << " de " << cantCaminos << "..." << endl;
 
         cantGimnasios = 0;
         cantPokeparadas = 0;
@@ -191,47 +116,47 @@ void generarSalida(vector<Camino>& caminos, Vecindad criterio, ofstream& salida)
             }
         }
 
+        cout << "           Camino de " << cantGimnasios << " gimnasios y " << cantPokeparadas << " pokeparadas" << endl;
+
+        tamMochila = caminos[c].tamMochila();
+
+        cout << "           Hallando una solucion golosa... ";
+
+        caminos[c].asignarSolucionGolosaJ();
+
+        cout << "Listo" << endl;
+
+        cout << "           Midiendo tiempos... ";
+ 
         cantCiclosTotal = 0;
-        for(int r = 0; r < CANT_REPETICIONES; r++){
-            caminoCola = caminoColaVacia;
-            caminoCopia = caminos[c];
-            auto inicio = RELOJ();
-                caminoCopia.busquedaLocal(criterio);
-                distancia = caminoCopia.devolverSolucion(caminoCola);
-            auto fin = RELOJ();
-            cantCiclosTotal += (double) chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count();
+        if(caminos[c].encontreCamino()){
+            for(int r = 0; r < CANT_REPETICIONES; r++){
+                caminoCola = caminoColaVacia;
+                caminoCopia = caminos[c];
+                auto inicio = RELOJ();
+                    cantCambios = caminoCopia.busquedaLocal(criterio);
+                    distancia = caminoCopia.devolverSolucion(caminoCola);
+                auto fin = RELOJ();
+                cantCiclosTotal += (double) chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count();
+            }
         }
+
+        cout << "Listo" << endl;
 
         tamCamino = caminoCola.size();
 
-        salida << cantGimnasios << "," << cantPokeparadas << "," << tamMochila << "," << criterio << ","
-               << distancia << "," << tamCamino << "," << cantCiclosTotal / (double) CANT_REPETICIONES << endl;
+        salida << cantGimnasios << "," << cantPokeparadas << "," << tamMochila << "," << distancia << "," << tamCamino
+               << "," << cantCambios << "," << cantCiclosTotal / (double) CANT_REPETICIONES << endl;
 
-        cout << "Listo" << endl;
+        cout << "       Listo" << endl;
     }
 
-    cout << "Listo" << endl;
+    cout << "   Listo" << endl;
 }
 
 void expAleat(ofstream& salida, Vecindad criterio){
-    vector<Grafo> grafos(CANT_MEDICIONES);
-    generarGrafosAleat(grafos);
-
-    cout << "   Definiendo tamaños de mochilas... ";
-
-    vector<int> tamMochilas(CANT_MEDICIONES);
-    /*for(int i = 0; i < CANT_MEDICIONES; i++){
-        tamMochilas[i] = aleatEnRango(POCIONES_MAX + 2, TAM_MOCHILA_MAX);
-    }*/
-    for(int i = 0; i < CANT_MEDICIONES; i++){
-        tamMochilas[i] = POCIONES_MAX * CANT_GIMNASIOS_MAX;
-    }
-
-    cout << "Listo" << endl;
-
-    vector<Camino> caminos(CANT_MEDICIONES);
-
-    generarCaminos(grafos, tamMochilas, caminos);
+    vector<Camino> caminos(CANT_CASOS);
+    generarCaminosAleat(caminos, false);
 
     generarSalida(caminos, criterio, salida);
 }

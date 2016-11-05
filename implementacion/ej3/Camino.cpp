@@ -57,15 +57,12 @@ Camino& Camino::operator=(const Camino& otro){
         _nodoInicial = &_grafo.nodo(otro._nodoInicial->id);
     }
     _distancia = otro._distancia;
+
     return *this;
 }
 
 Grafo& Camino::grafo(){
     return _grafo;
-}
-
-Nodo* Camino::nodoInicial(){
-    return _nodoInicial;
 }
 
 float Camino::distancia() const{
@@ -94,7 +91,9 @@ void Camino::asignarSolucion(float distancia, queue<int>& caminoCola){
         caminoCola.pop();
     }
 
-    asignarNodoInicial(&grafo().nodos()[camino[0]]);
+    if(!camino.empty()){
+        asignarNodoInicial(&grafo().nodos()[camino[0]]);
+    }
 
     if(tamCamino > 1){
         grafo().nodos()[camino[0]].siguiente = &grafo().nodos()[camino[1]];
@@ -159,23 +158,29 @@ void Camino::asignarSolucionGolosaA(){
 }
 
 bool Camino::encontreSolucion(){
-    return nodoInicial() != NULL;
+    return _distancia != INV;
 }
 
-void Camino::busquedaLocal(Vecindad criterio){
-    assert(encontreSolucion());
+bool Camino::encontreCamino(){
+    return _nodoInicial != NULL;
+}
+
+int Camino::busquedaLocal(Vecindad criterio){
+    assert(encontreCamino());
+
+    int cantCambios;
 
     if(criterio == permutaCamino){
         vector<Nodo*> nodosVisitados;
         
-        Nodo* nodoActual = nodoInicial();
+        Nodo* nodoActual = _nodoInicial;
         nodosVisitados.push_back(nodoActual);
         while(nodoActual->siguiente != NULL){
             nodoActual = nodoActual->siguiente;
             nodosVisitados.push_back(nodoActual);
         }
 
-        buscoSolucionVecinaMejor(nodosVisitados);
+        cantCambios = buscoSolucionVecinaMejor(nodosVisitados);
     } else{
         vector<Nodo*> pokeparadas;
 
@@ -185,11 +190,14 @@ void Camino::busquedaLocal(Vecindad criterio){
             }
         }
 
-        buscoSolucionVecinaMejor(pokeparadas);
+        cantCambios = buscoSolucionVecinaMejor(pokeparadas);
     }
+
+    return cantCambios;
 }
 
-void Camino::buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
+int Camino::buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
+    int cantCambios = 0;
     bool busco = true;
     map<int, int> nodosCambiados;
     
@@ -207,6 +215,7 @@ void Camino::buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
             if(nodosCambiados.size() > 0){
                 nodosCambiados.clear();
             }
+            cantCambios++;
         }
 
         #ifdef DEBUG
@@ -215,8 +224,16 @@ void Camino::buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
 
         if(!encuentroSolucionVecinaIgual(nodosConsiderados, nodosCambiados)){
             busco = false;
+        } else{
+            cantCambios++;
         }
     }
+
+    #ifdef DEBUG
+        cout << "Cantidad de cambios producidos por la busqueda local = " << cantCambios << endl;
+    #endif
+
+    return cantCambios;
 }
 
 bool Camino::encuentroSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
@@ -323,7 +340,7 @@ bool Camino::cambiarSiPuedo(Nodo* n1, Nodo* n2){
     }
 
     int pocionesDisponibles = 0;
-    Nodo* nodoActual = nodoInicial();
+    Nodo* nodoActual = _nodoInicial;
     while(pocionesDisponibles >= 0 && nodoActual != NULL){
         if(nodoActual->gimnasio){
             pocionesDisponibles -= nodoActual->pociones;
@@ -486,15 +503,18 @@ void Camino::imprimirSolucion(){
     assert(encontreSolucion());
 
     queue<int> camino;
-    camino.push(nodoInicial()->id);
-    
-    int tamCamino = 1;
+    int tamCamino = 0;
 
-    Nodo* nodoActual = nodoInicial();
-    while(nodoActual->siguiente != NULL){
-        camino.push(nodoActual->siguiente->id);
+    if(_nodoInicial != NULL){
+        camino.push(_nodoInicial->id);
         tamCamino++;
-        nodoActual = nodoActual->siguiente;
+
+        Nodo* nodoActual = _nodoInicial;
+        while(nodoActual->siguiente != NULL){
+            camino.push(nodoActual->siguiente->id);
+            tamCamino++;
+            nodoActual = nodoActual->siguiente;
+        }
     }
 
     cout << distancia() << " " << tamCamino;
@@ -508,11 +528,13 @@ void Camino::imprimirSolucion(){
 float Camino::devolverSolucion(queue<int>& camino){
     assert(encontreSolucion() && camino.empty());
 
-    camino.push(nodoInicial()->id);
-    Nodo* nodoActual = nodoInicial();
-    while(nodoActual->siguiente != NULL){
-        camino.push(nodoActual->siguiente->id);
-        nodoActual = nodoActual->siguiente;
+    if(_nodoInicial != NULL){
+        camino.push(_nodoInicial->id);
+        Nodo* nodoActual = _nodoInicial;
+        while(nodoActual->siguiente != NULL){
+            camino.push(nodoActual->siguiente->id);
+            nodoActual = nodoActual->siguiente;
+        }
     }
 
     return distancia();

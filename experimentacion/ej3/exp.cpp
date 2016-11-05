@@ -49,9 +49,19 @@ int main(int argc, char* argv[]){
 
             break;
         }
+        case 4 : {
+            // Comparacion de las dos heuristicas con las dos vecindades
+
+
+
+            break;
+        }
         default : {
             // Todos los experimentos anteriores. Uso archivos que se llamen como salida + "Aleat", etc.
             int sinoNoCompila;
+
+            
+            
         }
     }
     
