@@ -8,7 +8,7 @@ list<pair<int, float>> obtenerCandidatos() {
 	//Agrego como candidatos iniciales todas las paradas y gimnasios que pueden derrotarse inicialmente
 	for(int i = 0; i < nodos; i++) {
 		if(!(esGimnasio(i) && gimnasiosPoder[i] == 0)) continue;
-		candidatos.push_back(pair<int, float>(i, 0);
+		candidatos.push_back(pair<int, float>(i, 0));
 	}
 
 	return candidatos;
