@@ -15,13 +15,13 @@ void generarGrafosOpAleat(vector<Grafo>& grafos);
 void generarGrafosMejor(vector<Grafo>& grafos);
 void generarGrafosOpMejor(vector<Grafo>& grafos);
 
-void generarCaminos(vector<Grafo>& grafos, vector<int> tamMochilas, vector<Camino>& caminos);
+void generarCaminos(vector<Grafo>& grafos, vector<int>& tamMochilas, vector<Camino>& caminos);
 
 void generarSalida(vector<Camino>& caminos, Vecindad criterio, ofstream& salida);
 
-void expAleat(ofstream& salida);
-void expOpAleat(ofstream& salida);
-void expMejor(ofstream& salida);
-void expOpMejor(ofstream& salida);
+void expAleat(ofstream& salida, Vecindad criterio);
+void expOpAleat(ofstream& salidad, Vecindad criterio);
+void expMejor(ofstream& salida, Vecindad criterio);
+void expOpMejor(ofstream& salida, Vecindad criterio);
 
 #endif

@@ -21,29 +21,49 @@ int min(int a, int b){
 }
 
 void generarGrafosAleat(vector<Grafo>& grafos){
-    // Modificar para que tenga solucion
+    assert(grafos.size() == CANT_MEDICIONES);
+
+    cout << "   Generando grafos aleatorios... ";
+
     for(int m = 0; m < CANT_MEDICIONES; m++){
-        int cantNodos = aleatEnRango(0, CANT_NODOS_MAX);
+        int cantGimnasios = aleatEnRango(0, CANT_GIMNASIOS_MAX);        
+        
+        // Asumo que voy a usar estos grafos con mochilas lo suficientemente grandes:
+        int cantPokeparadas = (POCIONES_MAX*cantGimnasios)/3 + 1;
+        
+        int cantNodos = cantGimnasios + cantPokeparadas;
+        
         Grafo g(cantNodos);
-        for(int n = 0; n < cantNodos; n++){
+
+        int n;
+        for(n = 0; n < cantGimnasios; n++){
             Nodo nodoNuevo;
             nodoNuevo.id = n + 1;
             nodoNuevo.x = aleatEnRango(0, X_MAX);
             nodoNuevo.y = aleatEnRango(0, Y_MAX);
-            if(rand() % 2 == 0){
-                nodoNuevo.gimnasio = true;
-                nodoNuevo.pociones = aleatEnRango(0, POCIONES_MAX);
-            } else{
-                nodoNuevo.gimnasio = true;
-                nodoNuevo.pociones = POCIONES_POKEPARADA;
-            }
+            nodoNuevo.gimnasio = true;
+            nodoNuevo.pociones = aleatEnRango(0, POCIONES_MAX);
         }
-        grafos.push_back(g);
+
+        for( ; n < cantNodos; n++){
+            Nodo nodoNuevo;
+            nodoNuevo.id = n + 1;
+            nodoNuevo.x = aleatEnRango(0, X_MAX);
+            nodoNuevo.y = aleatEnRango(0, Y_MAX);
+            nodoNuevo.gimnasio = false;
+            nodoNuevo.pociones = POCIONES_POKEPARADA;
+        }
+
+        grafos[m] = g;
     }
+
+    cout << "Listo" << endl;
 }
 
 void generarGrafosOpAleat(vector<Grafo>& grafos){
     // Modificar para que tenga solucion
+    assert(grafos.size() == CANT_MEDICIONES);
+
     for(int m = 0; m < CANT_MEDICIONES; m++){
         int cantNodos = aleatEnRango(0, CANT_NODOS_OP_MAX);
         Grafo g(cantNodos);
@@ -62,12 +82,14 @@ void generarGrafosOpAleat(vector<Grafo>& grafos){
             }
         }
         
-        grafos.push_back(g);
+        grafos[m] = g;
     }
 }
 
 void generarGrafosMejor(vector<Grafo>& grafos){
     // Modificar para que tenga solucion
+    assert(grafos.size() == CANT_MEDICIONES);
+
     for(int m = 0; m < CANT_MEDICIONES; m++){
         int cantNodos = aleatEnRango(0, CANT_NODOS_MAX);
         Grafo g(cantNodos);
@@ -90,12 +112,14 @@ void generarGrafosMejor(vector<Grafo>& grafos){
             nodoNuevo.pociones = aleatEnRango(0, POCIONES_MAX);
         }
 
-        grafos.push_back(g);
+        grafos[m] = g;
     }
 }
 
 void generarGrafosOpMejor(vector<Grafo>& grafos){
     // Modificar para que tenga solucion
+    assert(grafos.size() == CANT_MEDICIONES);
+
     for(int m = 0; m < CANT_MEDICIONES; m++){
         int cantNodos = aleatEnRango(0, CANT_NODOS_OP_MAX);
         Grafo g(cantNodos);
@@ -118,33 +142,43 @@ void generarGrafosOpMejor(vector<Grafo>& grafos){
             nodoNuevo.pociones = aleatEnRango(0, POCIONES_MAX);
         }
 
-        grafos.push_back(g);
+        grafos[m] = g;
     }
 }
 
-void generarCaminos(vector<Grafo>& grafos, vector<int> tamMochilas, vector<Camino>& caminos){
-    // tamMochila = max(pociones de gimnasios) * cant gimnasios
+void generarCaminos(vector<Grafo>& grafos, vector<int>& tamMochilas, vector<Camino>& caminos){
+    assert(grafos.size() == CANT_MEDICIONES && tamMochilas.size() == CANT_MEDICIONES && caminos.size() == CANT_MEDICIONES);
 
-    assert(grafos.size() == tamMochilas.size());
+    cout << "   Generando caminos... ";
 
     int cantCaminos = grafos.size();
     for(int i = 0; i < cantCaminos; i++){
         Camino c(grafos[i], tamMochilas[i]);
-        caminos.push_back(c);
+        caminos[i] = c;
     }
+
+    cout << "Listo" << endl;
 }
 
 void generarSalida(vector<Camino>& caminos, Vecindad criterio, ofstream& salida){
+    assert(caminos.size() == CANT_MEDICIONES);
+
+    cout << "   Generando salida... " << endl;
+
     salida << "cantGimnasios,cantPokeparadas,tamMochila,criterio,distancia,tamCamino,tiempo" << endl;
+    // cant iteraciones <--------------------------------------------------------------------------------------------------
     
     int cantCaminos = caminos.size();
     double cantCiclosTotal;
     int cantGimnasios, cantPokeparadas, tamMochila, distancia, tamCamino, cantNodos;
     queue<int> caminoCola, caminoColaVacia;
+    Camino caminoCopia;
     
     for(int c = 0; c < cantCaminos; c++){
+
+        cout << "       Procesando camino " << c + 1 << " de " << cantCaminos << "... ";
+
         tamMochila = caminos[c].tamMochila();
-        Camino caminoCopia = caminos[c];
 
         cantGimnasios = 0;
         cantPokeparadas = 0;
@@ -172,21 +206,45 @@ void generarSalida(vector<Camino>& caminos, Vecindad criterio, ofstream& salida)
 
         salida << cantGimnasios << "," << cantPokeparadas << "," << tamMochila << "," << criterio << ","
                << distancia << "," << tamCamino << "," << cantCiclosTotal / (double) CANT_REPETICIONES << endl;
+
+        cout << "Listo" << endl;
     }
+
+    cout << "Listo" << endl;
 }
 
-void expAleat(ofstream& salida){
+void expAleat(ofstream& salida, Vecindad criterio){
+    vector<Grafo> grafos(CANT_MEDICIONES);
+    generarGrafosAleat(grafos);
+
+    cout << "   Definiendo tamaños de mochilas... ";
+
+    vector<int> tamMochilas(CANT_MEDICIONES);
+    /*for(int i = 0; i < CANT_MEDICIONES; i++){
+        tamMochilas[i] = aleatEnRango(POCIONES_MAX + 2, TAM_MOCHILA_MAX);
+    }*/
+    for(int i = 0; i < CANT_MEDICIONES; i++){
+        tamMochilas[i] = POCIONES_MAX * CANT_GIMNASIOS_MAX;
+    }
+
+    cout << "Listo" << endl;
+
+    vector<Camino> caminos(CANT_MEDICIONES);
+
+    generarCaminos(grafos, tamMochilas, caminos);
+
+    generarSalida(caminos, criterio, salida);
+}
+
+void expOpAleat(ofstream& salida, Vecindad criterio){
 
 }
 
-void expOpAleat(ofstream& salida){
+void expMejor(ofstream& salida, Vecindad criterio){
+    // tamMochila = max(pociones de gimnasios) * cant gimnasios para que pueda recorrer primero todas las pokeparadas.
 
 }
 
-void expMejor(ofstream& salida){
-
-}
-
-void expOpMejor(ofstream& salida){
+void expOpMejor(ofstream& salida, Vecindad criterio){
 
 }

@@ -53,7 +53,9 @@ void Camino::leerEntrada(){
 Camino& Camino::operator=(const Camino& otro){
     _grafo = otro._grafo;
     _tamMochila = otro._tamMochila;
-    _nodoInicial = &_grafo.nodo(otro._nodoInicial->id);
+    if(otro._nodoInicial != NULL){
+        _nodoInicial = &_grafo.nodo(otro._nodoInicial->id);
+    }
     _distancia = otro._distancia;
     return *this;
 }
