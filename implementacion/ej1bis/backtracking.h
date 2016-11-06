@@ -31,9 +31,12 @@ class backtracking {
 		bool esGimnasio(int id);
 
 		//
-		vector<pos> posiciones;
+		vector<pos> gimnasios;
 		vector<int> gimnasiosPoder;
+		vector<pos> paradas;
 		int mochila;
+
+		vector<pos> posiciones;
 
 		//
 		float mejorDistancia;
