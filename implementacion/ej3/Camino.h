@@ -25,7 +25,7 @@ class Camino{
         bool encontreSolucion();
         bool encontreCamino();
 
-        int busquedaLocal(Vecindad criterio);
+        Cambios busquedaLocal(Vecindad criterio);
 
         float distancia() const;
         float devolverSolucion(queue<int>& camino);
@@ -36,11 +36,12 @@ class Camino{
         int _tamMochila;
         Nodo* _nodoInicial;
         float _distancia;
+        Cambios _cambios;
 
         void asignarNodoInicial(Nodo* nodoInicial);
         void asignarDistancia(float distancia);
         
-        int buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados);
+        void buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados);
         
         bool encuentroSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados);
         bool cambiarMejora(Nodo* n1, Nodo* n2);

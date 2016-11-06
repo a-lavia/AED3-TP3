@@ -2,35 +2,36 @@
 #include "Camino.h"
 
 int main(int argc, char* argv[]){
-    Camino c;
+    Camino caminoBL;
 
-    c.leerEntrada();
+    caminoBL.leerEntrada();
 
-    c.asignarSolucionGolosaJ();
+    caminoBL.asignarSolucionGolosaJ();
 
-    if(c.encontreSolucion()){
+    if(caminoBL.encontreSolucion()){
         #ifdef DEBUG
             cout << "Solucion golosa:" << endl;
-            c.imprimirSolucion();
+            caminoBL.imprimirSolucion();
             cout << endl;
         #endif
             
-        Camino cCopia;
-        cCopia = c;
-        int cantCambios;
+        Camino caminoBLCopia;
+        caminoBLCopia = caminoBL;
+
+        Cambios cambiosBL;
         
         cout << "Busqueda local con vecindad = permutaCamino:" << endl;
-        if(c.encontreCamino()){
-            cantCambios = c.busquedaLocal(permutaCamino);
+        if(caminoBL.encontreCamino()){
+            cambiosBL = caminoBL.busquedaLocal(permutaCamino);
         }
-        c.imprimirSolucion();
+        caminoBL.imprimirSolucion();
         cout << endl;
 
         cout << "Busqueda local con vecindad = permutaYReemplazaPokeparadas:" << endl;
-        if(cCopia.encontreCamino()){
-            cantCambios = cCopia.busquedaLocal(permutaYReemplazaPokeparadas);
+        if(caminoBLCopia.encontreCamino()){
+            cambiosBL = caminoBLCopia.busquedaLocal(permutaYReemplazaPokeparadas);
         }
-        cCopia.imprimirSolucion();
+        caminoBLCopia.imprimirSolucion();
     } else{
         cout << -1 << endl;
     }

@@ -57,6 +57,7 @@ Camino& Camino::operator=(const Camino& otro){
         _nodoInicial = &_grafo.nodo(otro._nodoInicial->id);
     }
     _distancia = otro._distancia;
+    _cambios = otro._cambios;
 
     return *this;
 }
@@ -165,10 +166,8 @@ bool Camino::encontreCamino(){
     return _nodoInicial != NULL;
 }
 
-int Camino::busquedaLocal(Vecindad criterio){
+Cambios Camino::busquedaLocal(Vecindad criterio){
     assert(encontreCamino());
-
-    int cantCambios;
 
     if(criterio == permutaCamino){
         vector<Nodo*> nodosVisitados;
@@ -180,7 +179,7 @@ int Camino::busquedaLocal(Vecindad criterio){
             nodosVisitados.push_back(nodoActual);
         }
 
-        cantCambios = buscoSolucionVecinaMejor(nodosVisitados);
+        buscoSolucionVecinaMejor(nodosVisitados);
     } else{
         vector<Nodo*> pokeparadas;
 
@@ -190,13 +189,20 @@ int Camino::busquedaLocal(Vecindad criterio){
             }
         }
 
-        cantCambios = buscoSolucionVecinaMejor(pokeparadas);
+        buscoSolucionVecinaMejor(pokeparadas);
     }
 
-    return cantCambios;
+    #ifdef DEBUG
+        cout << "Cantidad de permutaciones para mejorar = " << _cambios.cantPermutacionesParaMejorar << endl;
+        cout << "Cantidad de permutaciones para mantener = " << _cambios.cantPermutacionesParaMantener << endl;
+        cout << "Cantidad de reemplazos para mejorar = " << _cambios.cantReemplazosParaMejorar << endl;
+        cout << "Cantidad de reemplazos para mantener = " << _cambios.cantReemplazosParaMantener << endl;
+    #endif
+
+    return _cambios;
 }
 
-int Camino::buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
+void Camino::buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
     int cantCambios = 0;
     bool busco = true;
     map<int, int> nodosCambiados;
@@ -215,7 +221,6 @@ int Camino::buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
             if(nodosCambiados.size() > 0){
                 nodosCambiados.clear();
             }
-            cantCambios++;
         }
 
         #ifdef DEBUG
@@ -224,16 +229,8 @@ int Camino::buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
 
         if(!encuentroSolucionVecinaIgual(nodosConsiderados, nodosCambiados)){
             busco = false;
-        } else{
-            cantCambios++;
         }
     }
-
-    #ifdef DEBUG
-        cout << "Cantidad de cambios producidos por la busqueda local = " << cantCambios << endl;
-    #endif
-
-    return cantCambios;
 }
 
 bool Camino::encuentroSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
@@ -255,6 +252,8 @@ bool Camino::encuentroSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
 bool Camino::cambiarMejora(Nodo* n1, Nodo* n2){
     bool mejora = false;
 
+    bool permute = false;
+
     float distanciaNueva;
     if(!estaEnElCamino(n1)){
         distanciaNueva = distanciaReemplazar(n2,n1);
@@ -262,6 +261,7 @@ bool Camino::cambiarMejora(Nodo* n1, Nodo* n2){
         distanciaNueva = distanciaReemplazar(n1,n2);
     } else{
         distanciaNueva = distanciaPermutar(n1,n2);
+        permute = true;
     }
     
     #ifdef DEBUG
@@ -271,6 +271,12 @@ bool Camino::cambiarMejora(Nodo* n1, Nodo* n2){
     if(distanciaNueva < distancia() && cambiarSiPuedo(n1, n2)){ 
         asignarDistancia(distanciaNueva);
         mejora = true;
+
+        if(permute){
+            _cambios.cantPermutacionesParaMejorar++;
+        } else{
+            _cambios.cantReemplazosParaMejorar++;
+        }
 
         #ifdef DEBUG
             cout << "¡MEJORE!" << endl;
@@ -303,6 +309,8 @@ bool Camino::encuentroSolucionVecinaIgual(vector<Nodo*>& nodosConsiderados, map<
 bool Camino::cambiarMantieneIgual(Nodo* n1, Nodo* n2){
     bool mantiene = false;
 
+    bool permute = false;
+
     float distanciaNueva;
     if(!estaEnElCamino(n1)){
         distanciaNueva = distanciaReemplazar(n2,n1);
@@ -310,6 +318,7 @@ bool Camino::cambiarMantieneIgual(Nodo* n1, Nodo* n2){
         distanciaNueva = distanciaReemplazar(n1,n2);
     } else{
         distanciaNueva = distanciaPermutar(n1,n2);
+        permute = true;
     }
 
     #ifdef DEBUG
@@ -319,6 +328,12 @@ bool Camino::cambiarMantieneIgual(Nodo* n1, Nodo* n2){
     if(distanciaNueva == distancia() && cambiarSiPuedo(n1, n2)){  
         asignarDistancia(distanciaNueva);
         mantiene = true;
+
+        if(permute){
+            _cambios.cantPermutacionesParaMantener++;
+        } else{
+            _cambios.cantReemplazosParaMantener++;
+        }
 
         #ifdef DEBUG
             cout << "CAMBIE POR UNA DISTANCIA IGUAL" << endl;

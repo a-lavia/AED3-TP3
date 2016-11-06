@@ -37,31 +37,38 @@ void generarCaminosAleat(vector<Camino>& caminos, bool paraCompOp){
     vector<Grafo> grafos(CANT_CASOS);
 
     for(int m = 0; m < CANT_CASOS; m++){
-        int cantGimnasios = aleatEnRango(0, cantGimnasiosMax);        
+        int cantGimnasios = aleatEnRango(CANT_GIMNASIOS_MIN, cantGimnasiosMax);        
+        vector<Nodo> gimnasios(cantGimnasios);
         
-        // Asumo que voy a usar estos grafos con mochilas lo suficientemente grandes:
-        int cantPokeparadas = (POCIONES_MAX*cantGimnasios)/3 + 1;
-        
-        int cantNodos = cantGimnasios + cantPokeparadas;
-        
-        Grafo g(cantNodos);
-
         int n;
         for(n = 0; n < cantGimnasios; n++){
             Nodo nodoNuevo;
             nodoNuevo.id = n + 1;
-            nodoNuevo.x = aleatEnRango(0, X_MAX);
-            nodoNuevo.y = aleatEnRango(0, Y_MAX);
+            nodoNuevo.x = aleatEnRango(X_MIN, X_MAX);
+            nodoNuevo.y = aleatEnRango(Y_MIN, Y_MAX);
             nodoNuevo.gimnasio = true;
-            nodoNuevo.pociones = aleatEnRango(0, POCIONES_MAX);
-            g.asignarNodo(nodoNuevo);
+            nodoNuevo.pociones = aleatEnRango(POCIONES_MIN, POCIONES_MAX);
+            gimnasios[n] = nodoNuevo;
+        }
+
+        int cantTotalPociones = 0;
+        for(int i = 0; i < cantGimnasios; i++){
+            cantTotalPociones += gimnasios[i].pociones;
+        }
+
+        int cantPokeparadas = aleatEnRango(cantTotalPociones, cantTotalPociones * 2);
+        int cantNodos = cantGimnasios + cantPokeparadas;
+        Grafo g(cantNodos);
+
+        for(int i = 0; i < cantGimnasios; i++){
+            g.asignarNodo(gimnasios[i]);
         }
 
         for( ; n < cantNodos; n++){
             Nodo nodoNuevo;
             nodoNuevo.id = n + 1;
-            nodoNuevo.x = aleatEnRango(0, X_MAX);
-            nodoNuevo.y = aleatEnRango(0, Y_MAX);
+            nodoNuevo.x = aleatEnRango(X_MIN, X_MAX);
+            nodoNuevo.y = aleatEnRango(Y_MIN, Y_MAX);
             nodoNuevo.gimnasio = false;
             nodoNuevo.pociones = POCIONES_POKEPARADA;
             g.asignarNodo(nodoNuevo);
@@ -94,13 +101,15 @@ void generarSalida(vector<Camino>& caminos, Vecindad criterio, ofstream& salida)
 
     cout << "   Generando salida... " << endl;
 
-    salida << "cantGimnasios,cantPokeparadas,tamMochila,distancia,tamCamino,cantCambios,tiempo" << endl;
+    salida << "cantGimnasios,cantPokeparadas,tamMochila,distanciaOriginal,distanciaNueva,cantPermutacionesParaMejorar,cantPermutacionesParaMantener,cantReemplazosParaMejorar,cantReemplazosParaMantener,tiempo" << endl;
     
     int cantCaminos = caminos.size();
+    
     double cantCiclosTotal;
-    int cantGimnasios, cantPokeparadas, tamMochila, distancia, tamCamino, cantCambios, cantNodos;
-    queue<int> caminoCola, caminoColaVacia;
+    int cantGimnasios, cantPokeparadas, tamMochila, distanciaOriginal, distanciaNueva, cantNodos;
+    queue<int> caminoCola, caminoColaVacia;    
     Camino caminoCopia;
+    Cambios cambiosBL;
     
     for(int c = 0; c < cantCaminos; c++){
         cout << "       Procesando camino " << c + 1 << " de " << cantCaminos << "..." << endl;
@@ -118,8 +127,6 @@ void generarSalida(vector<Camino>& caminos, Vecindad criterio, ofstream& salida)
 
         cout << "           Camino de " << cantGimnasios << " gimnasios y " << cantPokeparadas << " pokeparadas" << endl;
 
-        tamMochila = caminos[c].tamMochila();
-
         cout << "           Hallando una solucion golosa... ";
 
         caminos[c].asignarSolucionGolosaJ();
@@ -134,8 +141,8 @@ void generarSalida(vector<Camino>& caminos, Vecindad criterio, ofstream& salida)
                 caminoCola = caminoColaVacia;
                 caminoCopia = caminos[c];
                 auto inicio = RELOJ();
-                    cantCambios = caminoCopia.busquedaLocal(criterio);
-                    distancia = caminoCopia.devolverSolucion(caminoCola);
+                    cambiosBL = caminoCopia.busquedaLocal(criterio);
+                    distanciaNueva = caminoCopia.devolverSolucion(caminoCola);
                 auto fin = RELOJ();
                 cantCiclosTotal += (double) chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count();
             }
@@ -143,10 +150,13 @@ void generarSalida(vector<Camino>& caminos, Vecindad criterio, ofstream& salida)
 
         cout << "Listo" << endl;
 
-        tamCamino = caminoCola.size();
+        tamMochila = caminos[c].tamMochila();
+        distanciaOriginal = caminos[c].distancia();
 
-        salida << cantGimnasios << "," << cantPokeparadas << "," << tamMochila << "," << distancia << "," << tamCamino
-               << "," << cantCambios << "," << cantCiclosTotal / (double) CANT_REPETICIONES << endl;
+        salida << cantGimnasios << "," << cantPokeparadas << "," << tamMochila << "," << distanciaOriginal << ","
+        << distanciaNueva << "," << cambiosBL.cantPermutacionesParaMejorar << "," << cambiosBL.cantPermutacionesParaMantener
+        << "," << cambiosBL.cantReemplazosParaMejorar << "," << cambiosBL.cantReemplazosParaMantener << ","
+        << cantCiclosTotal / (double) CANT_REPETICIONES << endl;
 
         cout << "       Listo" << endl;
     }

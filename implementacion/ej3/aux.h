@@ -34,6 +34,17 @@ enum Vecindad{
     permutaYReemplazaPokeparadas
 };
 
+struct Cambios{
+    int cantPermutacionesParaMejorar;
+    int cantPermutacionesParaMantener;
+    int cantReemplazosParaMejorar;
+    int cantReemplazosParaMantener;
+
+    Cambios() : cantPermutacionesParaMejorar(0), cantPermutacionesParaMantener(0), cantReemplazosParaMejorar(0), cantReemplazosParaMantener(0){
+
+    }
+};
+
 float distanciaNodos(Nodo n1, Nodo n2);
 
 #endif
