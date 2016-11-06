@@ -10,7 +10,7 @@
 
 #define POCIONES_POKEPARADA 3
 #define INV -1
-// #define DEBUG   // Descomentando esta linea se imprimen por pantalla datos intermedios de la busqueda local.
+// #define DEBUG   // Descomentando esta linea se imprimen por pantalla datos intermedios del ejercicio.
 
 using namespace std;
     
@@ -29,11 +29,6 @@ struct Nodo{
     }
 };
 
-enum Vecindad{
-    permutaCamino,
-    permutaYReemplazaPokeparadas
-};
-
 struct Cambios{
     int cantPermutacionesParaMejorar;
     int cantPermutacionesParaMantener;
@@ -43,6 +38,11 @@ struct Cambios{
     Cambios() : cantPermutacionesParaMejorar(0), cantPermutacionesParaMantener(0), cantReemplazosParaMejorar(0), cantReemplazosParaMantener(0){
 
     }
+};
+
+enum Vecindad{
+    permutaCamino,
+    permutaYReemplazaPokeparadas
 };
 
 float distanciaNodos(Nodo n1, Nodo n2);
