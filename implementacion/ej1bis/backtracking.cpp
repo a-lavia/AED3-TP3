@@ -6,6 +6,10 @@ backtracking::backtracking(vector<pos>& gimnasios, vector<int>& gimnasiosPoder, 
     posiciones.insert(posiciones.end(), gimnasios.begin(), gimnasios.end());
     posiciones.insert(posiciones.end(), paradas.begin(), paradas.end());
 
+}
+
+void backtracking::correr_backtracking() {
+
 	//Obtengo algun recorrido de una solución heuristica
 	mejorRecorrido = solucionHeuristica(gimnasios, gimnasiosPoder, paradas, mochila);
 
@@ -13,10 +17,6 @@ backtracking::backtracking(vector<pos>& gimnasios, vector<int>& gimnasiosPoder, 
 		mejorDistancia = distanciaCamino(mejorRecorrido, gimnasios, paradas);
 	else
 		mejorDistancia = FLOAT_MAX;
-
-}
-
-void backtracking::correr_backtracking() {
 
 	//Preparamos los parametros del backtracking, agrego todos los nodos por verificar a una cola
 	queue<int> restantes;

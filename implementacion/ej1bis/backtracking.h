@@ -14,10 +14,13 @@ class backtracking {
 
 		backtracking(vector<pos>& gimnasios, vector<int>& gimnasiosPoder, vector<pos>& paradas, int mochila);
 
+		//Corre el backtracking
 		void correr_backtracking();
 
+		//Igual al anterior pero devuelve la menor distancia y copia la solucion a la cola del parametro (que debería estar vacía)
 		float correr_backtracking(queue<int>& solucion);
 
+		//Imprime la solución (debería correrse el backtracking antes de llamarla)
 		void imprimirSolucion();
 
 	private:
