@@ -1,1 +1,0 @@
-cantGimnasios,cantPokeparadas,tamMochila,criterio,distancia,tamCamino,tiempo

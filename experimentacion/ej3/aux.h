@@ -7,19 +7,22 @@
 #include <vector>
 #include <string>
 
-#define CANT_NODOS_OP_MAX 10
-#define CANT_NODOS_MAX 1000
-#define CANT_GIMNASIOS_MAX 500
+#define CANT_GIMNASIOS_MIN 0
+#define CANT_GIMNASIOS_MAX 100
+#define CANT_GIMNASIOS_MAX_OP 10
+#define TAM_MOCHILA 12 // POCIONES_MAX + 2
 
+#define X_MIN 0
 #define X_MAX 1000
+#define Y_MIN 0
 #define Y_MAX 1000
-#define POCIONES_MAX 50
-#define TAM_MOCHILA_MAX 1000
+#define POCIONES_MIN 0
+#define POCIONES_MAX 10
 
-#define CANT_MEDICIONES 2
-
+#define CANT_CASOS 30
 #define RELOJ chrono::high_resolution_clock::now
-#define CANT_REPETICIONES 100
+#define CANT_REPETICIONES 50
+#define CANT_REPETICIONES_OP 10
 
 using namespace std;
 

@@ -29,9 +29,41 @@ int main(int argc, char* argv[]){
             break;
         }
         case 1 : {
-            // Instancias aleatorias comparadas con el optimo
+            cout << "Experimento con instancias aleatorias y sus soluciones optimas:" << endl << endl;
 
+            string stringExperimento = stringPrincipio + "-aleatOp";
 
+            cout << "Vecindad = permutaCamino" << endl;
+            
+            string stringPermutaCamino = stringExperimento + "-permutaCamino";
+            
+            string stringPermutaCaminoBL = stringPermutaCamino + "-BL.csv";
+            ofstream salidaPermutaCaminoBL;
+            salidaPermutaCaminoBL.open(stringPermutaCaminoBL.c_str());
+
+            string stringPermutaCaminoOp = stringPermutaCamino + "-Op.csv";
+            ofstream salidaPermutaCaminoOp;
+            salidaPermutaCaminoOp.open(stringPermutaCaminoOp.c_str());
+
+            expAleatOp(salidaPermutaCaminoBL, salidaPermutaCaminoOp, permutaCamino);
+            salidaPermutaCaminoBL.close();
+            salidaPermutaCaminoOp.close();
+
+            cout << endl << "Vecindad = permutaYReemplazaPokeparadas" << endl;
+
+            string stringPermutaYReemplazaPokeparadas = stringExperimento + "-permutaYReemplazaPokeparadas";
+            
+            string stringPermutaYReemplazaPokeparadasBL = stringPermutaYReemplazaPokeparadas + "-BL.csv";
+            ofstream salidaPermutaYReemplazaPokeparadasBL;
+            salidaPermutaYReemplazaPokeparadasBL.open(stringPermutaYReemplazaPokeparadasBL.c_str());
+
+            string stringPermutaYReemplazaPokeparadasOp = stringPermutaYReemplazaPokeparadas + "-Op.csv";
+            ofstream salidaPermutaYReemplazaPokeparadasOp;
+            salidaPermutaYReemplazaPokeparadasOp.open(stringPermutaYReemplazaPokeparadasOp.c_str());
+
+            expAleatOp(salidaPermutaYReemplazaPokeparadasBL, salidaPermutaYReemplazaPokeparadasOp, permutaYReemplazaPokeparadas);
+            salidaPermutaYReemplazaPokeparadasBL.close();
+            salidaPermutaYReemplazaPokeparadasOp.close();
 
             break;
         }
@@ -49,9 +81,17 @@ int main(int argc, char* argv[]){
 
             break;
         }
+        case 4 : {
+            // Comparacion de las dos heuristicas con las dos vecindades
+
+
+
+            break;
+        }
         default : {
-            // Todos los experimentos anteriores. Uso archivos que se llamen como salida + "Aleat", etc.
-            int sinoNoCompila;
+            cout << "Modo de uso: ./exp.out [opcion]" << endl;
+            cout << "[opcion] == 0: experimento con instancias aleatorias" << endl;
+            cout << "[opcion] == 1: experimento con instancias aleatorias y sus soluciones optimas" << endl;
         }
     }
     
