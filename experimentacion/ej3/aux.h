@@ -7,7 +7,8 @@
 #include <vector>
 #include <string>
 
-#define CANT_GIMNASIOS_MIN 0
+#define CANT_NODOS_MAX_OP 20
+#define CANT_GIMNASIOS_MIN 1
 #define CANT_GIMNASIOS_MAX 100
 #define CANT_GIMNASIOS_MAX_OP 10
 #define TAM_MOCHILA 12 // POCIONES_MAX + 2
