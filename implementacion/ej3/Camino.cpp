@@ -169,6 +169,9 @@ bool Camino::encontreCamino(){
 Cambios Camino::busquedaLocal(Vecindad criterio){
     assert(encontreCamino());
 
+    Cambios cambiosVacio;
+    _cambios = cambiosVacio;
+
     if(criterio == permutaCamino){
         vector<Nodo*> nodosVisitados;
         
