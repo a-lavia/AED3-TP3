@@ -8,7 +8,7 @@ backtracking::backtracking(vector<pos>& gimnasios, vector<int>& gimnasiosPoder, 
 
 }
 
-void backtracking::correr_backtracking() {
+float backtracking::correr_backtracking() {
 
 	//Obtengo algun recorrido de una solución heuristica
 	mejorRecorrido = solucionHeuristica(gimnasios, gimnasiosPoder, paradas, mochila);
@@ -24,6 +24,8 @@ void backtracking::correr_backtracking() {
 
 	//Corremos el backtracking
 	btRecursivo(0, 0, gimnasiosPoder.size(), restantes, recorridos);
+
+	return mejorDistancia;
 
 }
 

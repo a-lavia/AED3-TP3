@@ -36,11 +36,11 @@ int main(int argc, char* argv[]){
 	// imprimirVector(paradas);
 
 	solucion* mejor_sol = solHeuristicaGolosa(mochila, gimnasios, paradas);
-    
-    if(mejor_sol != NULL){
-        imprimirSolucion(*mejor_sol);
-        delete mejor_sol;
-    }
+
+	if(mejor_sol != NULL){
+		imprimirSolucion(*mejor_sol);
+		delete mejor_sol;
+	}
 
 	return 0;
 }

@@ -208,7 +208,7 @@ Cambios Camino::busquedaLocal(Vecindad criterio){
 void Camino::buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados){
     int cantCambios = 0;
     bool busco = true;
-    map<int, int> nodosCambiados;
+    map<int, set<int>> nodosCambiados;
     
     #ifdef DEBUG
         cout << "Distancia actual = " << distancia() << endl;
@@ -291,16 +291,16 @@ bool Camino::cambiarMejora(Nodo* n1, Nodo* n2){
     return mejora;
 }
 
-bool Camino::encuentroSolucionVecinaIgual(vector<Nodo*>& nodosConsiderados, map<int, int>& nodosCambiados){
+bool Camino::encuentroSolucionVecinaIgual(vector<Nodo*>& nodosConsiderados, map<int, set<int>>& nodosCambiados){
     bool busco = true;
     int cantNodos = nodosConsiderados.size();
 
     for(int i = 0; i < cantNodos && busco; i++){
         for(int j = 0; j < cantNodos && busco; j++){
             if(i != j && (estaEnElCamino(nodosConsiderados[i]) || estaEnElCamino(nodosConsiderados[j]))
-                      && !(nodosCambiados.count(nodosConsiderados[i]->id) > 0 && nodosCambiados[nodosConsiderados[i]->id] == nodosConsiderados[j]->id)
+                      && !(nodosCambiados.count(nodosConsiderados[i]->id) > 0 && nodosCambiados[nodosConsiderados[i]->id].count(nodosConsiderados[j]->id) > 0)
                       && cambiarMantieneIgual(nodosConsiderados[i], nodosConsiderados[j])){
-                nodosCambiados[nodosConsiderados[i]->id] = nodosConsiderados[j]->id;
+                nodosCambiados[nodosConsiderados[i]->id].insert(nodosConsiderados[j]->id);
                 busco = false;
             }
         }
