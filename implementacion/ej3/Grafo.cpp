@@ -2,7 +2,7 @@
 
 Grafo::Grafo(int cantNodos){
     _nodos.resize(cantNodos);
-    _distancias.resize(cantNodos, vector<float>(cantNodos));
+    _distancias.resize(cantNodos, vector<double>(cantNodos));
 }
 
 Grafo& Grafo::operator=(const Grafo& otro){
@@ -30,7 +30,7 @@ Nodo& Grafo::nodo(int id){
     return _nodos[id - 1];
 }
 
-float Grafo::distancia(const Nodo& n1, const Nodo& n2){
+double Grafo::distancia(const Nodo& n1, const Nodo& n2){
     return _distancias[n1.id - 1][n2.id - 1];
 }
 
@@ -42,14 +42,14 @@ void Grafo::asignarNodo(const Nodo& n){
         for(int i = 0; i < cantNodos; i++){
             _distancias[i].resize(n.id);
         }
-        _distancias.resize(n.id, vector<float>(n.id));
+        _distancias.resize(n.id, vector<double>(n.id));
     }
 
     _nodos[n.id - 1] = n;
 
     for(int i = 0; i < cantNodos; i++){
         if(_nodos[i].id != INV){
-            float distancia = distanciaNodos(n, _nodos[i]);
+            double distancia = distanciaNodos(n, _nodos[i]);
             _distancias[n.id - 1][_nodos[i].id - 1] = distancia;
             _distancias[_nodos[i].id - 1][n.id - 1] = distancia;
         }

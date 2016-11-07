@@ -18,7 +18,7 @@ class Camino{
         Grafo& grafo();
         int tamMochila() const;
 
-        void asignarSolucion(float distancia, queue<int>& caminoCola);
+        void asignarSolucion(double distancia, queue<int>& caminoCola);
         void asignarSolucionGolosaJ();
         void asignarSolucionGolosaA();
 
@@ -27,19 +27,19 @@ class Camino{
 
         Cambios busquedaLocal(Vecindad criterio);
 
-        float distancia() const;
-        float devolverSolucion(queue<int>& camino);
+        double distancia() const;
+        double devolverSolucion(queue<int>& camino);
         void imprimirSolucion();
 
     private: 
         Grafo _grafo;
         int _tamMochila;
         Nodo* _nodoInicial;
-        float _distancia;
+        double _distancia;
         Cambios _cambios;
 
         void asignarNodoInicial(Nodo* nodoInicial);
-        void asignarDistancia(float distancia);
+        void asignarDistancia(double distancia);
         
         void buscoSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados);
         
@@ -53,8 +53,8 @@ class Camino{
 
         bool estaEnElCamino(const Nodo* n);
 
-        float distanciaPermutar(const Nodo* n1, const Nodo* n2);
-        float distanciaReemplazar(const Nodo* nodoViejo, const Nodo* nodoNuevo);
+        double distanciaPermutar(const Nodo* n1, const Nodo* n2);
+        double distanciaReemplazar(const Nodo* nodoViejo, const Nodo* nodoNuevo);
         void permutar(Nodo* n1, Nodo* n2);
         void reemplazar(Nodo* nodoViejo, Nodo* nodoNuevo);
 };

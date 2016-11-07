@@ -10,6 +10,7 @@
 void generarCaminosAleat(vector<Camino>& caminos);
 void generarCaminosAleatOp(vector<Camino>& caminos);
 void generarCaminosMejor(vector<Camino>& caminos);
+void generarCaminosMejorOp(vector<Camino>& caminos);
 
 void asignarSolucionesJ(vector<Camino>& caminos);
 
@@ -19,9 +20,10 @@ void generarSalidaOp(vector<Camino>& caminos, ofstream& salida);
 
 
 // Todos los grafos generados tienen solucion:
-Grafo generarGrafoAleat(int cantGimnasios);
-Grafo generarGrafoAleatOp(int cantGimnasios, int cantPokeparadas);
+void generarGrafoAleat(int cantGimnasios, Grafo& grafo);
+void generarGrafoAleatOp(int cantGimnasios, int cantPokeparadas, Grafo& grafo);
 int generarGrafoMejor(int cantGimnasios, Grafo& grafo);
+int generarGrafoMejorOp(int cantGimnasios, int cantPokeparadas, Grafo& grafo);
 
 int aleatEnRango(int min, int max);
 int max(int a, int b);  

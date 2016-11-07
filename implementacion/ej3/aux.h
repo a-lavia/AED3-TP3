@@ -46,6 +46,6 @@ enum Vecindad{
     permutaYReemplazaPokeparadas
 };
 
-float distanciaNodos(Nodo n1, Nodo n2);
+double distanciaNodos(Nodo n1, Nodo n2);
 
 #endif

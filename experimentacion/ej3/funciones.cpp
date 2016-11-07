@@ -8,7 +8,7 @@ void generarCaminosAleat(vector<Camino>& caminos){
     for(int i = 0; i < CANT_CASOS; i++){
         int cantGimnasios = aleatEnRango(CANT_GIMNASIOS_MIN, CANT_GIMNASIOS_MAX);
         Grafo g;
-        g = generarGrafoAleat(cantGimnasios);
+        generarGrafoAleat(cantGimnasios, g);
 
         Camino c(g, TAM_MOCHILA);
         caminos[i] = c;
@@ -25,7 +25,7 @@ void generarCaminosAleatOp(vector<Camino>& caminos){
     for(int i = 0; i < CANT_NODOS_MAX_OP + 1; i++){
         int cantGimnasios = min(aleatEnRango(min(CANT_GIMNASIOS_MIN,i), i), CANT_GIMNASIOS_MAX_OP);
         Grafo g;
-        g = generarGrafoAleatOp(cantGimnasios, i - cantGimnasios);
+        generarGrafoAleatOp(cantGimnasios, i - cantGimnasios, g);
 
         Camino c(g, TAM_MOCHILA);
         caminos[i] = c;
@@ -46,6 +46,25 @@ void generarCaminosMejor(vector<Camino>& caminos){
         Grafo g;
         tamMochila = generarGrafoMejor(cantGimnasios, g);
         
+        Camino c(g, tamMochila);
+        caminos[i] = c;
+    }
+
+    cout << "Listo" << endl;
+}
+
+void generarCaminosMejorOp(vector<Camino>& caminos){
+    assert(caminos.size() == CANT_NODOS_MAX_OP + 1);
+
+    cout << "Generando caminos... ";
+
+    int tamMochila;
+
+    for(int i = 0; i < CANT_NODOS_MAX_OP + 1; i++){
+        int cantGimnasios = min(aleatEnRango(min(CANT_GIMNASIOS_MIN,i), i), CANT_GIMNASIOS_MAX_OP);
+        Grafo g;
+        tamMochila = generarGrafoMejorOp(cantGimnasios, i - cantGimnasios, g);
+
         Camino c(g, tamMochila);
         caminos[i] = c;
     }
@@ -200,7 +219,7 @@ void generarSalidaOp(vector<Camino>& caminos, ofstream& salida){
     cout << "   Listo" << endl;
 }
 
-Grafo generarGrafoAleat(int cantGimnasios){
+void generarGrafoAleat(int cantGimnasios, Grafo& grafo){
     vector<Nodo> gimnasios(cantGimnasios);
 
     int cantTotalPociones = 0;  
@@ -238,10 +257,10 @@ Grafo generarGrafoAleat(int cantGimnasios){
         n++;
     }
 
-    return g;
+    grafo = g;
 }
 
-Grafo generarGrafoAleatOp(int cantGimnasios, int cantPokeparadas){
+void generarGrafoAleatOp(int cantGimnasios, int cantPokeparadas, Grafo& grafo){
     int cantNodos = cantGimnasios + cantPokeparadas;
     Grafo g(cantNodos);   
 
@@ -273,7 +292,7 @@ Grafo generarGrafoAleatOp(int cantGimnasios, int cantPokeparadas){
         n++;
     }
 
-    return g;
+    grafo = g;
 }
 
 int generarGrafoMejor(int cantGimnasios, Grafo& grafo){
@@ -301,6 +320,46 @@ int generarGrafoMejor(int cantGimnasios, Grafo& grafo){
 
     for(int i = 0; i < cantGimnasios; i++){
         g.asignarNodo(gimnasios[i]);
+    }
+
+    while(n < cantNodos){
+        Nodo nodoNuevo;
+        nodoNuevo.id = n + 1;
+        nodoNuevo.x = aleatEnRango(X_MAX / 2, X_MAX);
+        nodoNuevo.y = aleatEnRango(Y_MAX / 2, Y_MAX);
+        nodoNuevo.gimnasio = false;
+        nodoNuevo.pociones = POCIONES_POKEPARADA;
+        g.asignarNodo(nodoNuevo);
+        n++;
+    }
+
+    grafo = g;
+    return cantTotalPociones;
+}
+
+int generarGrafoMejorOp(int cantGimnasios, int cantPokeparadas, Grafo& grafo){
+    int cantNodos = cantGimnasios + cantPokeparadas;
+    Grafo g(cantNodos);   
+
+    int pocionesMax;
+    if(cantGimnasios > 0){
+        pocionesMax = (cantPokeparadas * 3) / cantGimnasios;
+    }
+
+    int cantTotalPociones = 0;
+    int n = 0;
+    while(n < cantGimnasios){
+        Nodo nodoNuevo;
+        nodoNuevo.id = n + 1;
+        nodoNuevo.x = aleatEnRango(X_MIN, X_MAX / 2);
+        nodoNuevo.y = aleatEnRango(Y_MIN, Y_MAX / 2);
+        nodoNuevo.gimnasio = true;
+
+        nodoNuevo.pociones = aleatEnRango(POCIONES_MIN, min(pocionesMax, POCIONES_MAX));
+        cantTotalPociones += nodoNuevo.pociones;
+        
+        g.asignarNodo(nodoNuevo);
+        n++;
     }
 
     while(n < cantNodos){
