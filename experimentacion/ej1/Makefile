@@ -1,9 +1,10 @@
 .PHONY: all clean
 
-BIN = exp
+BIN = ej1Exp.out gen.out
 
 all:
-	g++ exp.cpp ../../implementacion/ej1bis/backtracking.cpp ../../implementacion/ej1bis/heuristica.cpp -std=c++11 -o exp
+	g++ ej.cpp backtracking.cpp heuristica.cpp -std=c++11 -o ej1Exp.out
+	g++ gen.cpp -std=c++11 -o gen.out
 
 clean:
 	rm -f $(BIN)
