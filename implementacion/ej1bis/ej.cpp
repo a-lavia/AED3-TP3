@@ -29,8 +29,18 @@ int main(int argc, char* argv[]) {
 	}
 
 	backtracking bt(gimnasios, gimnasiosPoder, paradas, mochila);
-	bt.correr_backtracking();
-	bt.imprimirSolucion();
+
+	queue<int> solucion;
+	float distancia = bt.correr_backtracking(&solucion);
+
+	if(solucion.size() != 0) {
+		cout << distancia << ' ' << solucion.size() << ' ';
+		while(!solucion.empty()) {
+			cout << (solucion.front()+1) << ' '; //La salida pide enumerarlos desde el 1
+			solucion.pop();
+		}
+		cout << endl;
+	} else cout << -1 << endl;
 
 	return 0;
 }
