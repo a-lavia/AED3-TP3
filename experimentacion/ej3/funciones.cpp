@@ -201,7 +201,7 @@ void generarSalidaOp(vector<Camino>& caminos, ofstream& salida){
             backtracking bt(gimnasios, gimnasiosPoder, paradas, tamMochila);
             caminoCola = caminoColaVacia;
             auto inicio = RELOJ();
-                distancia = bt.correr_backtracking(caminoCola);
+                distancia = bt.correr_backtracking(&caminoCola);
             auto fin = RELOJ();
             cantCiclosTotal += (double) chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count();
         }
