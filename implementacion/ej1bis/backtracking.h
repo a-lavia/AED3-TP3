@@ -17,11 +17,8 @@ class backtracking {
 		//Corre el backtracking, devuelve la distancia
 		float correr_backtracking();
 
-		//Igual al anterior pero devuelve la menor distancia y copia la solucion a la cola del parametro (que debería estar vacía)
-		float correr_backtracking(queue<int>& solucion);
-
-		//Imprime la solución (debería correrse el backtracking antes de llamarla)
-		void imprimirSolucion();
+		//Igual al anterior pero devuelve la distancia y copia la solucion a la cola del parametro
+		float correr_backtracking(queue<int>* solucion);
 
 	private:
 

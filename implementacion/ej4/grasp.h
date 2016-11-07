@@ -17,7 +17,9 @@ class grasp {
 
 		grasp(vector<pos>& g, vector<int>& gp, vector<pos>& p, int m);
 
-		float correr_grasp(int maxIteraciones, int semilla);
+		float correr_grasp(int maxIteraciones, float alfa, int semilla);
+
+		float correr_grasp(int maxIteraciones, float alfa, int semilla, queue<int>* solucion);
 
 		//float correr_grasp_reactivo(int maxIteraciones);
 

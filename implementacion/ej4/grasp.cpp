@@ -16,43 +16,36 @@ grasp::grasp(vector<pos>& g, vector<int>& gp, vector<pos>& p, int m) : gimnasios
 
 }
 
-float grasp::correr_grasp(int maxIteraciones, int semilla) {
+float grasp::correr_grasp(int maxIteraciones, float alfa, int semilla) {
+	correr_grasp(maxIteraciones, alfa, semilla, NULL);
+}
+
+float grasp::correr_grasp(int maxIteraciones, float alfa, int semilla, queue<int>* solucion) {
 
 	srand(semilla);
 
 	queue<int> mejorSolucion;
-	float mejorDistancia = 99999;
+	float mejorDistancia = FLOAT_MAX;
 
 	for(int i = 0; i < maxIteraciones; i++) {
 
-		queue<int> solucion = graspSolucionAleatoria(0.5);
-/*
-		queue<int> mejorRecorrido = solucion;
-		float jjj = distanciaCamino(solucion);
-		if(mejorRecorrido.size() != 0) {
-			cout << jjj << ' ' << mejorRecorrido.size() << ' ';
-			while(!mejorRecorrido.empty()) {
-				cout << (mejorRecorrido.front()+1) << ' '; //La salida pide enumerarlos desde el 1
-				mejorRecorrido.pop();
-			}
-			cout << endl;
-		} else cout << -1 << endl;
-*/
-
+		queue<int> solucionAleatoria = graspSolucionAleatoria(alfa);
 		Camino bl = Camino(grafo, mochila);
-		bl.asignarSolucion(distanciaCamino(solucion), solucion);
-		bl.busquedaLocal(permutaYReemplazaPokeparadas);
-		float distActual = bl.devolverSolucion(solucion);
+		bl.asignarSolucion(distanciaCamino(solucionAleatoria), solucionAleatoria);
+		bl.busquedaLocal(permutaCamino);
+		float distActual = bl.devolverSolucion(solucionAleatoria);
 
 		if(distActual < mejorDistancia) {
 			mejorDistancia = distActual;
-			mejorSolucion = solucion;
+			mejorSolucion = solucionAleatoria;
 		}
 	}
 
+	if(solucion != NULL)
+		*solucion = mejorSolucion;
+
 	return mejorDistancia;
 }
-
 
 //
 
@@ -111,10 +104,9 @@ void grasp::actualizarCandidatos(list<pair<int, float>>& candidatos, vector<bool
 
 }
 
-vector<int> grasp::obtenerCandidatosRestringidos(list<pair<int, float>>& candidatos, float alfa) {//Limitar el tamaño?
-	vector<int> candidatosRestringidos;
-
+vector<int> grasp::obtenerCandidatosRestringidos(list<pair<int, float>>& candidatos, float alfa) {
 	//alfa  [0..1], 0=greedy, 1=random
+	vector<int> candidatosRestringidos;
 
 	//Obtengo la maxima y minima distancia
 	float cMax = candidatos.front().second;
@@ -152,20 +144,11 @@ queue<int> grasp::graspSolucionAleatoria(float alfa) {
 
 	while(gimnasiosRestantes > 0) {
 
-		/*cout << "TOTAL CANDIDATOS" << endl;
-		for(pair<int, float> c : candidatos) cout << c.first << endl;//DEBUG
-		cout << endl;*/
-
 		//Restrinjo los candidatos a los mejores segun un threshold alfa (parte greedy)
 		vector<int> candidatosRestringidos = obtenerCandidatosRestringidos(candidatos, alfa);
 
-		/*cout << "RESTRINJIDOS" << endl;
-		for(int c : candidatosRestringidos) cout << c << endl;//DEBUG*/
-
 		//Obtengo un candidato aleatorio (parte probabilistica)
 		int candidatoAleatorio = candidatosRestringidos[aleatorio(0, candidatosRestringidos.size() )];
-
-		//cout << "elijo a " << candidatoAleatorio << endl << endl;//DEBUG
 
 		if(esGym(candidatoAleatorio)) {
 			gimnasiosRestantes--;

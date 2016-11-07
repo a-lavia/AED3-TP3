@@ -29,32 +29,16 @@ float backtracking::correr_backtracking() {
 
 }
 
-float backtracking::correr_backtracking(queue<int>& solucion) {
+float backtracking::correr_backtracking(queue<int>* solucion) {
 
 	//
 	correr_backtracking();
 
 	//Guardamos la solucion en el parametro recibido
-	queue<int> mejor = mejorRecorrido;
-	while(!mejor.empty()) {
-		solucion.push(mejor.front()+1);
-		mejor.pop();
-	}
+	if(solucion != NULL)
+		*solucion = mejorRecorrido;
 
 	return mejorDistancia;
-
-}
-
-void backtracking::imprimirSolucion() {
-
-	if(mejorRecorrido.size() != 0) {
-		cout << mejorDistancia << ' ' << mejorRecorrido.size() << ' ';
-		while(!mejorRecorrido.empty()) {
-			cout << (mejorRecorrido.front()+1) << ' '; //La salida pide enumerarlos desde el 1
-			mejorRecorrido.pop();
-		}
-		cout << endl;
-	} else cout << -1 << endl;
 
 }
 
