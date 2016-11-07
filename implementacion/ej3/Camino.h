@@ -46,7 +46,7 @@ class Camino{
         bool encuentroSolucionVecinaMejor(vector<Nodo*>& nodosConsiderados);
         bool cambiarMejora(Nodo* n1, Nodo* n2);
 
-        bool encuentroSolucionVecinaIgual(vector<Nodo*>& nodosConsiderados, map<int, int>& nodosCambiados);
+        bool encuentroSolucionVecinaIgual(vector<Nodo*>& nodosConsiderados, map<int, set<int>>& nodosCambiados);
         bool cambiarMantieneIgual(Nodo* n1, Nodo* n2);
 
         bool cambiarSiPuedo(Nodo* n1, Nodo* n2);
