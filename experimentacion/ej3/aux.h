@@ -7,7 +7,7 @@
 #include <vector>
 #include <string>
 
-#define CANT_NODOS_MAX_OP 20
+#define CANT_NODOS_MAX_OP 18
 #define CANT_GIMNASIOS_MIN 1
 #define CANT_GIMNASIOS_MAX 100
 #define CANT_GIMNASIOS_MAX_OP 10
