@@ -68,9 +68,29 @@ int main(int argc, char* argv[]){
             break;
         }
         case 2 : {
-            // Instancias de mejor caso para la busqueda local
-            // tamMochila = max(pociones de gimnasios) * cant gimnasios para que pueda recorrer primero todas las pokeparadas.
+            cout << "Experimento con instancias donde la busqueda local corrige mejor:" << endl << endl;
 
+            vector<Camino> caminos(CANT_CASOS);
+            generarCaminosMejor(caminos);
+            asignarSolucionesJ(caminos);
+
+            string stringExperimento = stringPrincipio + "-mejor";
+
+            cout << "Vecindad = permutaCamino..." << endl;
+            string stringPermutaCamino = stringExperimento + "-permutaCamino.csv";
+            ofstream salidaPermutaCamino;
+            salidaPermutaCamino.open(stringPermutaCamino.c_str());
+            generarSalidaBL(caminos, permutaCamino, salidaPermutaCamino);
+            salidaPermutaCamino.close();
+            cout << "Listo" << endl;
+
+            cout << endl << "Vecindad = permutaYReemplazaPokeparadas..." << endl;
+            string stringPermutaYReemplazaPokeparadas = stringExperimento + "-permutaYReemplazaPokeparadas.csv";
+            ofstream salidaPermutaYReemplazaPokeparadas;
+            salidaPermutaYReemplazaPokeparadas.open(stringPermutaYReemplazaPokeparadas.c_str());
+            generarSalidaBL(caminos, permutaYReemplazaPokeparadas, salidaPermutaYReemplazaPokeparadas);
+            salidaPermutaYReemplazaPokeparadas.close();
+            cout << "Listo" << endl;
 
             break;
         }
@@ -92,6 +112,7 @@ int main(int argc, char* argv[]){
             cout << "Modo de uso: ./exp.out [opcion]" << endl;
             cout << "[opcion] == 0: experimento con instancias aleatorias" << endl;
             cout << "[opcion] == 1: experimento con instancias aleatorias y sus soluciones optimas" << endl;
+            cout << "[opcion] == 2: experimento con instancias donde la busqueda local corrige mejor" << endl;
         }
     }
     
