@@ -11,13 +11,13 @@ class Grafo{
 
         vector<Nodo>& nodos();
         Nodo& nodo(int id);
-        float distancia(const Nodo& n1, const Nodo& n2);
+        double distancia(const Nodo& n1, const Nodo& n2);
 
         void asignarNodo(const Nodo& n);
 
     private: 
         vector<Nodo> _nodos;
-        vector<vector<float>> _distancias;
+        vector<vector<double>> _distancias;
 };
 
 #endif

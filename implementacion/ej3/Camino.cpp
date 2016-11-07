@@ -66,7 +66,7 @@ Grafo& Camino::grafo(){
     return _grafo;
 }
 
-float Camino::distancia() const{
+double Camino::distancia() const{
     return _distancia;
 }
 
@@ -78,11 +78,11 @@ void Camino::asignarNodoInicial(Nodo* nodoInicial){
     _nodoInicial = nodoInicial;
 }
 
-void Camino::asignarDistancia(float distancia){
+void Camino::asignarDistancia(double distancia){
     _distancia = distancia;
 }
 
-void Camino::asignarSolucion(float distancia, queue<int>& caminoCola){
+void Camino::asignarSolucion(double distancia, queue<int>& caminoCola){
     asignarDistancia(distancia);
 
     int tamCamino = caminoCola.size();
@@ -257,7 +257,7 @@ bool Camino::cambiarMejora(Nodo* n1, Nodo* n2){
 
     bool permute = false;
 
-    float distanciaNueva;
+    double distanciaNueva;
     if(!estaEnElCamino(n1)){
         distanciaNueva = distanciaReemplazar(n2,n1);
     } else if(!estaEnElCamino(n2)){
@@ -314,7 +314,7 @@ bool Camino::cambiarMantieneIgual(Nodo* n1, Nodo* n2){
 
     bool permute = false;
 
-    float distanciaNueva;
+    double distanciaNueva;
     if(!estaEnElCamino(n1)){
         distanciaNueva = distanciaReemplazar(n2,n1);
     } else if(!estaEnElCamino(n2)){
@@ -391,8 +391,8 @@ bool Camino::estaEnElCamino(const Nodo* n){
     return n->anterior != NULL || n->siguiente != NULL;
 }
 
-float Camino::distanciaPermutar(const Nodo* n1, const Nodo* n2){
-    float distanciaNueva = distancia();
+double Camino::distanciaPermutar(const Nodo* n1, const Nodo* n2){
+    double distanciaNueva = distancia();
 
     if(n2->siguiente != n1){
         if(n1->anterior != NULL){
@@ -421,8 +421,8 @@ float Camino::distanciaPermutar(const Nodo* n1, const Nodo* n2){
     return distanciaNueva;
 }
 
-float Camino::distanciaReemplazar(const Nodo* nodoViejo, const Nodo* nodoNuevo){
-    float distanciaNueva = distancia();
+double Camino::distanciaReemplazar(const Nodo* nodoViejo, const Nodo* nodoNuevo){
+    double distanciaNueva = distancia();
 
     if(nodoViejo->anterior != NULL){
         distanciaNueva -= grafo().distancia(*(nodoViejo->anterior), *nodoViejo);
@@ -543,7 +543,7 @@ void Camino::imprimirSolucion(){
     cout << endl;
 }
 
-float Camino::devolverSolucion(queue<int>& camino){
+double Camino::devolverSolucion(queue<int>& camino){
     assert(encontreSolucion() && camino.empty());
 
     if(_nodoInicial != NULL){
