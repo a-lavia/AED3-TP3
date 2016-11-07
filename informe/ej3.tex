@@ -1,1 +1,42 @@
 \section{Ejercicio III: Heur\'istica de b\'usqueda local}
+
+\subsection{Introducci\'on}
+
+B\'usqueda local es un m\'etodo que parte de una soluci\'on no \'optima a un problema e intenta mejorarla a trav\'es de modificaciones, es decir, convirti\'endola en una soluci\'on \textit{vecina}. Luego, es necesario determinar qu\'e constituye una soluci\'on vecina a otra dada, hay que definir un \textit{vecindario}. Por ejemplo, en nuestro problema a resolver, donde una soluci\'on s* es un camino simple, que cumple ciertas condiciones, entre algunos nodos de un grafo, una soluci\'on vecina s a s* podr\'ia ser un camino id\'entico al de s* excepto por un nodo que se reemplaza con otro que s* no recorre.
+
+Presentamos a continuaci\'on un pseudoc\'odigo que ilustra la idea general de este algoritmo, en \'el asumimos que queremos minimizar f(s) donde s es una soluci\'on y f una funci\'on que la eval\'ua.
+
+\begin{algorithm}[H]
+\label{}
+\caption{Procedimiento general de b\'usqueda local}
+\begin{algorithmic}[1]
+\Statex \underline{Entrada}: S un conjunto de soluciones, N una funci\'on que devuelve las soluciones vecinas a otra dada y f una funci\'on que eval\'ua una soluci\'on
+\medskip
+\State s* $\gets$ s $\in$ S
+\While{($\exists$ s $\in$ N(s*)) f(s) $<$ f(s*)}
+    \State s* $\gets$ s $\in$ N(s*) tal que f(s) $<$ f(s*)
+\EndWhile
+\medskip
+\Statex \underline{Salida}: s*
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Algoritmo}
+% GENERAL: Explicar de forma clara, sencilla, estructurada y concisa, las ideas desarrolladas para la resolucion del problema. Para esto se pide utilizar pseudoc ́odigo y lenguaje coloquial combinando adecuadamente ambas herramientas (¡sin usar codigo fuente!).
+
+% ESTE TP:  Explicar detalladamente el algoritmo implementado. Plantear al menos dos vecindades distin-tas para la busqueda.
+
+\subsection{Complejidad}
+% GENERAL: Deducir una cota de complejidad temporal del algoritmo propuesto (en funci ́on de los par ́ametros que se consideren correctos) y justificar por qu ́e el algoritmo desarrollado para la resoluci ́on del problema cumple la cota dada. Utilizar el modelo uniforme salvo que se explicite lo contrario
+
+% ESTE TP: Calcular el orden de complejidad temporal de peor caso de una iteraci ́on del algoritmo de busqueda local (para las vecindades planteadas). Si es posible, dar una cota superior para la cantidad de iteraciones de la heur ́ıstica.
+
+\subsection{Experimentación}
+% GENERAL: Realizar una experimentacion computacional para medir la performance del programa implementado. Para ello se debe preparar un conjunto de casos de test que permitan observar los tiempos de ejecucion en funcion de los parametros de entrada. Deber ́an desarrollarse tanto experimentos con instancias aleatorias (detallando como fueron generadas) como experimentos con instancias particulares (de peor/mejor caso en tiempo de ejecuci ́on, por ejemplo). Se debe presentar adecuadamente en forma grafica una comparaci on entre los tiempos medidos y la complejidad te ́orica calculada y extraer conclusiones de la experimentaci ́on.
+% una experimentacion b ́asica que muestre que la cota planteada de complejidad tiene sentido.
+% algun experimento que muestre que el mejor caso es bueno y el peor caso es malo.
+% otros experimentos que les parezcan relevantes y pongan de manifiesto alguna caracter ́ıstica del algoritmo (que ya deber ́ıan haber comentado en algun lado).
+% una explicacion y justificacion de como van a hacer el experimento (como van a generar las instancias de prueba, cu ́antas corridas de cada uno van a tomar, etc.)
+
+% ESTE TP: Realizar una experimentacion que permita observar la performance del algoritmo comparando
+% los tiempos de ejecucion y la calidad de las soluciones obtenidas, en funci ́on de las vecindadeS utilizadas y elegir, si es posible, la configuraci ́on que mejores resultados provea para el grupo de instancias utilizado.
