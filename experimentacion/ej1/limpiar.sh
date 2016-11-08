@@ -1,0 +1,1 @@
+rm -f rj1.out nohup.out mapa.out
