@@ -265,7 +265,7 @@ Seguimos con la siguiente parte del código:
 		\State Marcar a g como visitado en gimnasios
 
 	\ElsIf{Si la mochila esta llena ó todas las paradas estan recorridas}
-		\State // Aquí no le gano a ningún gimnasio
+		\State // Si entro aquí no hay solución
 		\State s.distancia $\leftarrow$ $-1$
 		\State Retornar s
 	
@@ -367,13 +367,12 @@ Por lo tanto, la parte de código analisada con sus complejidades quedaría de l
 \end{algorithmic}
 \end{algorithm}
 
-En peor caso esta porción de código correría tantas veces como cantidad de gimnasios, entonces la complejidad sería: $\mathcal{O}(|gimnasios|)* ( 2*\mathcal{O}(|gimnasios|) + \mathcal{O}(1) + \mathcal{O}(|paradas|) = \mathcal{O}(|gimnasios|) * (\mathcal{O}(|gimnasios|) + \mathcal{O}(|paradas|))$.
 
-Cómo $\mathcal{O}(|gimnasios|) + \mathcal{O}(|paradas|) = \mathcal{O}(N)$, siendo $N$ la cantidad de nodos del grafo. Entonces la complejidad sería: $\mathcal{O}(|gimnasios|) * (\mathcal{O}(|gimnasios|) + \mathcal{O}(|paradas|)) = \mathcal{O}(|gimnasios|) * \mathcal{O}(N)$.
+Para cada gimnasio hay que tener las pociones suficientes en la mochila para ganarle, entonces se necesita al menos pasar por una poke parada antes de ir a un gimnasio. Por lo tanto, ese ciclo se realiza la cantidad de gimnasios más la cantidad de poke paradas, o sea, la cantidad total de nodos del grafo. Esto daría como complejidad total: $\mathcal{O}(N)* ( 2*\mathcal{O}(|gimnasios|) + \mathcal{O}(1) + \mathcal{O}(|paradas|) = \mathcal{O}(N) * (max\{\mathcal{O}(|gimnasios|), \mathcal{O}(|paradas|)\})$. Siendo $N$ la cantidad total de nodos del grafo (gimnasios + paradas).
 
-Para finalizar el analisis de ésta función, unamos la complejidad de las dos partes para obtener la complejidad total de la misma: Por la primera parte tenemos $\mathcal{O}(1)$ y por la última $\mathcal{O}(|gimnasios|) * \mathcal{O}(N)$. Por lo tanto, la complejidad total de la función está dada por la última parte.
+Para finalizar el analisis de ésta función, unamos la complejidad de las dos partes para obtener la complejidad total de la misma: Por la primera parte tenemos $\mathcal{O}(1)$ y por la última $\mathcal{O}(N) * (max\{\mathcal{O}(|gimnasios|), \mathcal{O}(|paradas|)\})$. Por lo tanto, la complejidad total de la función está dada por la última parte.
 
-Complejidad de la función \textbf{SolucionCasoGeneral} es de: $\mathcal{O}(|gimnasios|) * \mathcal{O}(N)$.
+Complejidad de la función \textbf{SolucionCasoGeneral} es de: $\mathcal{O}(N) * (max\{\mathcal{O}(|gimnasios|), \mathcal{O}(|paradas|)\})$.
 
 
 \subsubsection{Función SolucionHeuristicaGolosa}
@@ -385,7 +384,7 @@ Antes de comenzar, cabe aclarar que difiere un poco la descripción de la funci�
 
 Comencemos el analisis.
 
-Lo primero que realiza nuestra implementación, y que no está en el pseudo código, es generar una matriz de adyacencias donde en sus coordenadas tenemos la distancia entre los nodos. Generamos ésta matriz para optimizar un poco este calculo. Un pseudo código de la creación de la misma es:
+Lo primero que realiza nuestra implementación, y que no está en el pseudo código, es generar una matriz de adyacencias donde en sus coordenadas tenemos la distancia entre los nodos. Generamos ésta matriz para optimizar un poco este cálculo. Un pseudo código de la creación de la misma es:
 
 \[
 	\text{\textbf{return}:  } M \text{ donde } M \in \mathbb{R}^{NxN} \text{ y } (\forall i \in \text{filas($M$)})(\forall j \in \text{columnas($M$)}) M[i,j] = distancia(nodo[i], nodo[j])
@@ -500,19 +499,19 @@ Ahora analisemos la segunda y última parte del código:
 \end{algorithmic}
 \end{algorithm}
 
-Como podemos observar, se realiza casi el mismo código así que iremos analisando al mismo tiempo.
+Como podemos observar, se realiza casi el mismo código tanto si la guarda del if es verdadera como falsa, así que iremos analisandolo al mismo tiempo.
 
 Lo primero es la complejidad de la guarda del if, como la suma de las pociones de todos los gimnasios la tenemos calculada de un principio, ésta es $\mathcal{O}(1)$.
 
 Luego, cada for itera sobre la cantidad de gimnasios en el primer bloque o paradas en el segundo y, como cada una de estas es un índice, la complejidad de la guarda en cada una de las iteraciones es $\mathcal{O}(1)$.
 
-Dentro de cada for se hace un llamado a la función \textbf{SolucionCasoGeneral}, por cada gimnasio o parada dependiendo en que bloque corra, y donde la complejidad ya fue calculada: $\mathcal{O}(|gimnasios|) * \mathcal{O}(N)$ siendo $N$ la cantidad de nodos, y se la misma en el conjunto de solución creado.
+Dentro de cada for se hace un llamado a la función \textbf{SolucionCasoGeneral}, por cada gimnasio o parada dependiendo en que bloque corra, y donde la complejidad ya fue calculada: $\mathcal{O}(N) * (max\{\mathcal{O}(|gimnasios|), \mathcal{O}(|paradas|)\})$ siendo $N$ la cantidad de nodos, y se la misma en el conjunto de solución creado.
 
 En nuestra implementación no tenemos un conjunto de soluciones sino que tenemos un puntero a solución que comparamos con la que devuelve la función \textbf{SolucionCasoGeneral}, si es mejor que la que tenemos la cambiamos, sino seguimos buscando hasta el final, la comparación se hace con respecto a la distancia recorrida, por lo tanto ésta es $\mathcal{O}(1)$ y, como es un puntero, simplemente intercambiar punteros también es $\mathcal{O}(1)$.
 
-Analisemos que cambios tiene la complejidad si la guarda del if es verdadera o falsa, ya que el código casi el mismo. Si la guarda es verdadera, quiere decir que no se necesitan ninguna poción para ganarle a ningún gimnasio, por ende, corremos la función \textbf{SolucionCasoGeneral} desde todos los gimnasios buscando la mínima distancia. Por como esta hecha la función, siempre va a encontrar un gimnasio al que ganarle y avanzaría hasta el más cercano, nunca pasaria por las poke paradas. Esto hace que la complejidad de la función no sea $\mathcal{O}(|gimnasios|) * \mathcal{O}(N)$, sino $\mathcal{O}(|gimnasios|) * \mathcal{O}(|gimnasios|) = \mathcal{O}(|gimnasios|^2)$. Y, cómo esta función se realiza por cada gimnasio, la complejidad de éste bloque es: $\mathcal{O}(|gimnasios|)* \mathcal{O}(|gimnasios|^2) = \mathcal{O}(|gimnasios|^3)$.
+Analisemos que cambios tiene la complejidad si la guarda del if es verdadera o falsa, ya que el código es similar. Si la guarda es verdadera, quiere decir que no se necesita ninguna poción para ganarle a ningún gimnasio, por ende, corremos la función \textbf{SolucionCasoGeneral} desde todos los gimnasios buscando la mínima distancia. Por como esta hecha la función, siempre va a encontrar un gimnasio al que ganarle y avanzaría hasta el más cercano, nunca pasaria por las poke paradas. Esto hace que la complejidad de la función no sea $\mathcal{O}(N) * (max\{\mathcal{O}(|gimnasios|), \mathcal{O}(|paradas|)\})$, sino $\mathcal{O}(|gimnasios|) * \mathcal{O}(|gimnasios|) = \mathcal{O}(|gimnasios|^2)$. Y, cómo esta función se realiza por cada gimnasio, la complejidad de éste bloque es: $\mathcal{O}(|gimnasios|)* \mathcal{O}(|gimnasios|^2) = \mathcal{O}(|gimnasios|^3)$.
 
-Si la guarda es falsa, entonces necesitaria, como mínimo, pasar por una poke parada para poder ir a algún gimnasio. Por lo tanto, la complejidad de la función \textbf{SolucionCasoGeneral} es la calculada previamente $\mathcal{O}(|gimnasios|) * \mathcal{O}(N)$. Y, cómo esta función se realiza por cada parada, la complejidad de éste bloque es: $\mathcal{O}(|paradas|) * \mathcal{O}(|gimnasios|) * \mathcal{O}(N)$.
+Si la guarda es falsa, entonces necesitaria, como mínimo, pasar por una poke parada para poder ir a algún gimnasio. Por lo tanto, la complejidad de la función \textbf{SolucionCasoGeneral} es la calculada previamente $\mathcal{O}(N) * (max\{\mathcal{O}(|gimnasios|), \mathcal{O}(|paradas|)\})$. Y, cómo esta función se realiza por cada parada, la complejidad de éste bloque es: $\mathcal{O}(|paradas|) \mathcal{O}(N) * (max\{\mathcal{O}(|gimnasios|), \mathcal{O}(|paradas|)\})$.
 
 Por último, despues de obtener la mejor solución, y cómo dijimos en un principio que lo haciamos por fuera pero lo agregamos aquí a sólo hecho del cálculo de la complejidad, es imprimir esa solución. Para imprimir generamos la función \textbf{imprimirSolucion} donde imprimimos la distancia y luego vamos desencolando e imprimiendo el indice de cada nodo. Cómo en peor caso se recorren todos los nodos, la complejidad de ésta función es $\mathcal{O}(N)$, siendo $N$ la cantidad de nodos.
 
@@ -557,17 +556,11 @@ Un pseudo código más cercano a la realidad y con las complejidades seria de la
 \State Terminar
 
 \medskip
-\Statex \underline{Complejidad: $\mathcal{O}(|gimnasios|^3) + \mathcal{O}(|paradas|) * \mathcal{O}(|gimnasios|) * \mathcal{O}(N) + \mathcal{O}(N) = $}
-\Statex \underline{$ = \mathcal{O}(|gimnasios|^3) + \mathcal{O}(|paradas|) * \mathcal{O}(|gimnasios|) * \mathcal{O}(N)$}
+\Statex \underline{Complejidad: $\mathcal{O}(|gimnasios|^3) + \mathcal{O}(|paradas|) * \mathcal{O}(N) * (max\{\mathcal{O}(|gimnasios|), \mathcal{O}(|paradas|)\}) + \mathcal{O}(N)$}
 \end{algorithmic}
 \end{algorithm}
 
-Por lo tanto, la complejidad de la función, y total de la solución propuesta, es de $\mathcal{O}(|gimnasios|^3) + \mathcal{O}(|paradas|) * \mathcal{O}(|gimnasios|) * \mathcal{O}(N)$.
-
-Podríamos obtener una cota superior de la misma acotando la cantidad de gimnasios y cantidad de paradas por la cantidad total de nodos ya que $|gimnasios| \leq N$ y $|paradas| \leq N$. De esta forma obtendríamos la siguiente complejidad: $\mathcal{O}(|gimnasios|^3) + \mathcal{O}(|paradas|) * \mathcal{O}(|gimnasios|) * \mathcal{O}(N) = \mathcal{O}(N^3) + \mathcal{O}(N) * \mathcal{O}(N) * \mathcal{O}(N) = \mathcal{O}(N^3) + \mathcal{O}(N^3) = \mathcal{O}(N^3)$.
-
-De esta manera, podemos observar como la complejidad está acotada por $\mathcal{O}(N^3)$.
-
+Por lo tanto, la complejidad de la función, y total de la solución propuesta, es la suma total de las complejidades $\mathcal{O}(N^2) + \mathcal{O}(|gimnasios|^3) + \mathcal{O}(|paradas|) * \mathcal{O}(N) * (max\{\mathcal{O}(|gimnasios|), \mathcal{O}(|paradas|)\}) + \mathcal{O}(N) = max\{\mathcal{O}(N^2), \mathcal{O}(|gimnasios|^3), \mathcal{O}(|paradas|) * \mathcal{O}(N) * (max\{\mathcal{O}(|gimnasios|), \mathcal{O}(|paradas|)\})\}$.
 
 
 
