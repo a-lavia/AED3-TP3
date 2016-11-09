@@ -2,7 +2,8 @@
 
 \subsection{Introducci\'on}
 \label{sec:ej3_intro}
-B\'usqueda local es un m\'etodo que parte de una soluci\'on no \'optima a un problema e intenta mejorarla a trav\'es de modificaciones, es decir, convirti\'endola en una soluci\'on \textit{vecina}. Luego, es necesario determinar qu\'e constituye una soluci\'on vecina a otra dada, hay que definir un \textit{vecindario}. Por ejemplo, en nuestro problema a resolver, donde una soluci\'on s* es un camino simple, que cumple ciertas condiciones, entre algunos nodos de un grafo, una soluci\'on vecina s a s* podr\'ia ser un camino id\'entico al de s* excepto por un nodo que se reemplaza con otro que s* no recorre.
+
+B\'usqueda local es un m\'etodo que parte de una soluci\'on no \'optima a un problema e intenta mejorarla a trav\'es de modificaciones, es decir, convirti\'endola en una soluci\'on \textit{vecina}. Luego, es necesario determinar qu\'e constituye una soluci\'on vecina a otra dada, hay que definir un \textit{vecindario}. Por ejemplo, en nuestro problema a resolver, donde una soluci\'on s* es un camino simple, que cumple ciertas condiciones, entre algunos nodos de un grafo, una soluci\'on vecina s a s* podr\'ia ser un camino id\'entico al de s* excepto por un nodo n que se reemplaza con otro n' que s* no recorre. Donde el reemplazo se interpreta como avanzar en s desde el predecesor de n en s* hacia n' y luego continuar por el siguiente de n en s*.
 
 Presentamos a continuaci\'on un pseudoc\'odigo que ilustra la idea general de este algoritmo, en \'el asumimos que queremos minimizar f(s) donde s es una soluci\'on y f una funci\'on que la eval\'ua.
 
@@ -21,27 +22,26 @@ Presentamos a continuaci\'on un pseudoc\'odigo que ilustra la idea general de es
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Estructuras}
-Para implementar una heur\'istica de b\'usqueda local para nuestro problema utilizamos una clase llamada \texttt{Camino} que est\'a formada por una instancia de la clase \texttt{Grafo}, el tamaño de la mochila, la distancia computada hasta el momento y un puntero al primer nodo visitado en el recorrido actual, que es un elemento de tipo \texttt{Nodo}.
-
-La clase \texttt{Grafo} est\'a compuesta por un vector de instancias de tipo \texttt{Nodo} y una matriz con la distancia entre cada par de nodos. Esta distancia se corresponde con la distancia euclideana\footnote{\url{https://es.wikipedia.org/wiki/Distancia_euclidiana}} calculada utilizando sus coordenadas.
-
-Cada nodo tiene un n\'umero de identificaci\'on, sus coordendas x e y, la cantidad de pociones que demanda u otorga, un valor booleano que indica si el nodo representa a un gimnasio, un puntero a su nodo anterior y otro a su nodo siguiente dentro del camino actual.
-
-Luego, utilizando las estructuras descriptas anteriormente, realizamos una implementaci\'on que \textit{soporta} dos criterios distintos de vecindad.
-
-\subsection{Vecindad I: Permutaci\'on del camino}
-En este vecindario establecemos que s* es una soluci\'on vecina a s si el camino de s* se puede obtener permutando el orden en el que se recorren dos nodos en s. Este criterio se conoce comunmente como \textit{swap}.
-
-\subsection{Vecindad II: Permutaci\'on y reemplazo de las pokeparadas}
-Este criterio considera que s* es una soluci\'on vecina a otra s si el camino de s* es igual al de s* luego de permutar el orden en el que se recorren dos pokeparadas, o reemplazar una pokeparada del camino por otra que no se encontraba en \'el.
-
-Elegimos este vecindario suponiendo que una heur\'istica golosa podr\'ia encontrar un buen camino entre los gimnasios pero tendr\'ia dificultades estableciendo los \textit{desv\'ios} para buscar pociones.
-
 \subsection{Algoritmo}
+
+Para implementar una heur\'istica de b\'usqueda local para nuestro problema utilizamos una clase llamada \texttt{Camino} que est\'a formada por un grafo (en nuestra implementaci\'on son instancias de la clase \texttt{Grafo}), el tamaño de la mochila, la distancia computada hasta el momento y un puntero al primer nodo del grafo visitado en el recorrido actual, siendo todos los nodos elementos del tipo \texttt{Nodo}.
+
+La clase \texttt{Grafo} est\'a compuesta por un vector de nodos y una matriz con la distancia entre cada par de nodos. Esta distancia se corresponde con la distancia euclideana\footnote{\url{https://es.wikipedia.org/wiki/Distancia_euclidiana}} calculada utilizando sus coordenadas.
+
+Cada instancia de \texttt{Nodo} tiene un n\'umero de identificaci\'on, sus coordendas x e y, la cantidad de pociones que demanda u otorga, un valor booleano que indica si el nodo representa a un gimnasio, un puntero a su nodo anterior y otro a su nodo siguiente dentro del camino actual.
+
+Luego, utilizando las estructuras descriptas anteriormente, realizamos una implementaci\'on que \textit{soporta} dos criterios distintos de vecindad:
+
+\paragraph{Vecindad I: Permutaci\'on del camino}
+Establecemos que s* es una soluci\'on vecina a s si el camino de s* se puede obtener permutando el orden en el que se recorren dos nodos en s. Este criterio se conoce comunmente como \textit{swap}.
+
+\paragraph{Vecindad II: Permutaci\'on y reemplazo de las pokeparadas}
+Este vecindario considera que s* es una soluci\'on vecina a otra s si el camino de s* es igual al de s* luego de permutar el orden en el que se recorren dos pokeparadas, o reemplazar una pokeparada del camino por otra que no se encontraba en \'el. Suponemos que una heur\'istica golosa podr\'ia encontrar un buen camino entre los gimnasios pero tendr\'ia dificultades estableciendo los \textit{desv\'ios} para buscar pociones, en ese caso esta vecindad podr\'ia ser de gran utilidad.
+
+\paragraph{}
 Como explicamos en la secci\'on \ref{sec:ej3_intro}, para realizar una b\'usqueda local tomamos una soluci\'on incial que luego es \textit{mejorada}. Para esto decidimos utilizar el algoritmo goloso desarrollado en el segundo ejercicio.
 
-Adem\'as, optamos por considerar tambi\'en las soluciones que devuelven una misma distancia final una vez que no podemos encontrar soluciones vecinas que reduzcan m\'as ese n\'umero. Esperamos que en algunos casos esto nos permita hallar mejoras nuevas. Para evitar entrar en ciclos infinitos, por ejemplo, donde vamos de una soluci\'on s* a otra s equivalente, y de ella nuevamente volvamos a s*, utilizamos un diccionario donde tenemos como clave la identificaci\'on de un nodo y como significado un conjunto con las identificaciones de los nodos que fueron permutados o reemplazados por el primero. De esta manera tambi\'en limitamos la cantidad de soluciones equivalentes para analizar.
+Adem\'as, optamos por considerar tambi\'en las soluciones que devuelven una misma distancia final cuando no podemos encontrar soluciones vecinas que reduzcan ese n\'umero. Esperamos que en algunos casos esto nos permita hallar mejoras nuevas. Para evitar entrar en ciclos infinitos, por ejemplo, donde vamos de una soluci\'on s* a otra s equivalente, y de ella nuevamente volvemos a s*, utilizamos un diccionario donde tenemos como clave la identificaci\'on de un nodo y como significado un conjunto con las identificaciones de los nodos que fueron permutados o reemplazados por el primero. De esta manera tambi\'en limitamos la cantidad de soluciones equivalentes para analizar.
 
 Todo lo descripto anteriormente se encuentra resumido en el siguiente pseudoc\'odigo:
 
@@ -61,12 +61,12 @@ Todo lo descripto anteriormente se encuentra resumido en el siguiente pseudoc\'o
     \State busco $\gets$ true
     \State dicc(int, conj(int)) nodosCambiados $\gets$ Vac\'io()
     \While{busco}
-        \While{encuentroSoluci\'onVecinaMejor(nodosConsiderados)}
+        \While{camino.encuentroSoluci\'onVecinaMejor(nodosConsiderados)}
             \If{\#nodosCambiados.claves() $>$ 0}
                 \State nodosCambiados $\gets$ Vac\'io()
             \EndIf
         \EndWhile
-        \If{$\neg$encuentroSoluci\'onVecinaIgual(nodosConsiderados, nodosCambiados)}
+        \If{$\neg$camino.encuentroSoluci\'onVecinaIgual(nodosConsiderados, nodosCambiados)}
             \State busco $\gets$ false
         \EndIf
     \EndWhile
@@ -76,9 +76,9 @@ Todo lo descripto anteriormente se encuentra resumido en el siguiente pseudoc\'o
 \end{algorithmic}
 \end{algorithm}
 
-Como podemos observar en las l\'ineas 12 y 13, si encuentro una soluci\'on que mejora la que ten\'ia vac\'io el diccionario por si ven\'ia de modificar mi camino por otro de distancia igual.
+Como podemos observar en las l\'ineas 12 y 13, si encuentro una soluci\'on que mejora la que ten\'ia vac\'io el diccionario por si ven\'ia de modificar mi camino por otro de distancia igual. Los ciclos \'unicamente ocurren cuando recorro soluciones equivalentes entre si.
 
-Es importante destacar que la funci\'on \texttt{encuentroSoluci\'onVecinaMejor} devuelve verdadero si encuentra una y realiza las modificaciones necesarias en mi instancia de \texttt{Camino} para transformar mi soluci\'on en esa. El comportamiento de \texttt{encuentroSoluci\'onVecinaIgual} es an\'alogo, sumando la consulta al diccionario que recibe como argumento para evitar ciclos.
+Es importante destacar que la funci\'on \texttt{encuentroSoluci\'onVecinaMejor} devuelve el valor booleano \texttt{true} si encuentra una, y realiza las modificaciones necesarias en la instancia de \texttt{Camino} para transformar la soluci\'on actual en la vecina hallada. Como el comportamiento de \texttt{encuentroSoluci\'onVecinaIgual} es an\'alogo, sumando la consulta al diccionario que recibe como argumento para evitar ciclos, exihibimos \'unicamente un psuedoc\'odigo de \texttt{encuentroSoluci\'onVecinaMejor}:
 
 \begin{algorithm}[H]
 \label{}
@@ -98,6 +98,37 @@ Es importante destacar que la funci\'on \texttt{encuentroSoluci\'onVecinaMejor} 
 \Statex \underline{Salida}: $\neg$busco
 \end{algorithmic}
 \end{algorithm}
+
+En s\'intesis, el algoritmo anterior toma cada par de nodos perteneciente al vector recibido y, apenas encuentra un par con un elemento que est\'a en el camino actual y que permite mejorar la distancia actual con su reemplazo o permutaci\'on, realiza la modificaci\'on, si esta fuera posible, y devuelve \texttt{true}. Que uno de los nodos no est\'e en el camino actual significa que mis nodos considerados son pokeparadas y estoy contemplando hacer un reemplazo, en caso contrario \texttt{cambiarMejora} eval\'ua la distancia nueva luego de una permutaci\'on y si es menor a la actual la realiza.
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale = 0.5]{imagenes/ej3_algoritmo_1.pdf}
+    \caption{Permutaci\'on de los nodos 2 y 3 en un camino posible del grafo.}
+    \label{fig:ej3_algoritmo_1}
+  \end{center}
+\end{figure}
+
+Para calcular la distancia nueva utilizamos los punteros almacenados en cada nodo. Si, por ejemplo, estuvi\'eramos en el caso de la figura \ref{fig:ej3_algoritmo_1} el c\'alculo realizado ser\'ia:
+\begin{equation*}
+distancia\ nueva = distancia\ actual - distancia(1,2) - distancia(3,4) + distancia(1,3) + distancia(2,4)
+\end{equation*}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale = 0.5]{imagenes/ej3_algoritmo_2.pdf}
+    \caption{Reemplazo del nodo 3 por el 5 en un camino posible del grafo.}
+    \label{fig:ej3_algoritmo_2}
+  \end{center}
+\end{figure}
+
+Si la modificaci\'on fuera un reemplazo, como, por ejemplo, en la figura \ref{fig:ej3_algoritmo_2}:
+\begin{equation*}
+distancia\ nueva = distancia\ actual - distancia(2,3) - distancia(3,4) + distancia(2,5) + distancia(5,4)
+\end{equation*}
+
+Luego, si la distancia nueva es menor a la actual analizamos si el reempalzo o la permutaci\'on es posible, teniendo en cuenta las pociones que requieren los gimnasios, las que otorgan las pokeparadas y la capacidad de nuestra mochila. Con este fin avanzamos desde el nodo inicial de nuestra instancia de \texttt{Camino}, llevando la cuenta de cu\'antas pociones tenemos en nuestra mochila. Si el nodo actual es una pokeparada sumamos el m\'inimo entre 3 y lo que le reste de espacio a la mochila, en caso contrario restamos el costo del gimnasio. Si nuestra mochila queda con pociones negativas significa que el cambio no es posible y paramos de iterar, si no continuamos hasta llegar al final del camino. Llegar al nodo que no tiene siguiente significa que el cambio es posible.
+
 
 
 \subsection{Complejidad}
