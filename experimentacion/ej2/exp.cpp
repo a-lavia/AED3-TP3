@@ -34,7 +34,7 @@ int main(int argc, char* argv[]){
 	ofstream salida;
 	salida.open("salida.csv", std::ios_base::app);
 	double cantCiclosTotal = 0;
-	float distancia_total = 0;
+	double distancia_total = 0;
 
 	// salida << "gimnasios,paradas,mochila,distancia,cantciclos" << endl;
 
@@ -42,10 +42,11 @@ int main(int argc, char* argv[]){
 	
 		auto inicio = RELOJ();
 		solucion* mejor_sol = solHeuristicaGolosa(mochila, gimnasios, paradas);
-	
+
 		if(mejor_sol != NULL){
+			
 			imprimirSolucion(*mejor_sol);
-			mejor_sol->d = distancia_total;
+			distancia_total = mejor_sol->d;
 			delete mejor_sol;
 		}
 		auto fin = RELOJ();
