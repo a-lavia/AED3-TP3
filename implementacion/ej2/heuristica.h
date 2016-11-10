@@ -23,4 +23,6 @@ queue<int> heuristicaParadasCercanas(queue<int>& caminoGimnasios, vector<pos>& p
 
 queue<int> solucionHeuristica(vector<pos>& gimnasios, vector<int>& gimnasiosPoder, vector<pos>& paradas, int mochila);
 
+void imprimirSolucion(queue<int>& camino, vector<pos>& posGym, vector<pos>& posParadas);
+
 #endif
