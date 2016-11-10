@@ -6,6 +6,8 @@ int main(int argc, char* argv[]) {
 	cin >> iteraciones;
 	float alfa;
 	cin >> alfa;
+	float omega;
+	cin >> omega;
 	int semilla;
 	cin >> semilla;
 
@@ -34,7 +36,7 @@ int main(int argc, char* argv[]) {
 	grasp g = grasp(gimnasios, gimnasiosPoder, paradas, mochila);
 
 	queue<int> solucion;
-	float distancia =  g.correr_grasp(iteraciones, alfa, semilla, &solucion);
+	float distancia =  g.correr_grasp(iteraciones, alfa, omega, semilla, &solucion);
 
 	cout << distancia << ' ' << solucion.size() << ' ';
 	while(!solucion.empty()) {
