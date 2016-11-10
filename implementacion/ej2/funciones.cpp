@@ -60,11 +60,22 @@ solucion* solHeuristicaGolosa(unsigned int mochilaSize, vector<struct gym>& gimn
 		return mejorSolucion;
 	}
 
+	// Caso patologico: sumaTotalPociones=0, genero un camino por un gimnasio
+	if(sumaTotalPociones == 0){
+		struct solucion solucionNueva;
+		solucionNueva.d = 0;
+		correrHeuristica(0, solucionNueva, mochilaSize, gimnasios, paradas, matrizDistancias);
+		if((mejorSolucion->d == -1 && solucionNueva.d != -1) || 
+			(solucionNueva.d != -1 && solucionNueva.d < mejorSolucion->d))
+		{
+			*mejorSolucion = solucionNueva;
+		}
+	}
+
 	// Busco la mejor solución comenzando por cada parada
 	for(int i = gimnasios.size(); i < paradas.size() + gimnasios.size(); i++){
 		struct solucion solucionNueva;
 		solucionNueva.d = 0;
-
 		correrHeuristica(i, solucionNueva, mochilaSize, gimnasios, paradas, matrizDistancias);
 
 		if((mejorSolucion->d == -1 && solucionNueva.d != -1) || 
@@ -95,9 +106,16 @@ void correrHeuristica(int idxComienzo, struct solucion& sol, unsigned int mochil
 	sol.camino.push(idxActual);
 	
 	// idxComienzo es indice de paradas + gimnasios.size, entonces para conocer el indice real lo tengo que restar
-	paradas[idxComienzo - gimnasios.size()].visitado = true;
-	mochila = 3;
-	paradasNoRecorridas--;
+	if(idxComienzo != 0 ){
+		paradas[idxComienzo - gimnasios.size()].visitado = true;
+		mochila = 3;
+		paradasNoRecorridas--;
+	} else {
+		//Caso patologico: sumaTotalPociones=0, genero un camino por un gimnasio
+		gimnasios[idxComienzo].visitado = true;
+		mochila = 0;
+		gymNoRecorridos--;
+	}
 
 	while(gymNoRecorridos > 0){
 
