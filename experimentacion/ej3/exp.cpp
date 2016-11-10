@@ -2,6 +2,8 @@
 #include "funciones.h"
 
 int main(int argc, char* argv[]){
+    srand(420);
+
     string stringPrincipio = "exp-ej3";
 
     switch(atoi(argv[1])){
@@ -57,13 +59,13 @@ int main(int argc, char* argv[]){
             salidaPermutaYReemplazaPokeparadas.close();
             cout << "Listo" << endl;
             
-            /*cout << endl << "Soluciones optimas..." << endl;
+            cout << endl << "Soluciones optimas..." << endl;
             string stringOp = stringExperimento + "-Op.csv";
             ofstream salidaOp;
             salidaOp.open(stringOp.c_str());
             generarSalidaOp(caminos, salidaOp);
             salidaOp.close();
-            cout << "Listo" << endl;*/
+            cout << "Listo" << endl;
             
             break;
         }
@@ -119,13 +121,13 @@ int main(int argc, char* argv[]){
             salidaPermutaYReemplazaPokeparadas.close();
             cout << "Listo" << endl;
             
-            /*cout << endl << "Soluciones optimas..." << endl;
+            cout << endl << "Soluciones optimas..." << endl;
             string stringOp = stringExperimento + "-Op.csv";
             ofstream salidaOp;
             salidaOp.open(stringOp.c_str());
             generarSalidaOp(caminos, salidaOp);
             salidaOp.close();
-            cout << "Listo" << endl;*/
+            cout << "Listo" << endl;
             
             break;
         }
