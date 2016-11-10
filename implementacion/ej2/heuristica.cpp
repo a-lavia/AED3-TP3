@@ -132,13 +132,13 @@ void imprimirSolucion(queue<int>& camino, vector<pos>& posGym, vector<pos>& posP
 	cout << distanciaCamino(camino, posGym, posParadas) << " ";
 	cout << camino.size() << " ";
 
-	if(solucion.size != 0){
-		while(!solucion.empty()){
-			cout << (solucion.front()+1) << " ";
-			solucion.pop();
+	if(camino.size() != 0){
+		while(!camino.empty()){
+			cout << camino.front() + 1 << " ";
+			camino.pop();
 		}
 	} else {
-		cout << "-1";
+		cout << -1;
 	}
 	cout << endl;
 

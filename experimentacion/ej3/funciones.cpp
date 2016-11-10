@@ -72,12 +72,12 @@ void generarCaminosMejorOp(vector<Camino>& caminos){
     cout << "Listo" << endl;
 }
 
-void asignarSolucionesJ(vector<Camino>& caminos){
+void asignarSoluciones(vector<Camino>& caminos){
     cout << "Hallando soluciones golosas para los caminos... ";
 
     int cantCaminos = caminos.size();
     for(int c = 0; c < cantCaminos; c++){
-        caminos[c].asignarSolucionGolosaJ();
+        caminos[c].asignarSolucionGolosa();
     }
     
     cout << "Listo" << endl;

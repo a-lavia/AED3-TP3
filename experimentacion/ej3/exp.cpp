@@ -10,7 +10,7 @@ int main(int argc, char* argv[]){
 
             vector<Camino> caminos(CANT_CASOS);
             generarCaminosAleat(caminos);
-            asignarSolucionesJ(caminos);
+            asignarSoluciones(caminos);
 
             string stringExperimento = stringPrincipio + "-aleat";
 
@@ -37,7 +37,7 @@ int main(int argc, char* argv[]){
 
             vector<Camino> caminos(CANT_NODOS_MAX_OP + 1);
             generarCaminosAleatOp(caminos);
-            asignarSolucionesJ(caminos);
+            asignarSoluciones(caminos);
 
             string stringExperimento = stringPrincipio + "-aleatOp";
 
@@ -57,13 +57,13 @@ int main(int argc, char* argv[]){
             salidaPermutaYReemplazaPokeparadas.close();
             cout << "Listo" << endl;
             
-            cout << endl << "Soluciones optimas..." << endl;
+            /*cout << endl << "Soluciones optimas..." << endl;
             string stringOp = stringExperimento + "-Op.csv";
             ofstream salidaOp;
             salidaOp.open(stringOp.c_str());
             generarSalidaOp(caminos, salidaOp);
             salidaOp.close();
-            cout << "Listo" << endl;
+            cout << "Listo" << endl;*/
             
             break;
         }
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]){
 
             vector<Camino> caminos(CANT_CASOS);
             generarCaminosMejor(caminos);
-            asignarSolucionesJ(caminos);
+            asignarSoluciones(caminos);
 
             string stringExperimento = stringPrincipio + "-mejor";
 
@@ -99,7 +99,7 @@ int main(int argc, char* argv[]){
 
             vector<Camino> caminos(CANT_NODOS_MAX_OP + 1);
             generarCaminosMejorOp(caminos);
-            asignarSolucionesJ(caminos);
+            asignarSoluciones(caminos);
 
             string stringExperimento = stringPrincipio + "-mejorOp";
 
@@ -119,21 +119,14 @@ int main(int argc, char* argv[]){
             salidaPermutaYReemplazaPokeparadas.close();
             cout << "Listo" << endl;
             
-            cout << endl << "Soluciones optimas..." << endl;
+            /*cout << endl << "Soluciones optimas..." << endl;
             string stringOp = stringExperimento + "-Op.csv";
             ofstream salidaOp;
             salidaOp.open(stringOp.c_str());
             generarSalidaOp(caminos, salidaOp);
             salidaOp.close();
-            cout << "Listo" << endl;
+            cout << "Listo" << endl;*/
             
-            break;
-        }
-        case 4 : {
-            // Comparacion de las dos heuristicas con las dos vecindades (si hay tiempo)
-
-
-
             break;
         }
         default : {

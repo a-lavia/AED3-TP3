@@ -106,35 +106,7 @@ void Camino::asignarSolucion(double distancia, queue<int>& caminoCola){
     }
 }
 
-void Camino::asignarSolucionGolosaJ(){
-    vector<gym> gimnasios;
-    vector<parada> paradas;
-
-    for(int i = 0; i < grafo().nodos().size(); i++){
-        if(grafo().nodos()[i].gimnasio){
-            gym gymNuevo;
-            gymNuevo.x = grafo().nodos()[i].x;
-            gymNuevo.y = grafo().nodos()[i].y;
-            gymNuevo.p = grafo().nodos()[i].pociones;
-            gymNuevo.visitado = false;
-            gimnasios.push_back(gymNuevo);
-        } else{
-            parada paradaNueva;
-            paradaNueva.x = grafo().nodos()[i].x;
-            paradaNueva.y = grafo().nodos()[i].y;
-            paradaNueva.visitado = false;
-            paradas.push_back(paradaNueva);
-        }
-    }
-
-    solucion* solucionInicial = solHeuristicaGolosa(tamMochila(), gimnasios, paradas);
-
-    if(solucionInicial != NULL && solucionInicial->d != INV){
-        asignarSolucion(solucionInicial->d, solucionInicial->camino);
-    }
-}
-
-void Camino::asignarSolucionGolosaA(){
+void Camino::asignarSolucionGolosa(){
     vector<pos> gimnasios;
     vector<int> gimnasiosPoder;
     vector<pos> paradas;

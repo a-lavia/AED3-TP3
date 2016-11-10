@@ -22,7 +22,7 @@
 
 #define CANT_CASOS 30
 #define RELOJ chrono::high_resolution_clock::now
-#define CANT_REPETICIONES 50
+#define CANT_REPETICIONES 100
 #define CANT_REPETICIONES_OP 10
 
 using namespace std;

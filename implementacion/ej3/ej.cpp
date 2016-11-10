@@ -6,7 +6,7 @@ int main(int argc, char* argv[]){
 
     caminoBL.leerEntrada();
 
-    caminoBL.asignarSolucionGolosaJ();
+    caminoBL.asignarSolucionGolosa();
 
     if(caminoBL.encontreSolucion()){
         #ifdef DEBUG

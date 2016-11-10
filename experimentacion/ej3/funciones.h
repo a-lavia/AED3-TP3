@@ -12,7 +12,7 @@ void generarCaminosAleatOp(vector<Camino>& caminos);
 void generarCaminosMejor(vector<Camino>& caminos);
 void generarCaminosMejorOp(vector<Camino>& caminos);
 
-void asignarSolucionesJ(vector<Camino>& caminos);
+void asignarSoluciones(vector<Camino>& caminos);
 
 void generarSalidaBL(vector<Camino>& caminos, Vecindad criterio, ofstream& salida);
 void generarSalidaOp(vector<Camino>& caminos, ofstream& salida);
