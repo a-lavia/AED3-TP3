@@ -4,7 +4,7 @@
 #include "aux.h"
 #include "Grafo.h"
 #include "../ej2/funciones.h"
-#include "../ej1bis/heuristica.h"
+#include "../ej2/SegundaHeuristica.h"
 
 class Camino{
     public:

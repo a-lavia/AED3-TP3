@@ -1,4 +1,4 @@
-#include "heuristica.h"
+#include "SegundaHeuristica.h"
 
 float distancia(pos& a, pos& b){
     float x = a.first - b.first;
