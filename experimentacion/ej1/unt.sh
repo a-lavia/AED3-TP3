@@ -1,12 +1,6 @@
 rm -f ej1.out
 touch ej1.out
 
-
-ceiling_divide() {
-  ceiling_result=$((($1+$2-1)/$2))
-}
-
-
 for i in {3..14..1} 
 do
     paradas=$((($i*2+3-1)/3))

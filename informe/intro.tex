@@ -4,25 +4,38 @@
 % 2 el enunciado formal del problema.
 % 3 ejemplos, casos interesantes, explicaciones en palabras  que ayuden a comprender qu ́e problema se est ́a tratando de resolver.
 
-En este problema, Brian desea convertirse en maestro Pokemon. Se conoce como pokemones a bichos que andan por el mundo donde una persona podría ``capturarlos'' y tenerlos como mascotas o entrenarlos para pelear contra otros pokemones, tanto de otros entrenadores como salvajes (termino para mencionar a un pokemon que no fue capturado). Para convertirse en maestro Pokemon, se debe poder controlar todos los gimasios del juego. Éstos están controlados por otros entrenadores y para poder controlar el gimnasio hay que batallar contra estos entrenadores (con pokemones, por supuesto) y vencerlos a todos. 
+En este problema, Brian desea convertirse en maestro Pokemon. 
+Se conoce como pokemons a unas criaturas que andan por el mundo donde una persona podría ``capturarlos'' y tenerlos como mascotas o entrenarlos para pelear contra otros, tanto de entrenadores como salvajes. 
+Para convertirse en maestro Pokemon, se debe vencer a los entrenadoras que controlan cada gimnasio del juego.
 
-Vencer un gimnasio no es fácil, éstos tienen una fuerza y hay que estar preparado para poder estar a la altura y ganar, para esto existen las pociones que curan a nuestros pokemones y así poder seguir batallando. Las pociones se pueden conseguir en estaciones conocidas como poke paradas donde en cada una entregan a los entrenadores tres de éstas. Para llevar las pociones, Brian cuenta con una mochila en la que puede guardar pociones hasta su máximo límite.
+Vencer un gimnasio no es fácil debido a que nuestros pokemons se debilitan en las batallas; para paliar esto, existen pociones que curan a nuestros pokemons y les permiten continuar batallando. 
+Estas se pueden conseguir en estaciones conocidas como poke paradas, en las que entregan exactamente tres. 
+Brian cuenta con una mochila en la que puede cargar hasta cierta cantidad, por lo que si pasa por una poke parada, deberá descartar las sobrantes. 
+Para saber si podemos vencer un gimnasio, contamos de antemano con el número de pociones que son requeridas para lograrlo. 
+No es posible visitar un gimnasio si no podemos vencerlo.
 
-El objetivo es encontrar la manera de vencer a todos los gimnasios recorriendo la mínima distancia, sin pasar por un gimnasio o una poke parada más de una vez.
+El objetivo es encontrarar la manera de vencer a todos los gimnasios sin pasar por un gimnasio o una poke parada más de una vez, recorriendo la mínima distancia.
 
-Formalmente, esto es equivalente a: dado dos conjuntos de tuplas en un plano y un número natural, donde uno de los conjuntos es una tripla de tres enteros que representa a los gimnasios donde las primeras dos posiciones de la misma representan las coordenadas del plano y la última representa la cantidad de pociones necesarias para llegar al nodo; el otro conjunto es una tupla de dos enteros que representa a las poke paradas donde los dos enteros representan la coordenada de la misma en el plano; y el natural $q = 0$ que representa a la mochila, donde éste está acotado por otro natural $k$ que representa el límite de peso de la misma, se quiere encontrar un camíno que cubra todos los puntos del conjunto que representa a los gimnasios con distancia mínima entre ellos.
+Con el fin de resolver el problema, necesitamos formalizar un poco. Para esto, ubicaremos las coordenadas correspondientes a los gimnasios y paradas en el plano y pensaremos al objetivo como el camino mínimo que pase por todos los gimnasios y las pokeparadas suficientes para vencerlos (lo que no equivale a la mínima cantidad de paradas necesarias, ya que lo que queremos minimizar es la distancia). Un importante detalle a tener en cuenta, es que podemos desperdiciar pociones si pasamos por una pokeparada y no podemos guardarlas todas en la mochila, lo que podría llevarnos a no encontrar solución.
 
+\begin{comment}
+Para pasar por un gimnasio debemos poder vencerlo, y para esto necesitaremos tener la cantidad de pociones que el gimnasio requiere. Para tener estas pociones debemos pasar por poke paradas y guardar las pociones que obtenemos en nuestra mochila, descartando las que sobren en caso de que la mochila se llene.
+\end{comment}
+\begin{comment}
+Formalmente, esto es equivalente a: dado dos conjuntos de tuplas en un plano y un número natural, donde uno de los conjuntos es una tripla de tres enteros que representa a los gimnasios donde las primeras dos posiciones de la misma representan las coordenadas del plano y la última representa la cantidad de pociones necesarias para llegar al nodo; el otro conjunto es una tupla de dos enteros que representa a las poke paradas donde los dos enteros representan la coordenada de la misma en el plano; y el natural $q = 0$ que representa a la mochila, donde éste está acotado por otro natural $k$ que representa el límite de peso de la misma, se quiere encontrar un camino que cubra todos los puntos del conjunto que representa a los gimnasios con distancia mínima entre ellos.
+\end{comment}
 
-\subsection{Caso de ejemplo}
+%   \subsection{Caso de ejemplo}
 
 % Un caso simple en un eje de coordenadas
 % Necesito el Backtracking para buscar una solucion optima y mostrarla
 
-
+\begin{comment}
 \subsection{Modelo del problema}
 
 Para resolver este problema lo modelamos en forma de grafo completo donde cada nodo es un gimnasio o una poke parada y cada arista tiene como peso la distancia que hay entre dos nodos. Si el nodo es un gimnasio también posée un atributo que es la cantidad de pociones que se necesita para ser vencido y si es una poke parada no posée nada ya que por cada una se reciben tres pociones.
 
 Entonces el caso de ejemplo quedaría de la siguiente forma:
+\end{comment}
 
 % Mismo caso pero modelado como si fuera un grafo
