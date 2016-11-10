@@ -1,5 +1,5 @@
-#ifndef GRASP_H
-#define GRASP_H
+#ifndef POKE_GRASP_H
+#define POKE_GRASP_H
 
 #include <utility> //pair
 #include <vector>
@@ -17,16 +17,18 @@ class grasp {
 
 		grasp(vector<pos>& g, vector<int>& gp, vector<pos>& p, int m);
 
-		float correr_grasp(int maxIteraciones, float alfa, int semilla);
+		float correr_grasp(int maxIteraciones, float alfa, float omega, int semilla);
 
-		float correr_grasp(int maxIteraciones, float alfa, int semilla, queue<int>* solucion);
+		float correr_grasp(int maxIteraciones, float alfa, float omega, int semilla, queue<int>* solucion);
 
 		//float correr_grasp_reactivo(int maxIteraciones);
 
 	private:
 
 		//
-		int aleatorio(int min, int max);
+		int int_aleatorio(int min, int max);
+
+		bool bool_aleatorio(float prob);
 
 		bool esGym(int i);
 
@@ -35,13 +37,12 @@ class grasp {
 		float distanciaCamino(queue<int> camino);
 
 		//
-		list<pair<int, float>> obtenerCandidatos();
-
-		void actualizarCandidatos(list<pair<int, float>>& candidatos, vector<bool>& visitados, int actual, int pociones);
 
 		vector<int> obtenerCandidatosRestringidos(list<pair<int, float>>& candidatos, float alfa);
 
-		queue<int> graspSolucionAleatoria(float alfa);
+		queue<int> graspSolucionGimnasios(float alfa);
+
+		queue<int> graspSolucionAleatoria(queue<int>& caminoGimnasios, float alfa, float omeg);
 
 		//
 		vector<pos> gimnasios;

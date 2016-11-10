@@ -1,9 +1,9 @@
 .PHONY: all clean
 
-BIN = ej1.out
+BIN = ej1
 
 all:
-	g++ ej.cpp funciones.cpp parser.cpp -std=c++11 -o ej1.out
+	g++ ej.cpp backtracking.cpp ../ej2/SegundaHeuristica.cpp -std=c++11 -o ej1
 
 clean:
 	rm -f $(BIN)

@@ -5,7 +5,7 @@
 #include "../../implementacion/ej3/aux.h"
 #include "../../implementacion/ej3/Grafo.h"
 #include "../../implementacion/ej3/Camino.h"
-#include "../../implementacion/ej1bis/backtracking.h"
+#include "../../implementacion/ej1/backtracking.h"
 
 void generarCaminosAleat(vector<Camino>& caminos);
 void generarCaminosAleatOp(vector<Camino>& caminos);

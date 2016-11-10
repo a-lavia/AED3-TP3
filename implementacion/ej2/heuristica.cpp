@@ -128,3 +128,19 @@ queue<int> solucionHeuristica(vector<pos>& gimnasios, vector<int>& gimnasiosPode
 
 }
 
+void imprimirSolucion(queue<int>& camino, vector<pos>& posGym, vector<pos>& posParadas){
+	cout << distanciaCamino(camino, posGym, posParadas) << " ";
+	cout << camino.size() << " ";
+
+	if(solucion.size != 0){
+		while(!solucion.empty()){
+			cout << (solucion.front()+1) << " ";
+			solucion.pop();
+		}
+	} else {
+		cout << "-1";
+	}
+	cout << endl;
+
+	return;
+}

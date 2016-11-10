@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include "backtracking.h"
+#include "../../implementacion/ej1/backtracking.h"
 #include <fstream>
 #include <chrono>
 
@@ -18,8 +18,8 @@ int main(int argc, char* argv[]) {
 	cin >> m;
 	int mochila;
 	cin >> mochila;
-	int dificultad;
-	cin >> dificultad;
+	// int dificultad;
+	// cin >> dificultad;
 
 	vector<pos> gimnasios(n);
 	vector<int> gimnasiosPoder(n);
@@ -35,26 +35,31 @@ int main(int argc, char* argv[]) {
 		cin >> paradas[i].second;
 	}
 
-	backtracking bt(gimnasios, gimnasiosPoder, paradas, mochila);
 
-	queue<int> solucion;
+	// queue<int> solucion;
 
 
 	ofstream salida;
-    salida.open("ej1.out", std::ios_base::app);
-    double cantCiclosTotal = 0;
-    for (int i = 0; i < CANT_REPETICIONES; ++i){
+	salida.open("salida.csv", std::ios_base::app);
+	double cantCiclosTotal = 0;
+	float distancia = 0;
+	for (int i = 0; i < CANT_REPETICIONES; ++i){
 
-    	auto inicio = RELOJ();
-		float distancia = bt.correr_backtracking(&solucion);
-	    auto fin = RELOJ();
-		while(!solucion.empty()) {
-			solucion.pop();
-		}
+		auto inicio = RELOJ();
 
-	    cantCiclosTotal = cantCiclosTotal + (double) chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count();
-    }
-	salida << n << ',' << m << ',' << mochila << ',' << dificultad << ',' << cantCiclosTotal / (double) CANT_REPETICIONES << endl;
+		backtracking bt(gimnasios, gimnasiosPoder, paradas, mochila);
+		distancia = bt.correr_backtracking();
+
+		auto fin = RELOJ();
+
+		// while(!solucion.empty()) {
+		// 	solucion.pop();
+		// }
+
+		cantCiclosTotal = cantCiclosTotal + (double) chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count();
+	}
+
+	salida << n << ',' << m << ',' << mochila << ',' << distancia << ',' << cantCiclosTotal / (double) CANT_REPETICIONES << endl;
 
 	salida.close();
 

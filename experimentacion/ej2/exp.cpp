@@ -1,61 +1,49 @@
 #include "exp.h"
 
+using namespace std;
 
-int main(int argc, char* argv[]){
-	int cant_gym, cant_paradas, mochila;
+int main(int argc, char* argv[]) {
 
-    cin >> cant_gym;
-	cin >> cant_paradas;
+	//Parseo la entrada
+	int n;
+	cin >> n;
+	int m;
+	cin >> m;
+	int mochila;
 	cin >> mochila;
 
-	vector<struct gym> gimnasios(cant_gym);
-	vector<struct parada> paradas(cant_paradas);
+	vector<pos> gimnasios(n);
+	vector<int> gimnasiosPoder(n);
+	vector<pos> paradas(m);
 
-	// Gimnasios
-	for(int i = 0; i < cant_gym; i++){
-		struct gym nuevo_gym;
-		cin >> nuevo_gym.x;
-		cin >> nuevo_gym.y;
-		cin >> nuevo_gym.p;
-		nuevo_gym.visitado = false;
-		gimnasios[i] = nuevo_gym;
+	for(int i = 0; i < n; i++) {
+		cin >> gimnasios[i].first;
+		cin >> gimnasios[i].second;
+		cin >> gimnasiosPoder[i];
 	}
-
-	// Paradas
-	for(int i = 0; i < cant_paradas; i++){
-		struct parada nueva_parada;
-		cin >> nueva_parada.x;
-		cin >> nueva_parada.y;
-		nueva_parada.visitado = false;
-		paradas[i] = nueva_parada;
+	for(int i = 0; i < m; i++) {
+		cin >> paradas[i].first;
+		cin >> paradas[i].second;
 	}
-
 
 	ofstream salida;
-	salida.open("salida.csv", std::ios_base::app);
+	salida.open("salidaOtraH.csv", std::ios_base::app);
 	double cantCiclosTotal = 0;
-	float distancia_total = 0;
+	float distancia = 0;
 
-	// salida << "gimnasios,paradas,mochila,distancia,cantciclos" << endl;
 
 	for(int i = 0; i < CANT_REPETICIONES;i++){
-	
+
 		auto inicio = RELOJ();
-		solucion* mejor_sol = solHeuristicaGolosa(mochila, gimnasios, paradas);
-	
-		if(mejor_sol != NULL){
-			imprimirSolucion(*mejor_sol);
-			mejor_sol->d = distancia_total;
-			delete mejor_sol;
-		}
+		queue<int> solucion = solucionHeuristica(gimnasios, gimnasiosPoder, paradas, mochila);
+		imprimirSolucion(solucion,gimnasios,paradas);
 		auto fin = RELOJ();
 	
 		cantCiclosTotal += (double) chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count();
 	}
-
-	salida << cant_gym << "," << cant_paradas << "," << mochila << "," << distancia_total << "," << cantCiclosTotal / (double) CANT_REPETICIONES << endl;
+	
+	salida << n << "," << m << "," << mochila << "," << distancia << "," << cantCiclosTotal / (double) CANT_REPETICIONES << endl;
 	salida.close();
-
 
 	return 0;
 }

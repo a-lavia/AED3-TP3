@@ -1,4 +1,4 @@
-#include "grasp.h"
+#include "pokeGrasp.h"
 
 //Recibe un vector con las posiciones de los gimnasios, un vector con el poder de los gimnasios, y otro vector con la posicion de las paradas
 grasp::grasp(vector<pos>& g, vector<int>& gp, vector<pos>& p, int m) : gimnasios(g), gimnasiosPoder(gp), paradas(p), mochila(m), grafo(g.size()+p.size()) {
@@ -16,28 +16,42 @@ grasp::grasp(vector<pos>& g, vector<int>& gp, vector<pos>& p, int m) : gimnasios
 
 }
 
-float grasp::correr_grasp(int maxIteraciones, float alfa, int semilla) {
-	correr_grasp(maxIteraciones, alfa, semilla, NULL);
+float grasp::correr_grasp(int maxIteraciones, float alfa, float omega, int semilla) {
+	correr_grasp(maxIteraciones, alfa, omega, semilla, NULL);
 }
 
-float grasp::correr_grasp(int maxIteraciones, float alfa, int semilla, queue<int>* solucion) {
+float grasp::correr_grasp(int maxIteraciones, float alfa, float omega, int semilla, queue<int>* solucion) {
 
+
+	//Vecinidad para la búsqueda local
+	//permutaCamino,
+    //permutaYReemplazaPokeparadas
+	Vecindad vecindad = permutaCamino;
+	
+	//Criterio de parada
+	bool continuarCuandoMejora = true;
+
+	//
 	srand(semilla);
 
 	queue<int> mejorSolucion;
 	float mejorDistancia = FLOAT_MAX;
 
 	for(int i = 0; i < maxIteraciones; i++) {
+		cout << "it " << i << endl;
+		queue<int> solucionGimnasios = graspSolucionGimnasios(alfa);
+		queue<int> solucionAleatoria = graspSolucionAleatoria(solucionGimnasios, alfa, omega);
+		//float distActual = distanciaCamino(solucionAleatoria);
 
-		queue<int> solucionAleatoria = graspSolucionAleatoria(alfa);
 		Camino bl = Camino(grafo, mochila);
 		bl.asignarSolucion(distanciaCamino(solucionAleatoria), solucionAleatoria);
-		bl.busquedaLocal(permutaCamino);
+		bl.busquedaLocal(vecindad);
 		float distActual = bl.devolverSolucion(solucionAleatoria);
 
 		if(distActual < mejorDistancia) {
 			mejorDistancia = distActual;
 			mejorSolucion = solucionAleatoria;
+			if(continuarCuandoMejora) i = 0;
 		}
 	}
 
@@ -49,8 +63,12 @@ float grasp::correr_grasp(int maxIteraciones, float alfa, int semilla, queue<int
 
 //
 
-int grasp::aleatorio(int min, int max) {
+int grasp::int_aleatorio(int min, int max) {
 	return rand() % (max-min) + min;
+}
+
+bool grasp::bool_aleatorio(float prob) {
+    return rand() < prob * (RAND_MAX+1.0);
 }
 
 bool grasp::esGym(int i) {
@@ -82,27 +100,7 @@ float grasp::distanciaCamino(queue<int> camino) {
 	return dist;
 }
 
-list<pair<int, float>> grasp::obtenerCandidatos() {
-	list<pair<int, float>> candidatos;
-
-	//Agrego como candidatos iniciales todas las paradas y gimnasios que pueden derrotarse inicialmente
-	for(int i = 0; i < gimnasios.size()+paradas.size(); i++) {
-		if(esGym(i) && gimnasiosPoder[i] != 0) continue;
-		candidatos.push_back(pair<int, float>(i, 0));
-	}
-	return candidatos;
-}
-
-void grasp::actualizarCandidatos(list<pair<int, float>>& candidatos, vector<bool>& visitados, int actual, int pociones) {
-
-	candidatos.clear();
-	for(int i = 0; i < gimnasios.size()+paradas.size(); i++) {
-		//Ignoro nodos visitados, gimnasios que no se les puede ganar, pokeparadas teniendo la mochila llena
-		if(visitados[i] || (esGym(i) && gimnasiosPoder[i] > pociones) || (!esGym(i) && pociones == mochila)) continue;
-		candidatos.push_back(pair<int, float>(i, distancia(actual, i)));
-	}
-
-}
+//
 
 vector<int> grasp::obtenerCandidatosRestringidos(list<pair<int, float>>& candidatos, float alfa) {
 	//alfa  [0..1], 0=greedy, 1=random
@@ -125,46 +123,108 @@ vector<int> grasp::obtenerCandidatosRestringidos(list<pair<int, float>>& candida
 	return candidatosRestringidos;
 }
 
-queue<int> grasp::graspSolucionAleatoria(float alfa) {
+queue<int> grasp::graspSolucionGimnasios(float alfa) {
 
-	queue<int> solucionParcial;
-
-	//Obtengo todos los candidatos iniciales
-	list<pair<int, float>> candidatos = obtenerCandidatos();
-
-	//Inicialmente arranco con cero pociones	
-	int pociones = 0;
+	queue<int> solucionGimnasios;
 	
 	//Faltan visitar todos los gimnasios
 	int gimnasiosRestantes = gimnasios.size();
 
 	//Inicialmente no visite nada
-	vector<bool> visitados(gimnasios.size()+paradas.size());
-	for(int i = 0; i < gimnasios.size()+paradas.size(); i++) visitados[i] = false;
+	vector<bool> visitados(gimnasios.size());
+	for(int i = 0; i < gimnasios.size(); i++) visitados[i] = false;
 
 	while(gimnasiosRestantes > 0) {
+
+		//Pongo todos los gimnasios como candidatos iniciales 
+		list<pair<int, float>> candidatos;
+		for(int i = 0; i < gimnasios.size(); i++) {
+			if(visitados[i]) continue;
+			float costo = solucionGimnasios.empty() ? 0 : distancia(i, solucionGimnasios.back());
+			candidatos.push_back(pair<int, float>(i, costo));
+		}
 
 		//Restrinjo los candidatos a los mejores segun un threshold alfa (parte greedy)
 		vector<int> candidatosRestringidos = obtenerCandidatosRestringidos(candidatos, alfa);
 
 		//Obtengo un candidato aleatorio (parte probabilistica)
-		int candidatoAleatorio = candidatosRestringidos[aleatorio(0, candidatosRestringidos.size() )];
-
-		if(esGym(candidatoAleatorio)) {
-			gimnasiosRestantes--;
-			pociones -= gimnasiosPoder[candidatoAleatorio];
-		}
-		else pociones = min(pociones+3, mochila);
+		int candidatoAleatorio = candidatosRestringidos[int_aleatorio(0, candidatosRestringidos.size() )];
 
 		//Lo marco como visitado
 		visitados[candidatoAleatorio] = true;
 
 		//Lo agrego a la solución a construir (parte adaptativa)
-		solucionParcial.push(candidatoAleatorio);
+		solucionGimnasios.push(candidatoAleatorio);
 
-		//Actualizo la lista de candidatos
-		actualizarCandidatos(candidatos, visitados, candidatoAleatorio, pociones);
+		//
+		gimnasiosRestantes--;
+
 	}
 
-	return solucionParcial;
+	return solucionGimnasios;
+}
+
+queue<int> grasp::graspSolucionAleatoria(queue<int>& caminoGimnasios, float alfa, float omega) {
+
+	queue<int> solucionAleatoria;
+
+	//
+	int paradasRestantes = paradas.size();
+
+	//Inicialmente arranco con cero pociones	
+	int pociones = 0;
+	
+	//Inicialmente no visite nada
+	vector<bool> visitados(gimnasios.size()+paradas.size());
+	for(int i = 0; i < gimnasios.size()+paradas.size(); i++) visitados[i] = false;
+
+	while(!caminoGimnasios.empty()) {
+
+		//Visito paradas
+		while(paradasRestantes > 0 && (pociones < gimnasiosPoder[caminoGimnasios.front()] || (pociones < mochila && bool_aleatorio(omega)))) {
+
+			//Lista de candidatos
+			list<pair<int, float>> candidatos;
+			for(int i = gimnasios.size(); i < gimnasios.size()+paradas.size(); i++) {
+				if(visitados[i]) continue;
+				candidatos.push_back(pair<int, float>(i, distancia(i, caminoGimnasios.front())));
+			}
+
+			//Restrinjo los candidatos a los mejores segun un threshold alfa (parte greedy)
+			vector<int> candidatosRestringidos = obtenerCandidatosRestringidos(candidatos, alfa);
+
+			//Obtengo un candidato aleatorio (parte probabilistica)
+			int candidatoAleatorio = candidatosRestringidos[int_aleatorio(0, candidatosRestringidos.size() )];
+
+			//Sumo pociones
+			pociones = min(pociones+3, mochila);
+
+			//Lo marco como visitado
+			visitados[candidatoAleatorio] = true;
+
+			//Lo agrego a la solución a construir (parte adaptativa)
+			solucionAleatoria.push(candidatoAleatorio);
+
+			//
+			paradasRestantes--;
+		}
+
+		//Resto las pociones del gimnasio
+		pociones -= gimnasiosPoder[caminoGimnasios.front()];
+
+		//
+		if(pociones < 0) cout << "ERRORRR" << endl;
+
+		//Lo marco como visitado
+		visitados[caminoGimnasios.front()] = true;
+
+		//Lo agrego a la solución
+		solucionAleatoria.push(caminoGimnasios.front());
+		
+		//Lo saco
+		caminoGimnasios.pop();
+
+	}
+
+	return solucionAleatoria;
 }
