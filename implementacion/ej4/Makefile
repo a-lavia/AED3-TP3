@@ -3,7 +3,7 @@
 BIN = ej4
 
 all:
-	g++ ej.cpp grasp.cpp ../ej3/Grafo.cpp ../ej3/Camino.cpp ../ej3/aux.cpp ../ej2/funciones.cpp ../ej1bis/heuristica.cpp -std=c++11 -o ej4
+	g++ ej.cpp grasp.cpp ../ej3/Grafo.cpp ../ej3/Camino.cpp ../ej3/aux.cpp ../ej2/funciones.cpp ../ej2/SegundaHeuristica.cpp -std=c++11 -o ej4
 
 clean:
 	rm -f $(BIN)
