@@ -21,13 +21,13 @@ solucion* solHeuristicaGolosa(unsigned int mochilaSize, vector<struct gym>& gimn
 			if(i == j){
 				matrizDistancias[i][j] = 0.0;
 			 } else if(i < cantGym && j < cantGym){
-				matrizDistancias[i][j] = distancia(gimnasios[i], gimnasios[j]);
+				matrizDistancias[i][j] = distancia2(gimnasios[i], gimnasios[j]);
 			} else if(i >= cantGym && j < cantGym){
-				matrizDistancias[i][j] = distancia(paradas[i-cantGym], gimnasios[j]);
+				matrizDistancias[i][j] = distancia2(paradas[i-cantGym], gimnasios[j]);
 			} else if(i < cantGym && j >= cantGym){
-				matrizDistancias[i][j] = distancia(gimnasios[i], paradas[j-cantGym]);
+				matrizDistancias[i][j] = distancia2(gimnasios[i], paradas[j-cantGym]);
 			} else if(i >= cantGym && j >= cantGym){
-				matrizDistancias[i][j] = distancia(paradas[i-cantGym], paradas[j-cantGym]);
+				matrizDistancias[i][j] = distancia2(paradas[i-cantGym], paradas[j-cantGym]);
 			}
 		}
 	}
@@ -271,7 +271,7 @@ void imprimirVector(vector<struct parada>& paradas){
 
 /************************************************************************/
 
-float distancia(const nodo &n1, const nodo &n2){
+float distancia2(const nodo &n1, const nodo &n2){
 	float x = n2.x - n1.x;
 	float y = n2.y - n1.y;
 

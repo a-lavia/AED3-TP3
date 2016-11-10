@@ -48,6 +48,6 @@ void imprimirMatriz(vector<vector<float>>& matrizDistancias);
 void imprimirVector(vector<struct gym>& gimnasios);
 void imprimirVector(vector<struct parada>& paradas);
 
-float distancia(const nodo &n1, const nodo &n2);
+float distancia2(const nodo &n1, const nodo &n2);
 
 #endif
