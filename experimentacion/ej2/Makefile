@@ -1,6 +1,6 @@
 .PHONY: all clean
 
-BIN = exp exp2
+BIN = exp
 
 all:
 	g++ exp.cpp ../../implementacion/ej2/heuristica.cpp -std=c++11 -o exp
