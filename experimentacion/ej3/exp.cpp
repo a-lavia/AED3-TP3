@@ -8,7 +8,7 @@ int main(int argc, char* argv[]){
 
     switch(atoi(argv[1])){
         case 0 : {
-            cout << "Experimento con instancias aleatorias:" << endl << endl;
+            cout << "Instancias aleatorias:" << endl << endl;
 
             vector<Camino> caminos(CANT_CASOS);
             generarCaminosAleat(caminos);
@@ -35,7 +35,7 @@ int main(int argc, char* argv[]){
             break;
         }
         case 1 : {
-            cout << "Experimento con instancias aleatorias y sus soluciones optimas:" << endl << endl;
+            cout << "Instancias aleatorias y sus soluciones optimas:" << endl << endl;
 
             vector<Camino> caminos(CANT_NODOS_MAX_OP + 1);
             generarCaminosAleatOp(caminos);
@@ -70,7 +70,7 @@ int main(int argc, char* argv[]){
             break;
         }
         case 2 : {
-            cout << "Experimento con instancias donde la busqueda local corrige mejor:" << endl << endl;
+            cout << "Instancias donde la busqueda local corrige mejor:" << endl << endl;
 
             vector<Camino> caminos(CANT_CASOS);
             generarCaminosMejor(caminos);
@@ -97,7 +97,7 @@ int main(int argc, char* argv[]){
             break;
         }
         case 3 : {
-            cout << "Experimento con instancias donde la busqueda local corrige mejor y sus soluciones optimas" << endl << endl;
+            cout << "Instancias donde la busqueda local corrige mejor y sus soluciones optimas" << endl << endl;
 
             vector<Camino> caminos(CANT_NODOS_MAX_OP + 1);
             generarCaminosMejorOp(caminos);
@@ -131,12 +131,46 @@ int main(int argc, char* argv[]){
             
             break;
         }
+        case 4 : {
+            cout << "Instancias con #gimnasios fija" << endl << endl;
+
+            vector<Camino> caminos(CANT_CASOS);
+            generarCaminosCantGimFija(caminos);
+            asignarSoluciones(caminos);
+
+            string stringExperimento = stringPrincipio + "-cantGimFija";
+
+            cout << endl << "Vecindad = permutaYReemplazaPokeparadas..." << endl;
+            string stringPermutaYReemplazaPokeparadas = stringExperimento + "-permutaYReemplazaPokeparadas.csv";
+            ofstream salidaPermutaYReemplazaPokeparadas;
+            salidaPermutaYReemplazaPokeparadas.open(stringPermutaYReemplazaPokeparadas.c_str());
+            generarSalidaBL(caminos, permutaYReemplazaPokeparadas, salidaPermutaYReemplazaPokeparadas);
+            salidaPermutaYReemplazaPokeparadas.close();
+            cout << "Listo" << endl;
+
+            cout << endl << "Instancias con #pokeparadas fija" << endl << endl;
+
+            generarCaminosCantPokFija(caminos);
+            asignarSoluciones(caminos);
+
+            stringExperimento = stringPrincipio + "-cantPokFija";
+
+            cout << endl << "Vecindad = permutaYReemplazaPokeparadas..." << endl;
+            stringPermutaYReemplazaPokeparadas = stringExperimento + "-permutaYReemplazaPokeparadas.csv";
+            salidaPermutaYReemplazaPokeparadas.open(stringPermutaYReemplazaPokeparadas.c_str());
+            generarSalidaBL(caminos, permutaYReemplazaPokeparadas, salidaPermutaYReemplazaPokeparadas);
+            salidaPermutaYReemplazaPokeparadas.close();
+            cout << "Listo" << endl;
+
+            break;
+        }
         default : {
             cout << "Modo de uso: ./exp.out [opcion]" << endl;
-            cout << "[opcion] == 0: experimento con instancias aleatorias" << endl;
-            cout << "[opcion] == 1: experimento con instancias aleatorias y sus soluciones optimas" << endl;
-            cout << "[opcion] == 2: experimento con instancias donde la busqueda local corrige mejor" << endl;
-            cout << "[opcion] == 3: experimento con instancias donde la busqueda local corrige mejor y sus soluciones optimas" << endl;
+            cout << "[opcion] == 0: instancias aleatorias" << endl;
+            cout << "[opcion] == 1: instancias aleatorias y sus soluciones optimas" << endl;
+            cout << "[opcion] == 2: instancias donde la busqueda local corrige mejor" << endl;
+            cout << "[opcion] == 3: instancias donde la busqueda local corrige mejor y sus soluciones optimas" << endl;
+            cout << "[opcion] == 4: instancias con #gimnasios fija e instancias con #pokeparadas fija" << endl;
         }
     }
     
