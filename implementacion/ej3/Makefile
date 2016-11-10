@@ -3,7 +3,7 @@
 BIN = ej.out
 
 all:
-	g++ ej.cpp aux.cpp Grafo.cpp Camino.cpp ../ej2/funciones.cpp ../ej1bis/heuristica.cpp -std=c++11 -o ej.out
+	g++ ej.cpp aux.cpp Grafo.cpp Camino.cpp ../ej2/funciones.cpp ../ej2/SegundaHeuristica.cpp -std=c++11 -o ej.out
 
 clean:
 	rm -f $(BIN)
