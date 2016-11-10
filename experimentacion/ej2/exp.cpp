@@ -36,14 +36,14 @@ int main(int argc, char* argv[]) {
 
 		auto inicio = RELOJ();
 		queue<int> solucion = solucionHeuristica(gimnasios, gimnasiosPoder, paradas, mochila);
+		distancia = distanciaCamino(solucion, gimnasios, paradas);
 		imprimirSolucion(solucion,gimnasios,paradas);
 		auto fin = RELOJ();
 
-		distancia = distanciaCamino(solucion, gimnasios, paradas);
 
 		cantCiclosTotal += (double) chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count();
 	}
-	
+
 	salida << n << "," << m << "," << mochila << "," << distancia << "," << cantCiclosTotal / (double) CANT_REPETICIONES << endl;
 	salida.close();
 

@@ -134,7 +134,10 @@ void imprimirSolucion(queue<int>& camino, vector<pos>& posGym, vector<pos>& posP
 	// si la distancia es 0 y no hay gimnasios gane.
 	if(d == 0 && posGym.size() == 0){
 		cout << "0 0" << endl;
+		return;
 	}
+
+	cout << d << " ";
 
 	if(camino.size() != 0){
 		cout << camino.size() << " ";
