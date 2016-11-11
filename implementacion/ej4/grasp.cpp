@@ -40,7 +40,7 @@ float grasp::correr_grasp(criterio_parada criterio, int iteraciones, float alfa,
 
 		queue<int> solucionGimnasios = graspSolucionGimnasios(alfa);
 		queue<int> solucionAleatoria = graspSolucionAleatoria(solucionGimnasios, alfa, omega);
-		float distActual = distanciaCamino(solucionAleatoria);
+		//float distActual = distanciaCamino(solucionAleatoria);
 
 		//DEBUG PRINT
 		/*queue<int> copio = solucionAleatoria;
@@ -51,10 +51,10 @@ float grasp::correr_grasp(criterio_parada criterio, int iteraciones, float alfa,
 		}
 		cout << endl;*/
 		
-		/*Camino bl = Camino(grafo, mochila);
+		Camino bl = Camino(grafo, mochila);
 		bl.asignarSolucion(distanciaCamino(solucionAleatoria), solucionAleatoria);
 		bl.busquedaLocal(vecindad);
-		float distActual = bl.devolverSolucion(solucionAleatoria);*/
+		float distActual = bl.devolverSolucion(solucionAleatoria);
 
 		//cout << "mejor dist " << distActual << endl;
 
