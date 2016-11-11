@@ -93,9 +93,8 @@ Para analizar cada camino utilizamos los siguientes criterios:
 El backtracking, a lo sumo chequea cada combinacion posible de gimnasios y paradas en todos sus ordenes posibles; lo que, dicho de otra manera serían todas las permutaciones de cada subconjunto de partes del conjunto de nodos. 
 Como cada permutacion de longitud k se construye a partir de una permutación de longitud k-1, no necesitamos construir ningún camino más de una vez.
 Esto nos lleva a ver que lo que recorremos es un arbol, donde la raíz es el "conjunto vacío" (no haber recorrido nada) y el camino simple desde la misma hasta cada hoja es una permutación diferente de longitud n, donde n es la cantidad de nodos.
-Habiendo entendido esto, llegamos rapidamente a la conclusión de que nuestro backtracking pertenece a la clase de complejidad O(n!) ya que construye a lo sumo todas las permutaciones de longitud n, las cuales contienen a todas las de tamaños menores.
+Habiendo entendido esto, llegamos rapidamente a la conclusión de que nuestro backtracking pertenece a la clase de complejidad \bigo{n!} ya que construye a lo sumo todas las permutaciones de longitud n, las cuales contienen a todas las de tamaños menores.
 
-%\bigo{n!}
 
 \subsection{Experimentaci\'on}
 
