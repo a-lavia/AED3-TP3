@@ -48,7 +48,7 @@ En el primer llamado a la función, S es el conjunto con todos los elementos que
 La solución que implementamos para obtener el camino óptimo es un backtracking. 
 Para analizar cada camino utilizamos los siguientes criterios:
 \begin{itemize}
-    \item Si el camino que se está chequeando pasa por todos los gimnasios y recorre menos distancia que la mejor solucion encontrada hasta el momento, se reemplaza esa solución con el camino actual.
+    \item Si el camino que se está chequeando pasa por todos los gimnasios y recorre menos distancia que la mejor solución encontrada hasta el momento, se reemplaza esa solución con el camino actual.
     \item Si la distancia del camino actual es mayor a la distancia del mejor encontrado, no se chequean mas caminos que partan de este.
     \item Si la distancia del camino actual es menor a la distancia del mejor hallado, y es un movimiento válido (en caso de ser un gimnasio el último nodo agregado al camino, habrá que chequear que las pociones fueran suficientes para vencerle); entonces se verifican todos los caminos que partan desde este último, sólo teniendo en cuenta como continuación los nodos que aún no están en el camino actual.
 \end{itemize}
@@ -57,41 +57,41 @@ Para analizar cada camino utilizamos los siguientes criterios:
 \label{}
 \caption{Backtracking}
 \begin{algorithmic}[1]
-\Statex \underline{Entrada}: distanciaActual: \texttt{float}, pociones: \texttt{int}, gimnasiosPorVisitar: \texttt{int}, recorridos: \texttt{cola}, restantes: \texttt{cola}, mejorSolucion{cola}
+\Statex \underline{Entrada}: distanciaActual : \texttt{float}, pociones : \texttt{int}, gimnasiosPorVisitar : \texttt{int}, recorridos : \texttt{cola}, restantes : \texttt{cola}, mejorSoluci\'on : \texttt{cola}
 \medskip
 \If{gimnasiosPorVisitar == 0}
-    \If{distanciaActual < mejorSolucion.distancia}
-        \State mejorSolucion $\gets$ recorridos
+    \If{distanciaActual $<$ mejorSoluci\'on.distancia}
+        \State mejorSoluci\'on $\gets$ recorridos
     \EndIf
 \Else
-    \If{distanciaActual < mejorSolucion.distancia}
-        \State ultimo $\gets$ restantes.back
+    \If{distanciaActual $<$ mejorSoluci\'on.distancia}
+        \State ultimo $\gets$ restantes.back()
         \While{haya nodos para visitar}
-            \State proximoAVisitar $\gets$ restantes.front
-            \State restantes.pop
-            \State dist $\gets$ distancia(recorridos.back, proximoAVisitar)
-            \State recorridos.push(proximoAVisitar)
+            \State pr\'oximoAVisitar $\gets$ restantes.front()
+            \State restantes.pop()
+            \State dist $\gets$ distancia(recorridos.back, pr\'oximoAVisitar)
+            \State recorridos.push(pr\'oximoAVisitar)
 
-            \If{esGimnasio(proximoAVisitar)}
-                \State backtracking(distanciaActual+dist,pociones-pociones(proximoAVisitar), gimnasiosPorVisitar-1, restantes, recorridos, mejorSolucion)
+            \If{esGimnasio(pr\'oximoAVisitar)}
+                \State backtracking(distanciaActual+dist,pociones-pociones(pr\'oximoAVisitar), gimnasiosPorVisitar-1, restantes, recorridos, mejorSoluci\'on)
             \Else
-                \State backtracking(distanciaActual+dist, min(pociones+3, mochila), gimnasiosPorvisitar, restantes, recorridos, mejorSolucion)
+                \State backtracking(distanciaActual+dist, min(pociones+3, mochila), gimnasiosPorvisitar, restantes, recorridos, mejorSoluci\'on)
             \EndIf
         \EndWhile
     \EndIf
 \EndIf
 \medskip
-\Statex \underline{Salida}: mejorSolucion.imprimirSoluci\'on
+\Statex \underline{Salida}: mejorSoluci\'on
 \end{algorithmic}
 \end{algorithm}
 
 
 \subsection{Complejidad}
 
-El backtracking, a lo sumo chequea cada combinacion posible de gimnasios y paradas en todos sus ordenes posibles; lo que, dicho de otra manera serían todas las permutaciones de cada subconjunto de partes del conjunto de nodos. 
-Como cada permutacion de longitud k se construye a partir de una permutación de longitud k-1, no necesitamos construir ningún camino más de una vez.
-Esto nos lleva a ver que lo que recorremos es un arbol, donde la raíz es el "conjunto vacío" (no haber recorrido nada) y el camino simple desde la misma hasta cada hoja es una permutación diferente de longitud n, donde n es la cantidad de nodos.
-Habiendo entendido esto, llegamos rapidamente a la conclusión de que nuestro backtracking pertenece a la clase de complejidad \bigo{n!} ya que construye a lo sumo todas las permutaciones de longitud n, las cuales contienen a todas las de tamaños menores.
+El backtracking, a lo sumo chequea cada combinación posible de gimnasios y paradas en todos sus ordenes posibles; lo que, dicho de otra manera serían todas las permutaciones de cada subconjunto de partes del conjunto de nodos. 
+Como cada permutación de longitud k se construye a partir de una permutación de longitud k-1, no necesitamos construir ningún camino más de una vez.
+Esto nos lleva a ver que lo que recorremos es un árbol, donde la raíz es el "conjunto vacío" (no haber recorrido nada) y el camino simple desde la misma hasta cada hoja es una permutación diferente de longitud n, donde n es la cantidad de nodos.
+Habiendo entendido esto, llegamos rápidamente a la conclusión de que nuestro backtracking pertenece a la clase de complejidad \bigo{n!} ya que construye a lo sumo todas las permutaciones de longitud n, las cuales contienen a todas las de tamaños menores.
 
 
 \subsection{Experimentaci\'on}
@@ -99,7 +99,7 @@ Habiendo entendido esto, llegamos rapidamente a la conclusión de que nuestro ba
 Planteamos dos experimentos diferentes para el backtracking. Para ambos utilizamos instancias en las que los gimnasios representan un tercio de los nodos, y las paradas, los nodos restantes.
 
 El primero consiste en corroborar que la cota teórica de complejidad calculada se cumple en la práctica. Para esto utilizamos instancias del problema en las que es necesario pasar por la totalidad de las paradas para poder vencer en todos los gimnasios (acomodando adecuadamente los requerimientos de pociones). 
-A continuación observamos un gráfico en el que se refleja la división entre la función obtenida a partir de medir los ticks del clock en función de la cantidad de nodos y la función de complejidad
+A continuación observamos un gráfico en el que se refleja la división entre la función obtenida a partir de medir los ticks del reloj en función de la cantidad de nodos y la función de complejidad
 
 \begin{figure}[H]
   \begin{center}
@@ -122,6 +122,6 @@ Aquí debajo podemos ver un heatmap en el que mostramos la cantidad de ticks de 
   \end{center}
 \end{figure}
 
-Como podemos observar en la figura \ref{fig:ej1_conHeuristica}, la cantidad de ticks del clock aumenta en función de ambas variables, por lo que nuestra hipótesis está confirmada.
+Como podemos observar en la figura \ref{fig:ej1_conHeuristica}, la cantidad de ticks del reloj aumenta en función de ambas variables, por lo que nuestra hipótesis está confirmada.
 
 Para este último experimento, probamos utilizar la heurística del ejercicio 2 para hallar una distancia para usar como cota en el bactracking al realizar el primer llamado. Las mediciones realizadas tanto con la cota como sin la cota dieron muy similares, lo que nos llevo a entender que el backtracking hallaba una gran cantidad de soluciones con distancias menores que la encontrada por la heurística, por lo que el tiempo de cómputo no se vio afectado. 

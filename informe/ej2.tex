@@ -8,13 +8,13 @@ La heurística constructiva golosa propuesta para obtener una solución es la si
 
 Primero generamos caminos que sólo pasen por gimnasios, ignorando completamente las pociones y paradas, comenzando siempre desde un gimnasio distinto, y yendo al más cercano. Luego, nos quedamos con el camino de menor distancia recorrida. 
 
-Una vez obtenido este camino, generamos el camino solución de la siguiente forma: se toma el primer gimnasio del camino de gimnasios y observa cuantas pociones son necesarias para ganarle al mismo. Luego, mientras tenemos menos pociones que las necesarias, buscamos las pokeparadas más cercanas y las vamos agregando al camino solución hasta que pasamos por las suficientes para ganarle al gimnasio. Cuando llega a esa cantidad sufiente de pokeparadas, pasa por el gimnasio, lo vence y lo agrega al camino solución. Luego, avanza al siguiente gimnasio del camino de gimnasios y repite lo mismo hasta cubrirlos a todos.
+Una vez obtenido este camino, generamos el camino solución de la siguiente forma: se toma el primer gimnasio del camino de gimnasios y observa cuantas pociones son necesarias para ganarle al mismo. Luego, mientras tenemos menos pociones que las necesarias, buscamos las pokeparadas más cercanas y las vamos agregando al camino solución hasta que pasamos por las suficientes para ganarle al gimnasio. Cuando llega a esa cantidad suficiente de pokeparadas, pasa por el gimnasio, lo vence y lo agrega al camino solución. Luego, avanza al siguiente gimnasio del camino de gimnasios y repite lo mismo hasta cubrirlos a todos.
 
 El algoritmo termina si, o bien le ganó a todos los gimnasios, caso en el que devuelve la distancia recorrida, la cantidad de gimnasios y pokeparadas que recorrió y el camino realizado; o si llega a un punto donde no puede ganarle a ningún gimnasio y tiene la mochila llena o pasó por todas las pokeparadas, devolviendo $-1$.
 
 %Con todo esto descripto anteriormente, el pseudocódigo del algoritmo propuesto es el siguiente:
 
-Para generar el camino de gimnasios lo que hacemos es: comenzando por un gimnasio, buscamos el gimnasio de distancia menor a éste. Luego buscamos el de distancia menor al siguiente, así hasta que no quedan más gimnasios por recorrer y comparamos la distancia total del camino generado con la de la mejor solución, si es menor nos quedamos con el camino y reemplaza al mejor que teniamos, si es mayor lo descartamos. Este procedimiento lo hacemos por cada gimnasio, generando los caminos y siempre quedandonos con el de distancia menor. Una vez terminado, devolvemos el camino guardado. El pseudo código de esta operación es el siguiente:
+Para generar el camino de gimnasios lo que hacemos es: comenzando por un gimnasio, buscamos el gimnasio de distancia menor a éste. Luego buscamos el de distancia menor al siguiente, así hasta que no quedan más gimnasios por recorrer y comparamos la distancia total del camino generado con la de la mejor solución, si es menor nos quedamos con el camino y reemplaza al mejor que teníamos, si es mayor lo descartamos. Este procedimiento lo hacemos por cada gimnasio, generando los caminos y siempre quedándonos con el de distancia menor. Una vez terminado, devolvemos el camino guardado. El pseudo código de esta operación es el siguiente:
 
 \begin{algorithm}[H]
 \label{}
@@ -46,7 +46,7 @@ Para generar el camino de gimnasios lo que hacemos es: comenzando por un gimnasi
 \end{algorithmic}
 \end{algorithm}
 
-El pseudo código del algoritmo que genera la solucion es el siguiente:
+El pseudo código del algoritmo que genera la solución es el siguiente:
 
 \begin{algorithm}[H]
 \label{}
@@ -79,10 +79,10 @@ Lo primero que realizamos es generar el caminos entre los gimnasios. La función
 
 Ir generando el camino con distancia más corta de un gimnasio nos da como complejidad \bigo{|gimnasios|^2} ya que por cada uno se busca entre los demás con cual tiene menor distancia para agregar al camino. Y, como toda esta operación se realiza por cada gimnasio, la complejidad total de esta función es \bigo{|gimnasios|^3}
 
-Luego, por cada gimnasio del camino generado por la función anterior, buscamos la cantidad de pociones necesarias para ganarle. Ésta operación la realizamos en la función \texttt{heuristicaParadasCercanas}. Basicamente lo que hace es lo siguiente: tomamos del camino generado por la función anterior el primer gimnasio y observamos cual es la cantidad de pociones necesarias para ganarle. Entonces, mientras en la mochila no tengamos esa cantidad de pociones vamos a las paradas más cercanas del gimnasio hasta tener las suficientes. En nuestra función tenemos un vector con las posiciones de todas las pokeparadas y una lista con los índices de las que no fueron visitadas. Cuando se visita alguna poke parada, se quita el índice de la lista. En peor caso, un gimnasio para ser vencido puede necesitar tantas pociones como $|paradas|*3$, entonces, en este caso, iría buscando la poke parada más cercana que no visito dentro de la lista y quitandolas hasta que esta quede vacía. La complejidad de esta operación es \bigo{\frac{|paradas|^2 + |paradas|}{2}} = \bigo{|paradas|^2}. En mejor caso, no sería necesario ir a alguna poke parada para ganarle a los gimnasios (porque estos necesitan cero pociones para ganarles), entonces no se buscaría ninguna parada. 
+Luego, por cada gimnasio del camino generado por la función anterior, buscamos la cantidad de pociones necesarias para ganarle. Ésta operación la realizamos en la función \texttt{heuristicaParadasCercanas}. Básicamente lo que hace es lo siguiente: tomamos del camino generado por la función anterior el primer gimnasio y observamos cual es la cantidad de pociones necesarias para ganarle. Entonces, mientras en la mochila no tengamos esa cantidad de pociones vamos a las paradas más cercanas del gimnasio hasta tener las suficientes. En nuestra función tenemos un vector con las posiciones de todas las pokeparadas y una lista con los índices de las que no fueron visitadas. Cuando se visita alguna pokeparada, se quita el índice de la lista. En peor caso, un gimnasio para ser vencido puede necesitar tantas pociones como $|paradas|*3$, entonces, en este caso, iría buscando la pokeparada más cercana que no visito dentro de la lista y quitandolas hasta que esta quede vacía. La complejidad de esta operación es \bigo{\frac{|paradas|^2 + |paradas|}{2}} = \bigo{|paradas|^2}. En mejor caso, no sería necesario ir a alguna poke parada para ganarle a los gimnasios (porque estos necesitan cero pociones para ganarles), entonces no se buscaría ninguna parada. 
 Esto da la idea que la complejidad de este código termina siendo \bigo{|gimnasios| + |paradas|^2} ya que recorre a todos los gimnasios y, en peor caso, recorrería todas las paradas siempre buscando la de distancia menor.
 
-Por último, tenemos la función \texttt{imprimirSolucion} que toma el camino de la solución. Se calcula la distancia total mirando todos los elementos del camino, esto con complejidad \bigo{|paradas| + |gimnasios|} y, luego, se van desencolando los índices de los gimnasios y paradas recorridos imprimiendolos, esto también con complejidad \bigo{|paradas| + |gimnasios|}. Entonces, la complejidad de esta función es \bigo{|paradas| + |gimnasios|}.
+Por último, tenemos la función \texttt{imprimirSoluci\'on} que toma el camino de la solución. Se calcula la distancia total mirando todos los elementos del camino, esto con complejidad \bigo{|paradas| + |gimnasios|} y, luego, se van desencolando los índices de los gimnasios y paradas recorridos imprimiendolos, esto también con complejidad \bigo{|paradas| + |gimnasios|}. Entonces, la complejidad de esta función es \bigo{|paradas| + |gimnasios|}.
 
 
 Con todo esto calculado, la complejidad total es dada por la suma de las complejidades de estas tres funciones: \bigo{|gimnasios|^3} + \bigo{|gimnasios| + |paradas|^2} + \bigo{|paradas| + |gimnasios|}. 
@@ -112,7 +112,7 @@ Este caso cuenta con 5 gimnasios, 5 pokeparadas, mochila con capacidad 3 y pocio
 
 Las posiciones de los gimnasios, tanto $x$ como $y$, fueron elegidas de forma aleatoria entre 10 y 15; y las posiciones de las paradas también fueron elegidas de forma aleatoria pero entre 0 y 5. 
 
-Aquí podemos ver un grafico de la instancia donde los nodos rojos representan a los gimnasios y los verdes a las pokeparadas:
+Aquí podemos ver un gráfico de la instancia donde los nodos rojos representan a los gimnasios y los verdes a las pokeparadas:
 
 \begin{figure}[H]
   \begin{center}
@@ -126,7 +126,7 @@ Aquí podemos ver un grafico de la instancia donde los nodos rojos representan a
 \newpage
 
 La solución óptima obtenida sobre esta instancia devuelve un camino con distancia 78.8592.
-Ahora bien, cuando la corremos con la heuristica obtenemos un camino con distancia 104.98, lo que da como diferencia 26.1208.
+Ahora bien, cuando la corremos con la heurística obtenemos un camino con distancia 104.98, lo que da como diferencia 26.1208.
 
 \begin{figure}[H]
 \centering
@@ -144,7 +144,7 @@ Ahora bien, cuando la corremos con la heuristica obtenemos un camino con distanc
 \end{figure}
 
 
-Se puede apreciar en las figuras como la heuristica pasa por una poke parada más que en el óptimo y esto hace que la distancia recorrida sea mayor.
+Se puede apreciar en las figuras como la heurística pasa por una pokeparada más que en el óptimo y esto hace que la distancia recorrida sea mayor.
 
 
 \subsubsection{Caso: Pokeparadas y gimnasios de a pares en el plano}
@@ -172,16 +172,16 @@ En este caso, tenemos 5 gimnasios y 5 pokeparadas que se encuentran de a pares e
 \begin{minipage}{0.45\textwidth}
 \centering
 \includegraphics[width=0.9\textwidth]{imagenes/test2-soltest2H.pdf}
-\caption{Solución con heuristica}
+\caption{Solución con heurística}
 \label{fig:ej2_caso2h}
 \end{minipage}
 \end{figure}
 
-La solución óptima devuelve un camino con distancia total 13.5366, en cambio la heuristica devuelve un camino con distancia 14.9061. La diferencia es de 1.3695.
+La solución óptima devuelve un camino con distancia total 13.5366, en cambio la heurística devuelve un camino con distancia 14.9061. La diferencia es de 1.3695.
 
 
 
-Tiene sentido que para este caso tenga una diferencia chica la una de la otra ya que por como están dispuestas las pokeparadas y los gimnasios y, dado que la heuristica primero genera un camino de gimnasios, en estos casos va a haber una diferencia de distancias pequeña.
+Tiene sentido que para este caso tenga una diferencia chica la una de la otra ya que por como están dispuestas las pokeparadas y los gimnasios y, dado que la heurística primero genera un camino de gimnasios, en estos casos va a haber una diferencia de distancias pequeña.
 
 
 \subsubsection{Caso: Sólo gimnasios}
@@ -194,9 +194,9 @@ Tiene sentido que para este caso tenga una diferencia chica la una de la otra ya
   \end{center}
 \end{figure}
 
-Este caso sólo presenta 10 gimnasios a los que no necesitan pociones para ser vencidos (en cada uno el valor necesario es cero). Éstos poséen posiciones aleatorias dentro del mapa.
+Este caso sólo presenta 10 gimnasios a los que no necesitan pociones para ser vencidos (en cada uno el valor necesario es cero). Éstos poseen posiciones aleatorias dentro del mapa.
 
-Cómo la heuristica genera un camino de gimnasios veamos como se comporta en este caso contra la solución óptima.
+Cómo la heurística genera un camino de gimnasios veamos como se comporta en este caso contra la solución óptima.
 
 \begin{figure}[H]
 \centering
@@ -215,7 +215,7 @@ Cómo la heuristica genera un camino de gimnasios veamos como se comporta en est
 \end{minipage}
 \end{figure}
 
-Tanto la solución óptima como la heuristica en este caso devolvieron el mismo camino. Ésto nos dice que podemos obtener mejores casos cuando se tienen más gimnasios que paradas y las instancias tienen solución.
+Tanto la solución óptima como la heurística en este caso devolvieron el mismo camino. Ésto nos dice que podemos obtener mejores casos cuando se tienen más gimnasios que paradas y las instancias tienen solución.
 
 
 \subsubsection{Caso: Posiciones aleatorias}
@@ -247,16 +247,16 @@ En este caso tenemos 5 gimnasios y 5 pokeparadas dispersos en el plano. Se cuent
 \end{minipage}
 \end{figure}
 
-La solución óptima obtenida para esta instancia devuelve un camino con distancia recorrida 60.7142, mientras que la heuristica devuelve un camino con distancia 85.9269. La diferencia entre distancias es de 25.2127. Esto nos dice que para grafos aleatorios podemos obtener casos muy lejanos de la solución óptima.
+La solución óptima obtenida para esta instancia devuelve un camino con distancia recorrida 60.7142, mientras que la heurística devuelve un camino con distancia 85.9269. La diferencia entre distancias es de 25.2127. Esto nos dice que para grafos aleatorios podemos obtener casos muy lejanos de la solución óptima.
 
-\subsubsection{Caso: La heuristica no encuentra una solución}
+\subsubsection{Caso: La heurística no encuentra una solución}
 
-Los peores casos de la heuristica son los que no encuentra una solución cuando la hay. Este es uno de esos casos.
+Los peores casos de la heurística son los que no encuentra una solución cuando la hay. Este es uno de esos casos.
 
 \begin{figure}[H]
   \begin{center}
     \includegraphics[scale=0.4]{imagenes/test5.pdf}
-    \caption{Grafo en el que nuestra heuristica no encuentra solución pero la tiene.}
+    \caption{Grafo en el que nuestra heurística no encuentra solución pero la tiene.}
     \label{fig:ej2_caso4}
   \end{center}
 \end{figure}
@@ -286,7 +286,7 @@ Dificultad = 50
 
 \begin{figure}[H]
   \begin{center}
-    \includegraphics[scale=0.4]{imagenes/ej2test1tiempos.pdf}
+    \includegraphics[scale=0.8]{imagenes/ej2test1tiempos.pdf}
     \caption{}
     \label{}
   \end{center}
@@ -301,7 +301,7 @@ Dificultad = 50
 
 \begin{figure}[H]
   \begin{center}
-    \includegraphics[scale=0.4]{imagenes/ej2test1tiempos.pdf}
+    \includegraphics[scale=0.8]{imagenes/ej2test1tiempos.pdf}
     \caption{}
     \label{}
   \end{center}
@@ -316,7 +316,7 @@ Dificultad 50
 
 \begin{figure}[H]
   \begin{center}
-    \includegraphics[scale=0.4]{imagenes/ej2test3iempos.pdf}
+    \includegraphics[scale=0.8]{imagenes/ej2test3iempos.pdf}
     \caption{}
     \label{}
   \end{center}
@@ -331,7 +331,7 @@ Mochila fija = 6
 
 \begin{figure}[H]
   \begin{center}
-    \includegraphics[scale=0.4]{imagenes/ej2test4iempos.pdf}
+    \includegraphics[scale=0.8]{imagenes/ej2test4iempos.pdf}
     \caption{}
     \label{}
   \end{center}
@@ -346,7 +346,7 @@ Mochila = 18
 
 \begin{figure}[H]
   \begin{center}
-    \includegraphics[scale=0.4]{imagenes/ej2test5iempos.pdf}
+    \includegraphics[scale=0.8]{imagenes/ej2test5iempos.pdf}
     \caption{}
     \label{}
   \end{center}

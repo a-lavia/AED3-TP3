@@ -8,7 +8,7 @@ En este problema, Brian desea convertirse en maestro Pokémon. Se conoce como po
 
 Vencer un gimnasio no es fácil debido a que nuestros pokemones se debilitan en las batallas; para paliar esto, existen pociones que curan a nuestros pokemones y les permiten continuar batallando. \'Estas se pueden conseguir en estaciones conocidas como pokeparadas, en las que entregan exactamente tres. Brian cuenta con una mochila en la que puede cargar hasta cierta cantidad, por lo que si pasa por una pokeparada y las tres no entran en su mochila deberá descartar las sobrantes. Para saber si podemos vencer un gimnasio, contamos de antemano con el número de pociones que son requeridas para lograrlo. No es posible visitar un gimnasio si no podemos vencerlo.
 
-El objetivo es encontrarar la manera de vencer todos los gimnasios sin pasar por un gimnasio o una pokeparada más de una vez, recorriendo la mínima distancia.
+El objetivo es encontrara la manera de vencer todos los gimnasios sin pasar por un gimnasio o una pokeparada más de una vez, recorriendo la mínima distancia.
 
 Podemos modelar el problema con un grafo donde cada gimnasio y cada pokeparada se corresponde con un nodo. Es un grafo completo ya que podemos ir desde cualquier posici\'on del plano a cualquier otra, y el peso de las aristas se corresponde con la distancia euclideana\footnote{\url{https://es.wikipedia.org/wiki/Distancia_euclidiana}} calculada utilizando las coordenadas de los nodos. Luego, nuestro objetivo es hallar un camino que pase por todos los nodos que representan a los gimnasios y todas las pokeparadas necesarias para vencerlos, minimizando la distancia del recorrido.
 
