@@ -5,12 +5,20 @@ Camino::Camino(Grafo g, int tamMochila){
     _tamMochila = tamMochila;
     _nodoInicial = NULL;
     _distancia = INV;
+    vector<int> ultimoCambio(2);
+    ultimoCambio[0] = INV;
+    ultimoCambio[1] = INV;
+    _ultimoCambio = ultimoCambio;
 }
 
 Camino::Camino(){
     _tamMochila = INV;
     _nodoInicial = NULL;
     _distancia = INV;
+    vector<int> ultimoCambio(2);
+    ultimoCambio[0] = INV;
+    ultimoCambio[1] = INV;
+    _ultimoCambio = ultimoCambio;
 }
 
 void Camino::leerEntrada(){
@@ -58,6 +66,7 @@ Camino& Camino::operator=(const Camino& otro){
     }
     _distancia = otro._distancia;
     _cambios = otro._cambios;
+    _ultimoCambio = otro._ultimoCambio;
 
     return *this;
 }
@@ -345,7 +354,13 @@ bool Camino::cambiarSiPuedo(Nodo* n1, Nodo* n2){
     #endif
 
     if(pocionesDisponibles >= 0){  
-        return true;
+        if(_ultimoCambio[0] == n1->id && _ultimoCambio[1] == n2->id){
+            return false;
+        } else{
+            _ultimoCambio[0] = n1->id;
+            _ultimoCambio[1] = n2->id;
+            return true;
+        }
     } else{
         if(!estaEnElCamino(n1)){
             reemplazar(n2,n1);
@@ -354,7 +369,6 @@ bool Camino::cambiarSiPuedo(Nodo* n1, Nodo* n2){
         } else{
             permutar(n1,n2);
         }
-
         return false;
     }
 }

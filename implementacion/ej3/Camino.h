@@ -35,6 +35,7 @@ class Camino{
         Nodo* _nodoInicial;
         double _distancia;
         Cambios _cambios;
+        vector<int> _ultimoCambio;
 
         void asignarNodoInicial(Nodo* nodoInicial);
         void asignarDistancia(double distancia);

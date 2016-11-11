@@ -149,3 +149,110 @@ Ejecutar nuestro algoritmo de b\'usqueda local sobre una soluci\'on inicial prod
 
 % ESTE TP: Realizar una experimentacion que permita observar la performance del algoritmo comparando
 % los tiempos de ejecucion y la calidad de las soluciones obtenidas, en funci ́on de las vecindadeS utilizadas y elegir, si es posible, la configuraci ́on que mejores resultados provea para el grupo de instancias utilizado.Si es posible, dar una cota superior para la cantidad de iteraciones de la heur ́ıstica.
+
+Con el objetivo de estudiar los algoritmos propuestos realizamos mediciones con diversos tipos de instancias que permiten hallar una soluci\'on por medio de la heur\'istica golosa que estudiamos anteriormente.
+
+En cada medici\'on registramos: la cantidad de gimnasios, la cantidad de pokeparadas, el tamaño de la mochila, la distancia obtenida con la soluci\'on golosa, la distancia mejorada con una b\'usqueda local, la cantidad de permutaciones realizadas para mejorar la soluci\'on actual, la cantidad de permutaciones para cambiar la soluci\'on actual por otra igualmente buena, la cantidad de reemplazos para mejorar la soluci\'on actual, la cantidad de reemplazos para cambiar la soluci\'on actual por otra igualmente buena, el tamaño final del camino y el tiempo demorado en ciclos de reloj.
+
+Para cada tipo creamos una cantidad fija de instancias de \texttt{Camino} y ejecutamos el algoritmo 100 veces. Cuando intentamos comparar nuestras soluciones con el \'optimo obtenido con backtracking ejecutamos este algoritmo 10 veces.
+
+\paragraph{Instancias aleatorias}
+Para generar cada instancia elegimos un n\'umero aleatorio de gimnasios entre 1 y 100. A cada gimnasio se le fij\'o una cantidad de pociones entre 0 y 10. Luego, sumamos las pociones que fueron asignadas a todos los gimnasios y elegimos una cantidad de pokeparadas random entre (cantidad total de pociones / 3) + 1 y ((cantidad total de pociones / 3) + 1) $\times$ 2. Las coordenadas de las pokeparadas y de los gimnasios se eligieron como n\'umeros aleatorios entre 0 y 1000. El tamaño de la mochila se determin\'o en 12 para evitar el desperdicio de pociones, debido a que lo m\'aximo que puede requerir un gimnasio es 10 pociones. Para estudiar este tipo creamos 30 instancias.
+
+\paragraph{Instancias aleatorias y sus soluciones \'optimas}
+Creamos 18 instancias con 1, 2, ..., 18 nodos cada una. En cada una elegimos la cantidad de gimnasios como el m\'inimo entre un n\'umero aleatorio entre 1 y la cantidad de nodos, y 10. Los nodos restantes corresponden a pokeparadas. Luego, establecemos que la cantidad m\'axima de pociones que puede pedir un gimnasio es (cantidad de pokeparadas $\times$ 3) / cantidad de gimnasios, y a cada nodo de tipo gimnasio le asignamos una cantida de pociones aleatoria entre 1 y el m\'inimo entre 10 y el m\'aximo calculado para la instancia. Nuevamente, las coordenadas se eligieron aleatoriamente entre 0 y 1000, y el tamaño de la mochila se fij\'o en 12.
+
+\paragraph{Instancias de mejor caso}
+Esperamos que la heur\'istica golosa tenga grandes dificultades para hallar caminos cercanos al \'optimo cuando los gimnasios y las pokeparadas se encuentran en \'areas distintas, ya que en primer lugar busca un camino entre los gimnasios y luego recorre las pokeparadas, lo que causar\'ia una ida y vuelta constante entre ambas \'areas. Estos casos, que podr\'iamos considerar como los \textit{peores} de la heur\'istica golosa, se corresonden con unos de los \textit{mejores} de la b\'usqueda local. Es decir, la b\'usqueda local va a tener un porcentaje de mejora mucho mayor que en instancias aleatorias.
+
+Para generar estas
+
+\paragraph{Instancias de mejor caso y sus soluciones \'optimas}
+
+\paragraph{Instancias con \#gimnasios fija e instancias con \#pokeparadas fija}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics{../experimentacion/ej3/expAleat_complejidad_permutaCamino.pdf}
+    \caption{expAleat complejidad permutaCamino}
+    \label{fig:expAleat_complejidad_permutaCamino}
+  \end{center}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics{../experimentacion/ej3/expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija.pdf}
+    \caption{expFijo complejidad permutaYReemplazaPokeparadas cantGimFija}
+    \label{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija}
+  \end{center}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics{../experimentacion/ej3/expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija.pdf}
+    \caption{expFijo complejidad permutaYReemplazaPokeparadas cantPokFija}
+    \label{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija}
+  \end{center}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics{../experimentacion/ej3/expAleat_cantCambios.pdf}
+    \caption{expAleat cantCambios}
+    \label{fig:expAleat_cantCambios}
+  \end{center}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics{../experimentacion/ej3/expMejor_cantCambios.pdf}
+    \caption{expMejor cantCambios}
+    \label{fig:expMejor_cantCambios}
+  \end{center}
+\end{figure}
+
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{ | l | l | l | l | l | }
+            \hline
+            \multicolumn{1}{|c|}{}&
+            \multicolumn{2}{|c|}{\textbf{Instancias aleatorias}}&
+            \multicolumn{2}{|c|}{\textbf{Instancias de mejor caso}}\\
+            \cline{2-5}
+                            &    \textit{Vecindad I}     &    \textit{Vecindad II}    &    \textit{Vecindad I}     &    \textit{Vecindad II}    \\ \hline
+            Media           &    11.368223  &   21.943365   &   70.201509   &    8.155963   \\ \hline
+            Desv\'io estandar       &   3.848846    &    6.707769   &   20.632809   &   3.791787    \\ \hline
+            M\'inimo        &   0.000000    &    0.000000   &   0.000000    &   0.000000    \\ \hline
+            M\'aximo        &   18.463784   &    28.902765  &       84.686633   &    23.047859  \\ \hline
+        \end{tabular}
+    \end{center}
+    \caption{Porcentaje de mejora.}    
+    \label{table:porcentaje_mejora}
+\end{table} 
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics{../experimentacion/ej3/expAleat_cantNodos_tiempo.pdf}
+    \caption{expAleat cantNodos tiempo}
+    \label{fig:expAleat_cantNodos_tiempo}
+  \end{center}
+\end{figure}
+
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{ | l | l | l | l | l | }
+            \hline
+            \multicolumn{1}{|c|}{}&
+            \multicolumn{2}{|c|}{\textbf{Instancias aleatorias}}&
+            \multicolumn{2}{|c|}{\textbf{Instancias de mejor caso}}\\
+            \cline{2-5}
+                        &    \textit{Vecindad I}     &    \textit{Vecindad II}    &    \textit{Vecindad I}     &    \textit{Vecindad II}    \\ \hline
+            Media       &   0.100376    &   0.127016    &   0.116154    &   0.807135    \\ \hline
+            Desv\'io estandar       &   0.096465    &   0.135994    &   0.148876    &   0.937515    \\ \hline
+            M\'inimo    &   0.000000    &   0.000000    &   0.000000    &   0.000000    \\ \hline
+            M\'aximo    &   0.280713    &   0.484252    &   0.492888    &   2.524617    \\ \hline
+        \end{tabular}
+    \end{center}
+    \caption{Error relativo.}    
+    \label{table:error_relativo}
+\end{table} 
