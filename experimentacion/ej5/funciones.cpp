@@ -304,7 +304,7 @@ void generarSalidaGRASP(vector<Camino>& caminos, ofstream& salida){
             }
         }
 
-        for(int r = 0; r < CANT_REPETICIONES; r++){
+        for(int r = 0; r < CANT_REPETICIONES_GRASP; r++){
             grasp g = grasp(gimnasios, gimnasiosPoder, paradas, tamMochila);
             caminoCola = caminoColaVacia;
             auto inicio = RELOJ();

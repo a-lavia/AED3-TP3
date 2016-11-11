@@ -16,20 +16,17 @@ grasp::grasp(vector<pos>& g, vector<int>& gp, vector<pos>& p, int m) : gimnasios
 
 }
 
-float grasp::correr_grasp(int maxIteraciones, float alfa, float omega, int semilla) {
-	correr_grasp(maxIteraciones, alfa, omega, semilla, NULL);
+float grasp::correr_grasp(criterio_parada criterio, int iteraciones, float alfa, float omega, int semilla) {
+	correr_grasp(criterio, iteraciones, alfa, omega, semilla, NULL);
 }
 
-float grasp::correr_grasp(int maxIteraciones, float alfa, float omega, int semilla, queue<int>* solucion) {
+float grasp::correr_grasp(criterio_parada criterio, int iteraciones, float alfa, float omega, int semilla, queue<int>* solucion) {
 
 
 	//Vecinidad para la búsqueda local
 	//permutaCamino,
     //permutaYReemplazaPokeparadas
 	Vecindad vecindad = permutaCamino;
-	
-	//Criterio de parada
-	bool continuarCuandoMejora = true;
 
 	//
 	srand(semilla);
@@ -37,21 +34,34 @@ float grasp::correr_grasp(int maxIteraciones, float alfa, float omega, int semil
 	queue<int> mejorSolucion;
 	float mejorDistancia = FLOAT_MAX;
 
-	for(int i = 0; i < maxIteraciones; i++) {
-		cout << "it " << i << endl;
+	for(int i = 0; i < iteraciones; i++) {
+
+		//cout << "iteracion " << i << endl;
+
 		queue<int> solucionGimnasios = graspSolucionGimnasios(alfa);
 		queue<int> solucionAleatoria = graspSolucionAleatoria(solucionGimnasios, alfa, omega);
 		//float distActual = distanciaCamino(solucionAleatoria);
 
+		//DEBUG PRINT
+		/*queue<int> copio = solucionAleatoria;
+		cout << "camino original " << distanciaCamino(copio) << ' ' << copio.size() << ' ';
+		while(!copio.empty()) {
+			cout << (copio.front()+1) << ' ';
+			copio.pop();
+		}
+		cout << endl;*/
+		
 		Camino bl = Camino(grafo, mochila);
 		bl.asignarSolucion(distanciaCamino(solucionAleatoria), solucionAleatoria);
 		bl.busquedaLocal(vecindad);
 		float distActual = bl.devolverSolucion(solucionAleatoria);
 
+		//cout << "mejor dist " << distActual << endl;
+
 		if(distActual < mejorDistancia) {
 			mejorDistancia = distActual;
 			mejorSolucion = solucionAleatoria;
-			if(continuarCuandoMejora) i = 0;
+			if(criterio == iteraciones_sin_mejorar) i = 0;
 		}
 	}
 
@@ -213,7 +223,7 @@ queue<int> grasp::graspSolucionAleatoria(queue<int>& caminoGimnasios, float alfa
 		pociones -= gimnasiosPoder[caminoGimnasios.front()];
 
 		//
-		if(pociones < 0) cout << "ERRORRR" << endl;
+		if(pociones < 0) cout << "NO HAY SOLUCIÓN" << endl;
 
 		//Lo marco como visitado
 		visitados[caminoGimnasios.front()] = true;

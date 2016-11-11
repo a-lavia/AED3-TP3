@@ -11,17 +11,20 @@
 
 using namespace std;
 
+enum criterio_parada {
+    iteraciones_fijas,
+    iteraciones_sin_mejorar
+};
+
 class grasp {
 
 	public:
 
 		grasp(vector<pos>& g, vector<int>& gp, vector<pos>& p, int m);
 
-		float correr_grasp(int maxIteraciones, float alfa, float omega, int semilla);
+		float correr_grasp(criterio_parada criterio, int iteraciones, float alfa, float omega, int semilla);
 
-		float correr_grasp(int maxIteraciones, float alfa, float omega, int semilla, queue<int>* solucion);
-
-		//float correr_grasp_reactivo(int maxIteraciones);
+		float correr_grasp(criterio_parada criterio, int iteraciones, float alfa, float omega, int semilla, queue<int>* solucion);
 
 	private:
 
