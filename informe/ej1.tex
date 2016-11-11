@@ -3,10 +3,11 @@
 \subsection{Introducci\'on}
 
 Backtracking es una técnica para encontrar solución a algunos problemas computacionales, que incrementalmente construye candidatos a solución y abandona cada candidato parcial inmediatamente tras chequear que este no puede ser completado para generar una solución válida. Se utiliza en caso de que el problema admita como solución a un candidato ``parcial''.
+Para esta solución pensamos a los gimnasios y paradas como nodos de un grafo completo donde los pesos de las aristas equivalen a la distancia entre los nodos.
 
-A continuación se puede observar un psuedocódigo para la idea general de backtracking, 
 
 \begin{comment}
+A continuación se puede observar un psuedocódigo para la idea general de backtracking.
 \begin{algorithm}[H]
 \label{}
 \caption{Idea general de backtracking}
@@ -37,27 +38,19 @@ procedure bt(c)
     bt(s)
     s ← next(P,s)
 
+En el primer llamado a la función, S es el conjunto con todos los elementos que se podrían utilizar en una solución, y N es un conjunto vacío, ya que aún no se ha chequeado nada.
 \end{comment}
 
 
 
-En el primer llamado a la función, S es el conjunto con todos los elementos que se podrían utilizar en una solución, y N es un conjunto vacío, ya que aún no se ha chequeado nada.
-
 \subsection{Algoritmo}
 
-
-
-
-
-
-\subsection{Algoritmo}
-
-%La solución que utilizamos para obtener el camino óptimo es backtracking. 
-%Para analizar cada camino utilizamos los siguientes criterios:
+La solución que implementamos para obtener el camino óptimo es un backtracking. 
+Para analizar cada camino utilizamos los siguientes criterios:
 \begin{itemize}
-    \item Si el camino que se está chequeando pasa por todos los gimnasios y recorre menos distancia que la mejor solucion encontrada hasta el momento, entonces se reemplaza esa solución con el camino actual.
-    \item Si la distancia del camino actual es mayor a la distancia del mejor encontrado, entonces no se chequean mas caminos que partan de este.
-    \item Si la distancia del camino actual es menor a la distancia del mejor encontrado, y es un movimiento válido (en caso de ser un gimnasio el último nodo agregado al camino, habrá que chequear que las pociones fueran suficientes para vencerle); entonces se chequean todos los caminos que partan de este último, sólo teniendo en cuenta como continuación los nodos que aún no están en el camino actual.
+    \item Si el camino que se está chequeando pasa por todos los gimnasios y recorre menos distancia que la mejor solucion encontrada hasta el momento, se reemplaza esa solución con el camino actual.
+    \item Si la distancia del camino actual es mayor a la distancia del mejor encontrado, no se chequean mas caminos que partan de este.
+    \item Si la distancia del camino actual es menor a la distancia del mejor hallado, y es un movimiento válido (en caso de ser un gimnasio el último nodo agregado al camino, habrá que chequear que las pociones fueran suficientes para vencerle); entonces se verifican todos los caminos que partan desde este último, sólo teniendo en cuenta como continuación los nodos que aún no están en el camino actual.
 \end{itemize}
 
 \begin{comment}
@@ -66,6 +59,7 @@ En el primer llamado a la función, S es el conjunto con todos los elementos que
 \caption{B\'usqueda local}
 \begin{algorithmic}[1]
 \Statex \underline{Entrada}: camino : \texttt{Camino} y criterio : \texttt{Vecindad}
+\Statex \underline{Entrada}: S un conjunto de soluciones, N una funci\'on que devuelve las soluciones vecinas a otra dada y f una funci\'on que eval\'ua una soluci\'on
 \medskip
 \State camino.asignarSoluci\'onGolosa()
 \If{camino.encontr\'eCamino()}
@@ -91,10 +85,15 @@ En el primer llamado a la función, S es el conjunto con todos los elementos que
 \Statex \underline{Salida}: camino.imprimirSoluci\'on()
 \end{algorithmic}
 \end{algorithm}
-
 \end{comment}
 
 
+\subsection{Complejidad}
+
+El backtracking, a lo sumo chequea cada combinacion posible de gimnasios y paradas en todos sus ordenes posibles; lo que, dicho de otra manera serían todas las permutaciones de cada subconjunto de partes del conjunto de nodos. 
+Como cada permutacion de longitud k se construye a partir de una permutación de longitud k-1, no necesitamos construir ningún camino más de una vez.
+Esto nos lleva a ver que lo que recorremos es un arbol, donde la raíz es el "conjunto vacío" (no haber recorrido nada) y el camino simple desde la misma hasta cada hoja es una permutación diferente de longitud n, donde n es la cantidad de nodos.
+Habiendo entendido esto, llegamos rapidamente a la conclusión de que nuestro backtracking pertenece a la clase de complejidad \bigo{n!} ya que construye a lo sumo todas las permutaciones de longitud n, las cuales contienen a todas las de tamaños menores.
 
 
 \subsection{Experimentaci\'on}
