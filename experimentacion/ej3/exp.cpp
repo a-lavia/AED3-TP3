@@ -37,7 +37,7 @@ int main(int argc, char* argv[]){
         case 1 : {
             cout << "Instancias aleatorias y sus soluciones optimas:" << endl << endl;
 
-            vector<Camino> caminos(CANT_NODOS_MAX_OP + 1);
+            vector<Camino> caminos(CANT_NODOS_MAX_OP);
             generarCaminosAleatOp(caminos);
             asignarSoluciones(caminos);
 
@@ -99,7 +99,7 @@ int main(int argc, char* argv[]){
         case 3 : {
             cout << "Instancias donde la busqueda local corrige mejor y sus soluciones optimas" << endl << endl;
 
-            vector<Camino> caminos(CANT_NODOS_MAX_OP + 1);
+            vector<Camino> caminos(CANT_NODOS_MAX_OP);
             generarCaminosMejorOp(caminos);
             asignarSoluciones(caminos);
 
