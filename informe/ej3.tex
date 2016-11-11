@@ -178,7 +178,7 @@ Para comprobar emp\'iricamente las complejidades te\'oricas dividimos el tiempo 
   \begin{center}
     \includegraphics{../experimentacion/ej3/expAleat_complejidad_permutaCamino.pdf}
     \caption{Tiempo sobre complejidad en funci\'on de la cantidad de nodos para la vecindad que permuta el camino, utilizando instancias aleatorias.}
-    \label{fig:expAleat_complejidad_permutaCamino}
+    \label{fig:ej3_expAleat_complejidad_permutaCamino}
   \end{center}
 \end{figure}
 
@@ -186,7 +186,7 @@ Para comprobar emp\'iricamente las complejidades te\'oricas dividimos el tiempo 
   \begin{center}
     \includegraphics{../experimentacion/ej3/expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija.pdf}
     \caption{Tiempo sobre complejidad en funci\'on de la cantidad de nodos para la vecindad que permuta y reemplaza pokeparadas, utilizando una cantidad de gimnasios fija.}
-    \label{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija}
+    \label{fig:ej3_expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija}
   \end{center}
 \end{figure}
 
@@ -194,11 +194,11 @@ Para comprobar emp\'iricamente las complejidades te\'oricas dividimos el tiempo 
   \begin{center}
     \includegraphics{../experimentacion/ej3/expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija.pdf}
     \caption{Tiempo sobre complejidad en funci\'on de la cantidad de nodos para la vecindad que permuta y reemplaza pokeparadas, utilizando una cantidad de pokeparadas fija.}
-    \label{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija}
+    \label{fig:ej3_expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija}
   \end{center}
 \end{figure}
 
-Como podemos observar en las figuras \ref{fig:expAleat_complejidad_permutaCamino}, \ref{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija} y \ref{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija} la relaci\'on entre el tiempo de ejecuci\'on y las cotas te\'oricas de los algoritmos es constante, lo que permite dar por \textit{comprobadas} las complejidades.
+Como podemos observar en las figuras \ref{fig:ej3_expAleat_complejidad_permutaCamino}, \ref{fig:ej3_expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija} y \ref{fig:ej3_expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija} la relaci\'on entre el tiempo de ejecuci\'on y las cotas te\'oricas de los algoritmos es constante, lo que permite dar por \textit{comprobadas} las complejidades.
 
 \subsubsection{\#iteraciones de la b\'usqueda}
 
@@ -208,7 +208,7 @@ Con el objetivo de dar una cota superior para la cantidad de iteraciones que rea
   \begin{center}
     \includegraphics{../experimentacion/ej3/expAleat_cantCambios.pdf}
     \caption{Cantidad de cambios sobre cantidad de nodos en funci\'on de la cantidad de nodos usando instancias aleatorias.}
-    \label{fig:expAleat_cantCambios}
+    \label{fig:ej3_expAleat_cantCambios}
   \end{center}
 \end{figure}
 
@@ -216,11 +216,11 @@ Con el objetivo de dar una cota superior para la cantidad de iteraciones que rea
   \begin{center}
     \includegraphics{../experimentacion/ej3/expMejor_cantCambios.pdf}
     \caption{Cantidad de cambios sobre cantidad de nodos en funci\'on de la cantidad de nodos usando instancias de mejor caso para la b\'usqueda.}
-    \label{fig:expMejor_cantCambios}
+    \label{fig:ej3_expMejor_cantCambios}
   \end{center}
 \end{figure}
 
-En las figuras \ref{fig:expAleat_cantCambios} y \ref{fig:expMejor_cantCambios} no parece haber una pendiente marcada en ning\'un sentido, por lo que podr\'iamos pensar que nuestra hip\'otesis es v\'alida.
+En las figuras \ref{fig:ej3_expAleat_cantCambios} y \ref{fig:ej3_expMejor_cantCambios} no parece haber una pendiente marcada en ning\'un sentido, por lo que podr\'iamos pensar que nuestra hip\'otesis es v\'alida.
 
 Observando el gr\'afico correspondiente a las instancias aleatorias podr\'iamos atrevernos a acotar la cantidad de cambios por n + m, sin embargo, en el mejor caso de la b\'usqueda estos ascienden a 4 $\times$ (n + m). Si este caso es efectivamente el que logra la mayor \textit{mejora} con respecto a la soluci\'on golosa, podr\'ia tambi\'en ser el que m\'as cambios demanda, lo que permitir\'ia acotar la cantidad de iteraciones por 4 $\times$ (n + m).
 
@@ -262,11 +262,11 @@ Como esper\'abamos, la media del porcentaje var\'ia enormemente. Adem\'as es int
   \begin{center}
     \includegraphics{../experimentacion/ej3/expAleat_cantNodos_tiempo.pdf}
     \caption{Tiempo en funci\'on de la cantidad de nodos para ambas vecindades usando instancias aleatorias.}
-    \label{fig:expAleat_cantNodos_tiempo}
+    \label{fig:ej3_expAleat_cantNodos_tiempo}
   \end{center}
 \end{figure}
 
-En la figura \ref{fig:expAleat_cantNodos_tiempo} podemos apreciar la relaci\'on entre la cantidad de nodos y el tiempo de ejecuci\'on con instancias aleatorias. Como podr\'ia esperarse, la que m\'as demora es la que posee el mayor porcentaje de mejora, es decir, la que probablemente m\'as modificaciones realiza sobre la soluci\'on inicial.
+En la figura \ref{fig:ej3_expAleat_cantNodos_tiempo} podemos apreciar la relaci\'on entre la cantidad de nodos y el tiempo de ejecuci\'on con instancias aleatorias. Como podr\'ia esperarse, la que m\'as demora es la que posee el mayor porcentaje de mejora, es decir, la que probablemente m\'as modificaciones realiza sobre la soluci\'on inicial.
 
 Por \'ultimo analizamos c\'uan buenas son las soluciones obtenidas por medio de la b\'usqueda local con respecto a laa \'optimas. Medimos esta magnitud con su error relativo:
 

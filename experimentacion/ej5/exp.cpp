@@ -54,7 +54,7 @@ int main(int argc, char* argv[]){
         case 1 : {
             cout << "Instancias aleatorias y sus soluciones optimas:" << endl << endl;
 
-            vector<Camino> caminos(CANT_NODOS_MAX_OP + 1);
+            vector<Camino> caminos(CANT_NODOS_MAX_OP);
             generarCaminosAleatOp(caminos);
 
             string stringExperimento = stringPrincipio + "-aleatOp";

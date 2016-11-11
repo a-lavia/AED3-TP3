@@ -18,7 +18,7 @@ void generarCaminosAleat(vector<Camino>& caminos){
 }
 
 void generarCaminosAleatOp(vector<Camino>& caminos){
-    assert(caminos.size() == CANT_NODOS_MAX_OP + 1);
+    assert(caminos.size() == CANT_NODOS_MAX_OP);
 
     cout << "Generando caminos... ";
 
@@ -28,7 +28,7 @@ void generarCaminosAleatOp(vector<Camino>& caminos){
         generarGrafoAleatFijo(cantGimnasios, i - cantGimnasios, g);
 
         Camino c(g, TAM_MOCHILA);
-        caminos[i] = c;
+        caminos[i - 1] = c;
     }
 
     cout << "Listo" << endl;
@@ -263,6 +263,7 @@ void generarSalidaGRASP(vector<Camino>& caminos, ofstream& salida){
     vector<pos> gimnasios, paradas, gimnasiosVacio, paradasVacio;
     vector<int> gimnasiosPoder, gimnasiosPoderVacio;
 
+    criterio_parada criterio = iteraciones_fijas;
     int iteraciones = 1000;
     float alfa = 0.1;
     float omega = 0.15;
@@ -308,7 +309,7 @@ void generarSalidaGRASP(vector<Camino>& caminos, ofstream& salida){
             grasp g = grasp(gimnasios, gimnasiosPoder, paradas, tamMochila);
             caminoCola = caminoColaVacia;
             auto inicio = RELOJ();
-                distancia =  g.correr_grasp(iteraciones, alfa, omega, semilla, &caminoCola);
+                distancia =  g.correr_grasp(criterio, iteraciones, alfa, omega, semilla, &caminoCola);
             auto fin = RELOJ();
 
             tamCamino = caminoCola.size();

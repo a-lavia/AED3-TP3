@@ -18,7 +18,7 @@ void generarCaminosAleat(vector<Camino>& caminos){
 }
 
 void generarCaminosAleatOp(vector<Camino>& caminos){
-    assert(caminos.size() == CANT_NODOS_MAX_OP + 1);
+    assert(caminos.size() == CANT_NODOS_MAX_OP);
 
     cout << "Generando caminos... ";
 
@@ -28,7 +28,7 @@ void generarCaminosAleatOp(vector<Camino>& caminos){
         generarGrafoAleatFijo(cantGimnasios, i - cantGimnasios, g);
 
         Camino c(g, TAM_MOCHILA);
-        caminos[i] = c;
+        caminos[i - 1] = c;
     }
 
     cout << "Listo" << endl;
@@ -54,7 +54,7 @@ void generarCaminosMejor(vector<Camino>& caminos){
 }
 
 void generarCaminosMejorOp(vector<Camino>& caminos){
-    assert(caminos.size() == CANT_NODOS_MAX_OP + 1);
+    assert(caminos.size() == CANT_NODOS_MAX_OP);
 
     cout << "Generando caminos... ";
 
@@ -66,7 +66,7 @@ void generarCaminosMejorOp(vector<Camino>& caminos){
         tamMochila = generarGrafoMejorFijo(cantGimnasios, i - cantGimnasios, g);
 
         Camino c(g, tamMochila);
-        caminos[i] = c;
+        caminos[i - 1] = c;
     }
 
     cout << "Listo" << endl;
