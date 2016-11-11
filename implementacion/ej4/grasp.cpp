@@ -38,7 +38,7 @@ float grasp::correr_grasp(int maxIteraciones, float alfa, float omega, int semil
 	float mejorDistancia = FLOAT_MAX;
 
 	for(int i = 0; i < maxIteraciones; i++) {
-		cout << "it " << i << endl;
+		// cout << "it " << i << endl;
 		queue<int> solucionGimnasios = graspSolucionGimnasios(alfa);
 		queue<int> solucionAleatoria = graspSolucionAleatoria(solucionGimnasios, alfa, omega);
 		//float distActual = distanciaCamino(solucionAleatoria);
