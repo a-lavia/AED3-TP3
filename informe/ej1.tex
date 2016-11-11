@@ -53,39 +53,37 @@ Para analizar cada camino utilizamos los siguientes criterios:
     \item Si la distancia del camino actual es menor a la distancia del mejor hallado, y es un movimiento válido (en caso de ser un gimnasio el último nodo agregado al camino, habrá que chequear que las pociones fueran suficientes para vencerle); entonces se verifican todos los caminos que partan desde este último, sólo teniendo en cuenta como continuación los nodos que aún no están en el camino actual.
 \end{itemize}
 
-\begin{comment}
 \begin{algorithm}[H]
 \label{}
-\caption{B\'usqueda local}
+\caption{Backtracking}
 \begin{algorithmic}[1]
-\Statex \underline{Entrada}: camino : \texttt{Camino} y criterio : \texttt{Vecindad}
-\Statex \underline{Entrada}: S un conjunto de soluciones, N una funci\'on que devuelve las soluciones vecinas a otra dada y f una funci\'on que eval\'ua una soluci\'on
+\Statex \underline{Entrada}: distanciaActual: \texttt{float}, pociones: \texttt{int}, gimnasiosPorVisitar: \texttt{int}, recorridos: \texttt{cola}, restantes: \texttt{cola}, mejorSolucion{cola}
 \medskip
-\State camino.asignarSoluci\'onGolosa()
-\If{camino.encontr\'eCamino()}
-    \If{criterio == permutaCamino}
-        \State nodosConsiderados $\gets$ nodos que forman el camino hallado por el algoritmo goloso
-    \Else
-        \State nodosConsiderados $\gets$ nodos que representan a las pokeparadas del grafo
+\If{gimnasiosPorVisitar == 0}
+    \If{distanciaActual < mejorSolucion.distancia}
+        \State mejorSolucion $\gets$ recorridos
     \EndIf
-    \State busco $\gets$ true
-    \State dicc(int, conj(int)) nodosCambiados $\gets$ Vac\'io()
-    \While{busco}
-        \While{camino.encuentroSoluci\'onVecinaMejor(nodosConsiderados)}
-            \If{\#nodosCambiados.claves() $>$ 0}
-                \State nodosCambiados $\gets$ Vac\'io()
+\Else
+    \If{distanciaActual < mejorSolucion.distancia}
+        \State ultimo $\gets$ restantes.back
+        \While{haya nodos para visitar}
+            \State proximoAVisitar $\gets$ restantes.front
+            \State restantes.pop
+            \State dist $\gets$ distancia(recorridos.back, proximoAVisitar)
+            \State recorridos.push(proximoAVisitar)
+
+            \If{esGimnasio(proximoAVisitar)}
+                \State backtracking(distanciaActual+dist,pociones-pociones(proximoAVisitar), gimnasiosPorVisitar-1, restantes, recorridos, mejorSolucion)
+            \Else
+                \State backtracking(distanciaActual+dist, min(pociones+3, mochila), gimnasiosPorvisitar, restantes, recorridos, mejorSolucion)
             \EndIf
         \EndWhile
-        \If{$\neg$camino.encuentroSoluci\'onVecinaIgual(nodosConsiderados, nodosCambiados)}
-            \State busco $\gets$ false
-        \EndIf
-    \EndWhile
+    \EndIf
 \EndIf
 \medskip
-\Statex \underline{Salida}: camino.imprimirSoluci\'on()
+\Statex \underline{Salida}: mejorSolucion.imprimirSoluci\'on
 \end{algorithmic}
 \end{algorithm}
-\end{comment}
 
 
 \subsection{Complejidad}
@@ -113,7 +111,6 @@ A continuación observamos un gráfico en el que se refleja la división entre l
 
 Como podemos observar en la figura \ref{fig:ej1_complejidad}, la funcion N! / cantidad de ticks es decreciente, lo que muestra que N! acota superiormente a nuestra implementación.
 
-
 Para el segundo experimento, definimos un parámetro de dificultad que representa el porcentaje de paradas necesarias para poder triunfar en todos los gimnasios. Creemos que a medida que aumenta esta dificultad, el backtracking tardará más en encontrar alguna solución viable y podará menos soluciones parciales, por lo que tomará más tiempo de ejecución.
 Aquí debajo podemos ver un heatmap en el que mostramos la cantidad de ticks de reloj en función de la cantidad de nodos y de la dificultad.
 
@@ -126,3 +123,5 @@ Aquí debajo podemos ver un heatmap en el que mostramos la cantidad de ticks de 
 \end{figure}
 
 Como podemos observar en la figura \ref{fig:ej1_conHeuristica}, la cantidad de ticks del clock aumenta en función de ambas variables, por lo que nuestra hipótesis está confirmada.
+
+Para este último experimento, probamos utilizar la heurística del ejercicio 2 para hallar una distancia para usar como cota en el bactracking al realizar el primer llamado. Las mediciones realizadas tanto con la cota como sin la cota dieron muy similares, lo que nos llevo a entender que el backtracking hallaba una gran cantidad de soluciones con distancias menores que la encontrada por la heurística, por lo que el tiempo de cómputo no se vio afectado. 
