@@ -2,11 +2,11 @@
 
 \subsection{Introducci\'on}
 
-Con el objetivo de mejorar las soluciones obtenidas hasta el momento con las heuristicas constructivas golosas y la de búsqueda local, decidimos implementar una metaheuristica \texttt{GRASP} (GREEDY RANDOMIZED ADAPTIVE SEARCH PROCEDURES), esta es una metaheuristica que consiste en construir soluciones iterativamente en base a otras heuristicas quedandose con la mejor de todas las obtenidas. Cada iteración consta fundamentalmente de dos fases una parte constructiva golosa/aleatoria y otra de búsqueda local, esto se repetira hasta cumplir con un cierto críterio de parada.
+Con el objetivo de mejorar las soluciones obtenidas hasta el momento con las heuristicas constructivas golosas y la de búsqueda local, decidimos implementar una metaheuristica GRASP (\textit{Greedy Randomized Adaptatative Search procedures}), esta es una metaheuristica que consiste en construir soluciones iterativamente en base a otras heuristicas quedandose con la mejor de todas las obtenidas. Cada iteración consta fundamentalmente de dos fases una parte constructiva golosa/aleatoria y otra de búsqueda local, esto se repetira hasta cumplir con un cierto críterio de parada.
 
 \subsection{Algoritmo}
 
-El algoritmo implementando de \texttt{GRASP} consta de un ciclo principal donde en cada iteración construimos una solución factible del problema con una heuristica constructiva en base a los parámetros $\alpha$ y $\omega$, estos parámetros indicaran lo golosa o aleatoria que deberá ser la solución, al resultado de la heuristica lo refinamos aplicándole búsqueda local considerando una cierta vecindad y comprobamos si el resultado mejoro con respecto a la mejor solución obtenida hasta el momento para conservarla, luego el ciclo se repite si el criterio de parada no fue alcanzado. Inicialmente recibimos como parámetros un criterio de parada del algoritmo, los valores $\alpha$ y $\omega$ y una semilla que usaremos para generar números pseudoaleatorios, en pseudocódigo tenemos lo siguiente:
+El algoritmo implementando de GRASP consta de un ciclo principal donde en cada iteración construimos una solución factible del problema con una heuristica constructiva en base a los parámetros $\alpha$ y $\omega$, estos parámetros indicaran lo golosa o aleatoria que deberá ser la solución, al resultado de la heuristica lo refinamos aplicándole búsqueda local considerando una cierta vecindad y comprobamos si el resultado mejoro con respecto a la mejor solución obtenida hasta el momento para conservarla, luego el ciclo se repite si el criterio de parada no fue alcanzado. Inicialmente recibimos como parámetros un criterio de parada del algoritmo, los valores $\alpha$ y $\omega$ y una semilla que usaremos para generar números pseudoaleatorios, en pseudocódigo tenemos lo siguiente:
 
 
 \begin{algorithm}[H]
@@ -16,18 +16,18 @@ El algoritmo implementando de \texttt{GRASP} consta de un ciclo principal donde 
 
 \begin{algorithmic}[1]
 
-\Statex \underline{Entrada}: Criterio de parada, $\alpha$, $\omega$, Semilla
+\Statex \underline{Entrada}: Criterio de parada, $\alpha$, $\omega$, semilla
 \medskip
-\State MejorSolucion $\gets$ $\emptyset$
+\State mejorSoluci\'on $\gets$ $\emptyset$
 \While{Criterio de parada no satisfecho}
-    \State SolucionHeuristica $\gets$ ConstruirSolucionHeuristica($\alpha$, $\omega$)
-	\State Solucion $\gets$ AplicarBusquedaLocal(SolucionHeuristica)
-	\If{Distancia(Solucion) $<$ Distancia(MejorSolucion)}
-		\State MejorSolucion $\gets$ Solucion
+    \State soluci\'onHeur\'istica $\gets$ ConstruirSoluci\'onHeur\'istica($\alpha$, $\omega$)
+	\State soluci\'on $\gets$ AplicarB\'usquedaLocal(soluci\'onHeur\'istica)
+	\If{Distancia(soluci\'on) $<$ Distancia(mejorSoluci\'on)}
+		\State mejorSoluci\'on $\gets$ soluci\'on
 	\EndIf
 \EndWhile
 \medskip
-\Statex \underline{Salida}: MejorSolucion
+\Statex \underline{Salida}: mejorSoluci\'on
 
 \end{algorithmic}
 \end{algorithm}
@@ -37,22 +37,22 @@ La primer fase consiste en armar una solución basada en la heuristica del ejerc
 \begin{algorithm}[H]
 
 \label{}
-\caption{Construir camino gimnasios}
+\caption{Construir camino de gimnasios}
 
 \begin{algorithmic}[1]
 
 \Statex \underline{Entrada}: $\alpha$
 \medskip
-\State Camino $\gets$ $\emptyset$
-\State Candidatos $\gets$ Gimnasios
-\While{Hay Gimnasios restantes que agregar a Camino}
-    \State EvaluarCostos(Candidatos)
-	\State MejoresCandidatos $\gets$ CandidatosRestringidos(Candidatos, $\alpha$)
-	\State Gimnasio $\gets$ ObtenerGimnasioAleatorio(MejoresCandidatos)
-	\State Agregar(Gimnasio, Camino)
+\State camino $\gets$ $\emptyset$
+\State candidatos $\gets$ gimnasios
+\While{Hay gimnasios restantes para agregar al camino}
+    \State EvaluarCostos(candidatos)
+	\State mejoresCandidatos $\gets$ CandidatosRestringidos(candidatos, $\alpha$)
+	\State gimnasio $\gets$ ObtenerGimnasioAleatorio(mejoresCandidatos)
+	\State Agregar(gimnasio, camino)
 \EndWhile
 \medskip
-\Statex \underline{Salida}: Camino
+\Statex \underline{Salida}: camino
 
 \end{algorithmic}
 \end{algorithm}
@@ -66,18 +66,18 @@ Para la elección de los candidatos restringidos vamos a considerar sobre todos 
 
 \begin{algorithmic}[1]
 
-\Statex \underline{Entrada}: Candidatos, $\alpha$
+\Statex \underline{Entrada}: candidatos, $\alpha$
 \medskip
-\State CostoMin $\gets$ CalcularCostoMin(Candidatos)
-\State CostoMax $\gets$ CalcularCostoMax(Candidatos)
-\State CandidatosRestringidos $\gets$ $\emptyset$
-\For{C : Candidatos}
-	\If{Costo(C) $\in [costo_{min}, costo_{min} + \alpha * (costo_{max} - costo_{min})]$}
-		\State Agregar(C, CandidatosRestringidos)
+\State costoM\'in $\gets$ CalcularCostoM\'in(candidatos)
+\State costoM\'ax $\gets$ CalcularCostoM\'ax(candidatos)
+\State candidatosRestringidos $\gets$ $\emptyset$
+\For{c : candidatos}
+	\If{Costo(c) $\in$ [costoM\'in, costoM\'in + $\alpha$ $\times$ (costoM\'ax - costoM\'in)]}
+		\State Agregar(c, candidatosRestringidos)
 	\EndIf
 \EndFor
 \medskip
-\Statex \underline{Salida}: CandidatosRestringidos
+\Statex \underline{Salida}: candidatosRestringidos
 
 \end{algorithmic}
 \end{algorithm}
@@ -87,32 +87,32 @@ Con el camino de gimnasios debemos seleccionar las pokeparadas necesarias que de
 \begin{algorithm}[H]
 
 \label{}
-\caption{Construir solucion heuristica}
+\caption{Construir soluci\'on heur\'istica}
 
 \begin{algorithmic}[1]
 
 \Statex \underline{Entrada}: $\alpha$, $\omega$
 \medskip
-\State CaminoGimnasios $\gets$ ConstruirCaminoGimnasios($\alpha$)
-\State Solucion $\gets$ $\emptyset$
-\State Pociones $\gets$ $0$
-\State Candidatos $\gets$ Pokeparadas
+\State caminoGimnasios $\gets$ ConstruirCaminoGimnasios($\alpha$)
+\State soluci\'on $\gets$ $\emptyset$
+\State pociones $\gets$ $0$
+\State candidatos $\gets$ pokeparadas
 
-\While{Hay Gimnasios en CaminoGimnasios}
-	\While{Pociones $<$ Poder(Prox(CaminoGimnasios)) $\lor$ (Pociones $<$ Mochila $\land$ BoolRnd($\omega$))}
-		\State EvaluarCostos(Candidatos)
-		\State MejoresCandidatos $\gets$ CandidatosRestringidos(Candidatos, $\alpha$)
-		\State Pokeparada $\gets$ ObtenerPokeparadaAleatorio(MejoresCandidatos)
-		\State Agregar(Pokeparada, Solucion)
-		\State Pociones $\gets$ Minimo(Pociones$+3$, Mochila)
+\While{Hay gimnasios en caminoGimnasios}
+	\While{pociones $<$ Poder(Pr\'ox(caminoGimnasios)) $\lor$ (pociones $<$ mochila $\land$ BoolRnd($\omega$))}
+		\State EvaluarCostos(candidatos)
+		\State MejoresCandidatos $\gets$ CandidatosRestringidos(candidatos, $\alpha$)
+		\State pokeparada $\gets$ ObtenerPokeparadaAleatoria(mejoresCandidatos)
+		\State Agregar(pokeparada, soluci\'on)
+		\State pociones $\gets$ M\'inimo(pociones$+3$, mochila)
 	\EndWhile
-	\State Pociones $\gets$  Pociones $-$ Poder(Prox(CaminoGimnasios))
-	\State  Agregar(Prox(CaminoGimnasios), Solucion)
-	\State  SacarPrimero(CaminoGimnasios)
+	\State pociones $\gets$  pociones $-$ Poder(Pr\'ox(caminoGimnasios))
+	\State  Agregar(Pr\'ox(caminoGimnasios), soluci\'on)
+	\State  SacarPrimero(caminoGimnasios)
 \EndWhile
 
 \medskip
-\Statex \underline{Salida}: Solucion
+\Statex \underline{Salida}: soluci\'on
 
 \end{algorithmic}
 \end{algorithm}

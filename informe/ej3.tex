@@ -26,7 +26,7 @@ Presentamos a continuaci\'on un pseudoc\'odigo que ilustra la idea general de es
 
 Para implementar una heur\'istica de b\'usqueda local para nuestro problema utilizamos una clase llamada \texttt{Camino} que est\'a formada por un grafo (en nuestra implementaci\'on son instancias de la clase \texttt{Grafo}), el tamaño de la mochila, la distancia computada hasta el momento y un puntero al primer nodo del grafo visitado en el recorrido actual, siendo todos los nodos elementos del tipo \texttt{Nodo}.
 
-La clase \texttt{Grafo} est\'a compuesta por un vector de nodos y una matriz con la distancia entre cada par de nodos. Esta distancia se corresponde con la distancia euclideana\footnote{\url{https://es.wikipedia.org/wiki/Distancia_euclidiana}} calculada utilizando sus coordenadas.
+La clase \texttt{Grafo} est\'a compuesta por un vector de nodos y una matriz con la distancia entre cada par de nodos. Esta distancia se corresponde con la distancia euclideana calculada utilizando sus coordenadas.
 
 Cada instancia de \texttt{Nodo} tiene un n\'umero de identificaci\'on, sus coordendas x e y, la cantidad de pociones que demanda u otorga, un valor booleano que indica si el nodo representa a un gimnasio, un puntero a su nodo anterior y otro a su nodo siguiente dentro del camino actual.
 
