@@ -1,98 +1,140 @@
 \section{Ejercicio IV: Metaheur\'istica}
 
-Introducción:
+\subsection{Introducci\'on}
 
-Con el objetivo de mejorar las soluciones obtenidas hasta el momento con las heuristicas constructivas golosas y la de búsqueda local, decidimos implementar una metaheuristica GRASP (GREEDY RANDOMIZED ADAPTIVE SEARCH PROCEDURES), esta es una metaheuristica que consiste en construir soluciones iterativamente en base a otras heuristicas quedandose con la mejor de todas las obtenidas. Cada iteración consta fundamentalmente de dos fases una parte constructiva golosa/aleatoria y otra de búsqueda local, esto se repetira hasta cumplir con un cierto críterio de parada.
+Con el objetivo de mejorar las soluciones obtenidas hasta el momento con las heuristicas constructivas golosas y la de búsqueda local, decidimos implementar una metaheuristica \texttt{GRASP} (GREEDY RANDOMIZED ADAPTIVE SEARCH PROCEDURES), esta es una metaheuristica que consiste en construir soluciones iterativamente en base a otras heuristicas quedandose con la mejor de todas las obtenidas. Cada iteración consta fundamentalmente de dos fases una parte constructiva golosa/aleatoria y otra de búsqueda local, esto se repetira hasta cumplir con un cierto críterio de parada.
 
-Algoritmo:
+\subsection{Algoritmo}
 
-El algoritmo implementando de GRASP consta de un ciclo principal donde en cada iteracion construimos una solución factible del problema con una heuristica constructiva en base a los parametros alfa y omega, estos parámetros indicaran lo golosa o aleatoria que debera ser la solución, al resultado de la heuristica lo refinamos aplicandole búsqueda local considerando una cierta vecindad y comprobamos si el resultado mejoro con respecto a la mejor solución obtenida hasta el momento para conservarla, luego el ciclo se repite si el criterio de parada no fue alcanzado. Inicialmente recibimos como parametros un criterio de parada del algoritmo, los valores de los parametros alfa y omega y una semilla que usaremos para generar numeros pseudoaleatorios, en pseudocódigo tenemos lo siguiente:
-
-Ciclo principal del procedimiento GRASP:
-
-	GRASP (criterio de parada C, valor alfa, valor omega, semilla S)
-
-	Solucion mejorSolucion
-
-	Mientras Criterio C no satisfecho
-
-		Solucion solucion
-		solucion <- ConstruirSolucionHeuristica(alfa, omega)
-		solucion <- AplicarBusquedaLocal(vecindad, solucion)
-		If Distacia(solucion) < Distancia(mejorSolucion)
-			mejorSolucion <- solucion
-
-	Devolver mejorSolucion
+El algoritmo implementando de \texttt{GRASP} consta de un ciclo principal donde en cada iteración construimos una solución factible del problema con una heuristica constructiva en base a los parámetros $\alpha$ y $\omega$, estos parámetros indicaran lo golosa o aleatoria que deberá ser la solución, al resultado de la heuristica lo refinamos aplicándole búsqueda local considerando una cierta vecindad y comprobamos si el resultado mejoro con respecto a la mejor solución obtenida hasta el momento para conservarla, luego el ciclo se repite si el criterio de parada no fue alcanzado. Inicialmente recibimos como parámetros un criterio de parada del algoritmo, los valores $\alpha$ y $\omega$ y una semilla que usaremos para generar números pseudoaleatorios, en pseudocódigo tenemos lo siguiente:
 
 
-#Heuristica:
-#El funcionamiento de esta heuristica constructiva golosa consta de dos partes, primero consideramos de forma golosa 
-#EL objetivo es recorrer gimnasios, paradas solo si es necesario bla bla 
+\begin{algorithm}[H]
 
-La primer fase consiste en armar una solución basada a la heuristica planteada anteriormente pero introduciendo como cambio dos parametros que indicaran que tan golosa es la elección de elementos. Primero vamos a considerar un camino de todos los gimnasios que tendremos que recorrer, todos estos seran nuestros candidatos a incorporar a la solución y le asignaremos a cada uno de ellos un 'costo incremental' a partir de una evaluación greedy, este costo incremental representa que tanto nos cuesta agregar el elemento a la solución que estamos armando y esta determinado por la distancia del elemento con el último agregado a la lista, inicialmente sera cero si no hay elementos en la lista. Luego a partir de todos nuestros candidatos creamos una nueva lista de candidatos restringidos formada por los mejores candidatos de todos, es decir los que tienen menor costo incremental para incorporarse a la solución (parte greedy del algoritmo), de esta lista de candidatos restringidos tomamos uno al azar (parte probabilistica) y lo incorporamos al camino que estamos construyendo y todos los costos incrementales del resto de los candidatos son vueltos a evaluar (parte adaptativa). En pseudocódigo:
+\label{}
+\caption{Ciclo principal de GRASP}
+
+\begin{algorithmic}[1]
+
+\Statex \underline{Entrada}: Criterio de parada, $\alpha$, $\omega$, Semilla
+\medskip
+\State MejorSolucion $\gets$ $\emptyset$
+\While{Criterio de parada no satisfecho}
+    \State SolucionHeuristica $\gets$ ConstruirSolucionHeuristica($\alpha$, $\omega$)
+	\State Solucion $\gets$ AplicarBusquedaLocal(SolucionHeuristica)
+	\If{Distancia(Solucion) $<$ Distancia(MejorSolucion)}
+		\State MejorSolucion $\gets$ Solucion
+	\EndIf
+\EndWhile
+\medskip
+\Statex \underline{Salida}: MejorSolucion
+
+\end{algorithmic}
+\end{algorithm}
+
+La primer fase consiste en armar una solución basada en la heuristica del ejercicio 2 pero introduciendo como cambio dos parámetros que indicaran que tan golosa es la elección de elementos. Primero vamos a considerar un camino de todos los gimnasios que tendremos que recorrer, todos estos serán nuestros candidatos a incorporar a la solución y le asignaremos a cada uno de ellos un 'costo incremental' a partir de una evaluación greedy, este costo incremental representa que tanto nos cuesta agregar el elemento a la solución que estamos armando y esta determinado por la distancia del elemento con el último agregado a la lista, inicialmente sera cero si no hay elementos en la lista. Luego a partir de todos nuestros candidatos creamos una nueva lista de candidatos restringidos formada por los mejores candidatos de todos, es decir los que tienen menor costo incremental para incorporarse a la solución (parte greedy del algoritmo), de esta lista de candidatos restringidos tomamos uno al azar (parte probabilística) y lo incorporamos al camino que estamos construyendo y todos los costos incrementales del resto de los candidatos son vueltos a evaluar (parte adaptativa). En pseudocódigo:
+
+\begin{algorithm}[H]
+
+\label{}
+\caption{Construir camino gimnasios}
+
+\begin{algorithmic}[1]
+
+\Statex \underline{Entrada}: $\alpha$
+\medskip
+\State Camino $\gets$ $\emptyset$
+\State Candidatos $\gets$ Gimnasios
+\While{Hay Gimnasios restantes que agregar a Camino}
+    \State EvaluarCostos(Candidatos)
+	\State MejoresCandidatos $\gets$ CandidatosRestringidos(Candidatos, $\alpha$)
+	\State Gimnasio $\gets$ ObtenerGimnasioAleatorio(MejoresCandidatos)
+	\State Agregar(Gimnasio, Camino)
+\EndWhile
+\medskip
+\Statex \underline{Salida}: Camino
+
+\end{algorithmic}
+\end{algorithm}
+
+Para la elección de los candidatos restringidos vamos a considerar sobre todos los candidatos el valor $costo_{min}$ al que tenga menor costo incremental y $costo_{max}$ al de mayor costo luego la lista restringida esta formada por los candidatos $c$ tal que $costo(c) \in [costo_{min}, costo_{min} + \alpha * (costo_{max} - costo_{min})]$, este intervalo depende del parámetro $\alpha$ donde $\alpha \in [0..1]$. La elección de un $\alpha = 0$ corresponde al intervalo $[costo_{min}, costo_{min}]$ es decir los candidatos serán elegidos de forma puramente golosa mientras que con $\alpha = 1$ el intervalo sera $[costo_{min}, costo_{max}]$ equivalente a una elección puramente aleatoria, luego el parámetro $\alpha$ regula que tan aleatoria o golosa sera la solución en cuestión.
+
+\begin{algorithm}[H]
+
+\label{}
+\caption{Candidatos restringidos}
+
+\begin{algorithmic}[1]
+
+\Statex \underline{Entrada}: Candidatos, $\alpha$
+\medskip
+\State CostoMin $\gets$ CalcularCostoMin(Candidatos)
+\State CostoMax $\gets$ CalcularCostoMax(Candidatos)
+\State CandidatosRestringidos $\gets$ $\emptyset$
+\For{C : Candidatos}
+	\If{Costo(C) $\in [costo_{min}, costo_{min} + \alpha * (costo_{max} - costo_{min})]$}
+		\State Agregar(C, CandidatosRestringidos)
+	\EndIf
+\EndFor
+\medskip
+\Statex \underline{Salida}: CandidatosRestringidos
+
+\end{algorithmic}
+\end{algorithm}
+
+Con el camino de gimnasios debemos seleccionar las pokeparadas necesarias que debemos visitar para ir recorriendo el camino de gimnasios, para ello vamos a repetir el mismo procedimiento con algunas consideraciones. Primero tomamos el primer gimnasio a recorrer de nuestro camino construido y mientras nos falten pociones para visitarlo vamos a tomar todas las pokeparadas no visitadas como candidatos y le pondremos un costo incremental de la distancia entre esa parada y el gimnasio, nuevamente obtenemos los candidatos restringidos entre todos según el parámetro $\alpha$, y de estos tomamos uno al azar, así hasta recolectar las cantidad de pociones necesarias para visitar al gimnasio y proceder con el siguiente actualizando los costos y volviendo a repetir el ciclo hasta que no queden gimnasios por recorrer. La nueva consideración a tener cuenta es el parámetro $\omega$ que cumple la siguiente función, cuando vamos visitando el camino de gimnasios tomando las pokeparadas necesarias para vencerlo queremos flexibilizar que tanto podemos desviarnos del camino recolectando algunas pociones extra si caben en la mochila, esto representa el parámetro $\omega$ con $\omega \in [0..1]$ la probabilidad de visitar otras paradas adicionalmente de las necesarias, por lo tanto cuando $\omega = 0$ en el camino se recolectaran unicamente las pociones justas para derrotar al gimnasio y pasar al siguiente, cuando $\omega = 1$ siempre se desviara hasta llenar la mochila. Finalmente la construcción de la solución heuristica es:
+
+\begin{algorithm}[H]
+
+\label{}
+\caption{Construir solucion heuristica}
+
+\begin{algorithmic}[1]
+
+\Statex \underline{Entrada}: $\alpha$, $\omega$
+\medskip
+\State CaminoGimnasios $\gets$ ConstruirCaminoGimnasios($\alpha$)
+\State Solucion $\gets$ $\emptyset$
+\State Pociones $\gets$ $0$
+\State Candidatos $\gets$ Pokeparadas
+
+\While{Hay Gimnasios en CaminoGimnasios}
+	\While{Pociones $<$ Poder(Prox(CaminoGimnasios)) $\lor$ (Pociones $<$ Mochila $\land$ BoolRnd($\omega$))}
+		\State EvaluarCostos(Candidatos)
+		\State MejoresCandidatos $\gets$ CandidatosRestringidos(Candidatos, $\alpha$)
+		\State Pokeparada $\gets$ ObtenerPokeparadaAleatorio(MejoresCandidatos)
+		\State Agregar(Pokeparada, Solucion)
+		\State Pociones $\gets$ Minimo(Pociones$+3$, Mochila)
+	\EndWhile
+	\State Pociones $\gets$  Pociones $-$ Poder(Prox(CaminoGimnasios))
+	\State  Agregar(Prox(CaminoGimnasios), Solucion)
+	\State  SacarPrimero(CaminoGimnasios)
+\EndWhile
+
+\medskip
+\Statex \underline{Salida}: Solucion
+
+\end{algorithmic}
+\end{algorithm}
+
+En la segunda fase a esta solución le aplicamos la heuristica de búsqueda local implementada eligiendo alguna vecindad. Luego introducimos dos criterios de paradas en el algoritmo:
+
+\paragraph{Criterio I: Iteraciones fijas}
+Dado un parámetro $K$ este criterio consiste en interpretar a $K$ como la cantidad de exactas de iteraciones que tendrá el ciclo principal hasta concluir el algoritmo y devolver la solución obtenida.
+
+\paragraph{Criterio II: Iteraciones sin mejoras}
+En este criterio de parada es consideramos a $K$ como las iteraciones máximas efectuadas del ciclo sin lograr mejorar la solución obtenida.
 
 
-	ConstruccionCaminoGimnasios (valor Alfa)
+\subsubsection{Complejidad}
 
-	Camino <- Vacio
-	Candidatos <- Todos los gimnasios
-	Mientras hay gimnasios por agregar al camino
-		EvaluarCostos(Candidatos)
-		MejoresCandidatos <- CandidatosRestringidos(Candidatos, Alfa)
-		Gimnasio <- ObtenerGimnasioAleatorio(MejoresCandidatos)
-		Agregar al camino (gimnasio)
+Consideramos como parámetros de entrada $G$ cantidad de gimnasios, $P$ cantidad de paradas y $K$ cantidad de iteraciones con el criterio de parada de iteraciones fijas.
+El algoritmo consta de un ciclo principal que realiza exactamente $K$ iteraciones en cada iteración llama a una función que construye la solución heuristica y luego le aplica búsqueda local esto es \bigo{K * costo(Heuristica) * costo(Busqueda Local)} 
 
-	Devolver Gimnasios
+Para construir nuestra solución heuristica lo primero que realizamos es la construcción de un camino de gimnasios utilizando la función graspSolucionGimnasios, en esta función iteramos sobre la cantidad total de gimnasios y en cada iteración actualizamos todos los gimnasios que son candidatos recorriendolos todos nuevamente y haciendo operaciones de costo constante como actualizar su costo incremental, luego a estos candidatos los procesamos con la función obtenerCandidatosRestringidos pero esta función tiene costo lineal sobre los candidatos recibidos, por lo tanto todo el costo es de \bigo{G*(G+G)} $\in$ \bigo{G^2}.
 
-Para la eleccion de los candidatos restringidos vamos a considerar sobre todos los candidatos el valor costo_min al que tenga menor costo incremental y costo_max al de mayor costo, luego la lista restringida esta formada por los candidatos que se encuentran dentro de este intervalo que depende del parametro alfa [costo_min, costo_min + alfa * (costo_maximo - costo_minimo)] donde alfa <- [0..1]. La elección de un alfa = 0 corresponde al intervalo [costo_min, costo_min] es decir los candidatos seran elegidos de forma puramente golosa mientras que con alfa = 1 el intervalo sera [costo_min, costo_max] equivalente a una elección puramente aleatoria, luego el alfa regula que tan aleatoria o golosa seran la solución en cuestión.
+La segunda parte de la heuristica se hace llamando a graspSolucionAleatoria en base a un camino de gimnasios de longitud $G$, itera sobre todos los gimnasios del camino y en cada iteración obtiene las paradas que son necesarias visitar el gimnasio actual, la cantidad de paradas que se visitaran entre todos los gimnasios serán como máximo $P$, y en cada parada visitada se actualiza el costo incremental de todas, esto es \bigo{G+P*P}. Finalmente el costo total de la heuristica es de \bigo{G^2+G+P^2} $\in$ \bigo{G^2+P^2}.
 
-	CandidatosRestringidos(Candidatos, Alfa)
-		costo_min <- CalcularCostoMin(Candidatos)
-		costo_max <- CalcularCostoMax(Candidatos)
-		CandidatosRestringidos <- Vacio
-		Para todos C : Candidatos
-			Si Costo(C) <- [costo_min, costo_min + alfa * (costo_maximo - costo_minimo)] Agregar(C, CandidatosRestringidos)
-	Devolver CandidatosRestringidos
-
-
-Con el camino de gimnasios debemos seleccionar las pokeparadas necesarias que debemos visitar para ir recorriendo el camino de gimnasios, para ello vamos a repetir el mismo procedimiento con algunas consideraciones. Primero tomamos el primer gimnasio a recorrer de nuestro camino construido y mientras nos falten pociones para visitarlo vamos a tomar todas las pokeparadas no visitadas como candidatos iniciales y le pondremos un costo incremental de la distancia entre esa parada y el gimnasio, nuevamente obtenemos los candidatos restringidos entre todos según el parametro alfa, y de estos tomamos uno al azar, así hasta recolectar las cantidad de pociones necesarias para visitar al gimnasio y proceder con el siguiente actualizando los costos, y volviendo a repetir el ciclo hasta que no queden gimnasios por recorrer. La nueva consideración a tener cuenta es el parametro omega que cumple la siguiente función, cuando vamos visitando el camino de gimnasios tomando las pokeparadas necesarias para vencerlo queremos flexibilizar que tanto podemos desviarnos del camino recolectando algunas pociones extra si caben en la mochila, esto representa el parametro omega <- [0..1], la probabilidad de visitar otras paradas adicionalmente de las necesarias, cuando omega = 0 en el camino se recolectaran unicamente las pociones justas para derrotar al gimnasio y pasar al siguiente, cuando omega = 1 siempre se desviara hasta llenar la mochila. Finalmente la construcción de la solución heuristica es:
-
-	ConstruirSolucionHeuristica(valor Alfa, valor Omega)
-	CaminoGimnasios <- ConstruccionCaminoGimnasios(Alfa)
-	Solucion <- Vacio
-	Pociones <- 0
-	Candidatos <- Todas las pokeparadas
-	Mientras hay Gimnasios en CaminoGimnasios
-	
-		Mientras Pociones < PocionesNecesarias(Siguiente(CaminoGimnasios)) || (Pociones < Mochila && BoolAleatorio(omega))
-
-			EvaluarCostos(Candidatos)
-			MejoresCandidatos <- CandidatosRestringidos(Candidatos, Alfa)
-			Pokeparada <- ObtenerPokeparadaAleatoria(MejoresCandidatos)
-			Agregar a Solucion(Pokeparada)
-			Pociones <- Minimo(pociones+3, mochila)
-
-		Pociones <- Pociones - PocionesNecesarias(Siguiente(CaminoGimnasios))
-		Agregar a Solucion(Siguiente(CaminoGimnasios))
-		SacarPrimero(CaminoGimnasios)
-
-	Devolver Solucion
-
-En la segunda fase a esta solución le aplicamos la heuristica de búsqueda local del ejercicio anterior eligiendo alguna vecindad, y repetimos el ciclo según un criterio de parada.
-
-Criterio de parada, numero K fijo de iteraciones, pero a medida
-Criterio de parada 2: K iteraciones sin mejorar
-
-Complejidad temporal:
-
-Consideramos como parametros de entrada G: cantidad de gimnasios, P cantidad de paradas, K cantidad de iteraciones.
-El algoritmo consta de un ciclo principal que realiza exactamente K iteraciones, en cada iteración llama a una función que construye la solución heuristica y luego le aplica búsqueda local, esto es O(K*costo(Heuristica)*costo(Busqueda Local))
-
-Costo Heuristica:
-
-Para construir nuestra solución heuristica lo primero que realizamos es la construcción de un camino de gimnasios para eso iteramos sobre la cantidad total de gimnasios y en cada iteración obtenemos todos los gimnasios que no han sido recorridos iterando nuevamente sobre el total de los gimnasios, esto es del orden O(G^2).
-La segunda parte de la heuristica en base a un camino de gimnasios de longitud G, itera sobre todos obteniendo las paradas que son necesarias visitar el gimnasio y actualiza el costo incremental de todas las paradas, esto es O(G*P). Finalmente el costo total de la heuristica es de O(G^2+G*P)
-
-Por lo tanto La complejidad temporal de todo el algoritmo es del orden O(K*(G^2+G*P)*BL)
+Por lo tanto La complejidad temporal de todo el algoritmo es del orden \bigo{K*(G^2+P^2)*costo(Busqueda Local)}
 
 
