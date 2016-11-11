@@ -1,6 +1,23 @@
 #include "aux.h"
 #include "Camino.h"
 
+/*void leerCamino() {
+
+	int camino;
+	cin >> camino;
+	float dist;
+	cin >> dist;
+	queue<int> solucion;
+	for(int i = 0; i < camino; i++) {
+		int n;
+		cin >> n;
+		solucion.push(n-1);
+	}
+	caminoBL.asignarSolucion(dist, solucion);
+
+	caminoBL.busquedaLocal(permutaCamino);
+}*/
+
 int main(int argc, char* argv[]){
     Camino caminoBL;
 

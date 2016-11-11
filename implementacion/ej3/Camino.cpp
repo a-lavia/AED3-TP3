@@ -354,7 +354,7 @@ bool Camino::cambiarSiPuedo(Nodo* n1, Nodo* n2){
     #endif
 
     if(pocionesDisponibles >= 0){  
-        if(_ultimoCambio[0] == n1->id && _ultimoCambio[1] == n2->id){
+		if((_ultimoCambio[0] == n1->id && _ultimoCambio[1] == n2->id) || (_ultimoCambio[0] == n2->id && _ultimoCambio[1] == n1->id)){
             return false;
         } else{
             _ultimoCambio[0] = n1->id;
