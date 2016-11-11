@@ -4,16 +4,62 @@ En el problema dado, Brian necesita conocer el camino con el menor recorrido par
 
 \subsection{Algoritmo}
 
-La \textbf{heurística constructiva golosa} propuesta para obtener una solución es la siguiente: generamos caminos que sólo pasen por gimnasios, ignorando completamente las pociones y paradas, comenzando siempre desde un gimnasio distinto, y yendo al más cercano. Luego, nos quedamos con el mejor de estos caminos (el de menor distancia recorrida). 
+La \textbf{heurística constructiva golosa} propuesta para obtener una solución es la siguiente:
 
-Una vez obtenido éste camino generamos el camino solución de la siguiente forma: toma el primer gimnasio del primer camino y observa cuantas pociones son necesarias para ganarle al mismo, entonces, mientras tiene menos pociones que las necesarias busca las poke paradas más cercanas y las va agregando al camino solución hasta que paso por las suficientes paradas para ganarle al gimnasio. Cuando llega a esa cantidad sufiente de poke paradas, pasa por el gimnasio, lo vence y lo agrega al camino solución.
+Primero generamos caminos que sólo pasen por gimnasios, ignorando completamente las pociones y paradas, comenzando siempre desde un gimnasio distinto, y yendo al más cercano. Luego, nos quedamos con el camino de menor distancia recorrida. 
 
-Luego, repite lo mismo para los siguientes gimnasios.
+Una vez obtenido éste camino, generamos el camino solución de la siguiente forma: se toma el primer gimnasio del camino de gimnasios y observa cuantas pociones son necesarias para ganarle al mismo. Luego, mientras tenemos menos pociones que las necesarias, buscamos las poke paradas más cercanas y las vamos agregando al camino solución hasta que pasamos por las suficientes para ganarle al gimnasio. Cuando llega a esa cantidad sufiente de poke paradas, pasa por el gimnasio, lo vence y lo agrega al camino solución. Luego, avanza al siguiente gimnasio del camino de gimnasios y repite lo mismo hasta cubrirlos a todos.
 
 El algoritmo termina si, o bien le ganó a todos los gimnasios, caso en el que devuelve la distancia recorrida, cantidad de gimnasios y poke paradas que recorrió y el camino realizado; o si llega a un punto donde no puede ganarle a ningún gimnasio y tiene la mochila llena o pasó por todas las poke paradas, devolviendo $-1$.
 
 
 Con todo esto descripto anteriormente, el pseudocódigo del algoritmo propuesto es el siguiente:
+
+Para generar el camino de gimnasios lo que hacemos es: comenzando por un gimnasio, buscamos el gimnasio de distancia menor a éste. Luego buscamos el de distancia menor al siguiente, así hasta que no quedan más gimnasios por recorrer y comparamos la distancia total del camino generado con la de la mejor solución, si es menor nos quedamos con el camino y reemplaza al mejor que teniamos, si es mayor lo descartamos. Este procedimiento lo hacemos por cada gimnasio, generando los caminos y siempre quedandonos con el de distancia menor. Una vez terminado, devolvemos el camino guardado. El pseudo código de esta operación es el siguiente:
+
+
+\begin{algorithm}[H]
+\begin{algorithmic}
+\Statex \textbf{ConstruccionCaminoGimnasios} \underline{Entrada}: \textbf{Gimnasios}: vector
+
+\State Lista mejorCamino $\leftarrow$ Vacia()
+\State Entero mejorDist $\leftarrow$ $\infty$
+
+\For{Para todo g Gimnasio en Gimnasios}
+
+	\State Lista camino $\leftarrow$ Vacia()
+
+	\State Lista Camino $\leftarrow$ Vacia()
+	\State Entero dist
+	\State Lista Candidatos $\leftarrow$ Todos los gimnasios
+	\State Gimnacio actual $\leftarrow$ g
+	\While{Mientras hay gimnasios en Candidatos}
+
+		\State gym $\leftarrow$ ObtenerGimnasioMasCercano(Candidatos, actual)
+		\State dist $\leftarrow$ dist + distancia(actual, gym)
+		\State AgregarAtras(Camino, gym)
+		\State actual $\leftarrow$ gym
+		\State Eliminar(Candidatos, gym)
+
+	\EndWhile
+
+	\If{dist $<$ mejorDist}
+
+		\State mejorCamino $\leftarrow$ Camino
+		\State mejorDist $\leftarrow$ dist
+
+	\EndIf
+
+\EndFor
+
+\State Devolver mejorCamino
+
+\medskip
+\Statex \underline{}
+\end{algorithmic}
+\end{algorithm}
+
+El pseudo código del algoritmo que genera la solucion es el siguiente:
 
 \begin{algorithm}[H]
 \label{}
@@ -21,9 +67,9 @@ Con todo esto descripto anteriormente, el pseudocódigo del algoritmo propuesto 
 \begin{algorithmic}[1]
 \Statex \underline{Entrada}: \textbf{Mochila}: entero, \textbf{Gimnasios}: vector, \textbf{Paradas}: vector
 
-\State cola Solución $\leftarrow$ Vacia()
-\State entero Pociones $\leftarrow$ 0
-\State lista CaminoGimnasios $\leftarrow$ ConstruccionCaminoGimnasios(gimnasios)
+\State Cola Solución $\leftarrow$ Vacia()
+\State Entero Pociones $\leftarrow$ 0
+\State Lista CaminoGimnasios $\leftarrow$ ConstruccionCaminoGimnasios(gimnasios)
 
 \While{Mientras hay Gimnasios en CaminoGimnasios}
 
@@ -40,62 +86,29 @@ Con todo esto descripto anteriormente, el pseudocódigo del algoritmo propuesto 
 
 \EndWhile
 
-\State Devolver Solución
+\State ImprimirSolucion(Solución)
 
 \medskip
 \Statex \underline{}
 \end{algorithmic}
 \end{algorithm}
-
-Para generar el camino de gimnasios lo que hacemos es: comenzando por cada gimnasio, vamos obteniendo siempre el de distancia menor a este hasta que no quedan más gimnasios por recorrer y agregamos la lista generada dentro de un conjunto. Una vez que hicimos este procedimiento, en el conjunto tendremos todos los camimos de gimnasios generados con este procedimiento y devolvemos el que posée distancia menor. El pseudo código de esta operación es el siguiente:
-
-\begin{algorithm}[H]
-\begin{algorithmic}
-\Statex \underline{Entrada}: \textbf{Gimnasios}: vector
-
-\State Conjunto ConjCamino $\leftarrow$ Vacio()
-
-\For{Para todo g Gimnasio en Gimnasios}
-
-	\State Lista Camino $\leftarrow$ Vacia()
-	\State Candidatos $\leftarrow$ Todos los gimnasios
-	\While{Mientras hay gimnasios por agregar al camino}
-
-		\State gym $\leftarrow$ ObtenerGimnasioMasCercano(Candidatos)
-		Agregar(ConjCamino, gym)
-
-	\EndWhile
-
-\EndFor
-
-\State DevolverCaminoMasCorto(ConjCamino)
-
-\medskip
-\Statex \underline{}
-\end{algorithmic}
-\end{algorithm}
-
-
-Y con esto termina nuestro algoritmo propuesto.
-
-Para no agobiar con tanto código, en esta sección no ahondaremos en el resto de las funciones auxiliares, que consideramos de por si declarativas, pero si haremos un análisis profundo de ellas en la siguiente sección donde analizaremos la complejidad del código.
 
 
 \subsection{Complejidad}
 
 El orden de complejidad de nuestra \textbf{heurística constructiva golosa} es de \bigo{|gimnasios|^3 + |paradas|^2 }. Veamos como lo obtuvimos:
 
-Lo primero que realizamos es generar el camino más corto de gimnasios. La función que se encarga de esta operación es \textbf{heuristicaVecinoCercano}. Dentro de ella, comenzando por cada gimnasio, generamos una lista de todos éstos menos el del comienzo. Entonces, tomando el gimnasio del comienzo como actual, iteramos en la lista cual es el gimnasio más cercano al actual, cuando lo obtenemos lo encolamos sobre el camino y asignamos como actual a este último encontrado.
+Lo primero que realizamos es generar el caminos entre los gimnasios. La función que se encarga de esta operación es \textbf{heuristicaVecinoCercano}. Dentro de ella, comenzando por cada gimnasio, generamos una lista de todos éstos menos el del comienzo. Entonces, tomando el gimnasio del comienzo como actual, iteramos en la lista cual es el gimnasio más cercano al actual, cuando lo obtenemos lo encolamos sobre el camino y asignamos como actual a este último encontrado.
 
-Ir generando el camino con distancia más corta de un gimnasio nos da como complejidad \bigo{|gimnasios|^2} ya que por cada uno tenemos que buscar entre los demás cual tiene menor distancia para agregar al camino. Y, como esto se realiza por cada gimnasio, la complejidad total de esta función es \bigo{|gimnasios|^3}
+Ir generando el camino con distancia más corta de un gimnasio nos da como complejidad \bigo{|gimnasios|^2} ya que por cada uno se busca entre los demás con cual tiene menor distancia para agregar al camino. Y, como toda esta operación se realiza por cada gimnasio, la complejidad total de esta función es \bigo{|gimnasios|^3}
 
-Luego, se realiza una busqueda por cada gimnasio del camino generado por la función anterior, la cantidad de paradas necesarias para ganarle. Ésta operación la realizamos en la función \textbf{heuristicaParadasCercanas}. Basicamente lo que hace es lo siguiente, tomamos del camino generado por la función anterior el primer gimnasio y observamos cual es la cantidad de pociones necesarias para ganarle. Entonces, mientras en la mochila no tengamos esa cantidad de pociones vamos a las paradas más cercanas del gimnasio hasta tener las suficientes. En nuestra función tenemos un vector con las posiciones de todas las paradas y una lista con los índices de las que no fueron visitadas. Cuando se visita alguna parada, se quita el índice de la lista. En peor caso, un gimnasio para ser vencido puede necesitar tantas pociones como $|paradas|*3$, entonces, en este caso, iría buscando la poke parada más cercana que no visito dentro de la lista y quitandolas hasta ésta quedar vacía. La complejidad de esta operación es \bigo{\frac{|paradas|^2 + |paradas|}{2}} = \bigo{|paradas|^2}. En mejor caso, no sería necesario ir a alguna poke parada para ganarle a los gimnasios (porque estos necesitan cero pociones para ganarles), entonces no se buscaría ninguna parada. 
+Luego, por cada gimnasio del camino generado por la función anterior, buscamos la cantidad de pociones necesarias para ganarle. Ésta operación la realizamos en la función \textbf{heuristicaParadasCercanas}. Basicamente lo que hace es lo siguiente: tomamos del camino generado por la función anterior el primer gimnasio y observamos cual es la cantidad de pociones necesarias para ganarle. Entonces, mientras en la mochila no tengamos esa cantidad de pociones vamos a las paradas más cercanas del gimnasio hasta tener las suficientes. En nuestra función tenemos un vector con las posiciones de todas las poke paradas y una lista con los índices de las que no fueron visitadas. Cuando se visita alguna poke parada, se quita el índice de la lista. En peor caso, un gimnasio para ser vencido puede necesitar tantas pociones como $|paradas|*3$, entonces, en este caso, iría buscando la poke parada más cercana que no visito dentro de la lista y quitandolas hasta que esta quede vacía. La complejidad de esta operación es \bigo{\frac{|paradas|^2 + |paradas|}{2}} = \bigo{|paradas|^2}. En mejor caso, no sería necesario ir a alguna poke parada para ganarle a los gimnasios (porque estos necesitan cero pociones para ganarles), entonces no se buscaría ninguna parada. 
 Esto da la idea que la complejidad de este código termina siendo \bigo{|gimnasios| + |paradas|^2} ya que recorre a todos los gimnasios y, en peor caso, recorrería todas las paradas siempre buscando la de distancia menor.
 
 Por último, tenemos la función \textbf{imprimirSolucion} que toma el camino de la solución. Se calcula la distancia total mirando todos los elementos del camino, esto con complejidad \bigo{|paradas| + |gimnasios|} y, luego, se van desencolando los índices de los gimnasios y paradas recorridos imprimiendolos, esto también con complejidad \bigo{|paradas| + |gimnasios|}. Entonces, la complejidad de esta función es \bigo{|paradas| + |gimnasios|}.
 
 
-Con todo esto calculado, la complejidad total esta dada por la suma de las complejidades de estas tres funciones: \bigo{|gimnasios|^3} + \bigo{|gimnasios| + |paradas|^2} + \bigo{|paradas| + |gimnasios|}. 
+Con todo esto calculado, la complejidad total es dada por la suma de las complejidades de estas tres funciones: \bigo{|gimnasios|^3} + \bigo{|gimnasios| + |paradas|^2} + \bigo{|paradas| + |gimnasios|}. 
 
 Como \bigo{|gimnasios|} $\subset$ \bigo{|gimnasios|^3} y \bigo{|paradas|} $\subset$ \bigo{|paradas|^2}, entonces la complejidad final es: \bigo{|gimnasios|^3} + \bigo{|paradas|^2} = \bigo{|gimnasios|^3 + |paradas|^2}
 
