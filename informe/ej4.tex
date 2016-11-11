@@ -2,7 +2,7 @@
 
 \subsection{Introducci\'on}
 
-Con el objetivo de mejorar las soluciones obtenidas hasta el momento con las heuristicas constructivas golosas y la de búsqueda local, decidimos implementar una metaheuristica GRASP (\textit{Greedy Randomized Adaptatative Search procedures}), esta es una metaheuristica que consiste en construir soluciones iterativamente en base a otras heuristicas quedandose con la mejor de todas las obtenidas. Cada iteración consta fundamentalmente de dos fases una parte constructiva golosa/aleatoria y otra de búsqueda local, esto se repetira hasta cumplir con un cierto críterio de parada.
+Con el objetivo de mejorar las soluciones obtenidas hasta el momento con las heuristicas constructivas golosas y la de búsqueda local, decidimos implementar una metaheuristica GRASP (\textit{Greedy Randomized Adaptatative Search Procedures}), esta es una metaheuristica que consiste en construir soluciones iterativamente en base a otras heuristicas quedandose con la mejor de todas las obtenidas. Cada iteración consta fundamentalmente de dos fases una parte constructiva golosa/aleatoria y otra de búsqueda local, esto se repetira hasta cumplir con un cierto críterio de parada.
 
 \subsection{Algoritmo}
 
@@ -126,7 +126,7 @@ Dado un parámetro $K$ este criterio consiste en interpretar a $K$ como la canti
 En este criterio de parada es consideramos a $K$ como las iteraciones máximas efectuadas del ciclo sin lograr mejorar la solución obtenida.
 
 
-\subsubsection{Complejidad}
+\subsection{Complejidad}
 
 Consideramos como parámetros de entrada $G$ cantidad de gimnasios, $P$ cantidad de paradas y $K$ cantidad de iteraciones con el criterio de parada de iteraciones fijas.
 El algoritmo consta de un ciclo principal que realiza exactamente $K$ iteraciones en cada iteración llama a una función que construye la solución heuristica y luego le aplica búsqueda local esto es \bigo{K * costo(Heuristica) * costo(Busqueda Local)} 
@@ -137,4 +137,18 @@ La segunda parte de la heuristica se hace llamando a graspSolucionAleatoria en b
 
 Por lo tanto La complejidad temporal de todo el algoritmo es del orden \bigo{K*(G^2+P^2)*costo(Busqueda Local)}
 
+\subsection{Experimentación}
 
+\subsubsection{Calidad de soluciones}
+
+En este experimento vamos a variar los parámetros $\alpha$ y  $\omega$ sobre una instancia aleatoria de 100 nodos, vamos a correr nuestro algoritmo con un criterio de parada fijo de 100 iteraciones y tomando $\alpha \in [0..1]$ $\omega \in [0..1]$ para comprar la calidad de las soluciones obtenidas, los resultados fueron los siguientes:
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics{../experimentacion/ej4/experimento_1.pdf}
+    \caption{Mapa de calor en base a las distancias obtenidas.}
+    \label{fig:ej3_expAleat_cantCambios}
+  \end{center}
+\end{figure}
+
+Como podemos ver en este mapa de calor los mejores resultados obtenidos en estas instancias se obtienen seteando valores de $\alpha \in [0.0 ; 0.1]$ y $\omega \in [0.1 ; 0.2]$ es decir tomando soluciones con elecciones bastante golosas pero dándole la oportunidad de realizar pequeños cambios aleatoriamente que resultan en caminos más óptimos, por otro lado permitiendo valores de $\alpha$ y $\omega$ muy altos, es decir permitiendo que elecciones muy aleatorias y permitiendo que se desvíe mucho del camino planteado por la heuristica las soluciones empeoran considerablemente.

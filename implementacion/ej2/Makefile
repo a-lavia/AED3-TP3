@@ -1,10 +1,9 @@
 .PHONY: all clean
 
-BIN = ej2
+BIN = ej2.out
 
-	# g++ ej2.cpp funciones.cpp -std=c++11 -o ej2
 all:
-	g++ ej.cpp heuristica.cpp -std=c++11 -o ej2
+	g++ ej.cpp heuristica.cpp -std=c++11 -o ej2.out
 
 borrartests:
 	rm -f *.txt

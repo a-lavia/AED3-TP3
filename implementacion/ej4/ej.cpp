@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 
 	cout << distancia << ' ' << solucion.size() << ' ';
 	while(!solucion.empty()) {
-		cout << (solucion.front()+1) << ' ';
+		cout << solucion.front() << ' ';
 		solucion.pop();
 	}
 	cout << endl;
