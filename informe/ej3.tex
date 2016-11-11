@@ -149,3 +149,89 @@ Ejecutar nuestro algoritmo de b\'usqueda local sobre una soluci\'on inicial prod
 
 % ESTE TP: Realizar una experimentacion que permita observar la performance del algoritmo comparando
 % los tiempos de ejecucion y la calidad de las soluciones obtenidas, en funci ́on de las vecindadeS utilizadas y elegir, si es posible, la configuraci ́on que mejores resultados provea para el grupo de instancias utilizado.Si es posible, dar una cota superior para la cantidad de iteraciones de la heur ́ıstica.
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics{../experimentacion/ej3/expAleat_complejidad_permutaCamino.pdf}
+    \caption{expAleat complejidad permutaCamino}
+    \label{fig:expAleat_complejidad_permutaCamino}
+  \end{center}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics{../experimentacion/ej3/expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija.pdf}
+    \caption{expFijo complejidad permutaYReemplazaPokeparadas cantGimFija}
+    \label{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija}
+  \end{center}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics{../experimentacion/ej3/expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija.pdf}
+    \caption{expFijo complejidad permutaYReemplazaPokeparadas cantPokFija}
+    \label{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija}
+  \end{center}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics{../experimentacion/ej3/expAleat_cantCambios.pdf}
+    \caption{expAleat cantCambios}
+    \label{fig:expAleat_cantCambios}
+  \end{center}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics{../experimentacion/ej3/expMejor_cantCambios.pdf}
+    \caption{expMejor cantCambios}
+    \label{fig:expMejor_cantCambios}
+  \end{center}
+\end{figure}
+
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{ | l | l | l | l | l | }
+            \hline
+            \multicolumn{1}{|c|}{}&
+            \multicolumn{2}{|c|}{\textbf{Instancias aleatorias}}&
+            \multicolumn{2}{|c|}{\textbf{Instancias de mejor caso}}\\
+            \cline{2-5}
+                            &    \textit{Vecindad I}     &    \textit{Vecindad II}    &    \textit{Vecindad I}     &    \textit{Vecindad II}    \\ \hline
+            Media           &    11.368223  &   21.943365   &   70.201509   &    8.155963   \\ \hline
+            Desv\'io estandar       &   3.848846    &    6.707769   &   20.632809   &   3.791787    \\ \hline
+            M\'inimo        &   0.000000    &    0.000000   &   0.000000    &   0.000000    \\ \hline
+            M\'aximo        &   18.463784   &    28.902765  &       84.686633   &    23.047859  \\ \hline
+        \end{tabular}
+    \end{center}
+    \caption{Porcentaje de mejora.}    
+    \label{table:porcentaje_mejora}
+\end{table} 
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics{../experimentacion/ej3/expAleat_cantNodos_tiempo.pdf}
+    \caption{expAleat cantNodos tiempo}
+    \label{fig:expAleat_cantNodos_tiempo}
+  \end{center}
+\end{figure}
+
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{ | l | l | l | l | l | }
+            \hline
+            \multicolumn{1}{|c|}{}&
+            \multicolumn{2}{|c|}{\textbf{Instancias aleatorias}}&
+            \multicolumn{2}{|c|}{\textbf{Instancias de mejor caso}}\\
+            \cline{2-5}
+                        &    \textit{Vecindad I}     &    \textit{Vecindad II}    &    \textit{Vecindad I}     &    \textit{Vecindad II}    \\ \hline
+            Media       &   0.100376    &   0.127016    &   0.116154    &   0.807135    \\ \hline
+            Desv\'io estandar       &   0.096465    &   0.135994    &   0.148876    &   0.937515    \\ \hline
+            M\'inimo    &   0.000000    &   0.000000    &   0.000000    &   0.000000    \\ \hline
+            M\'aximo    &   0.280713    &   0.484252    &   0.492888    &   2.524617    \\ \hline
+        \end{tabular}
+    \end{center}
+    \caption{Error relativo.}    
+    \label{table:error_relativo}
+\end{table} 
