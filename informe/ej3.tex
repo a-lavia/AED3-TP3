@@ -130,6 +130,7 @@ distancia\ nueva = distancia\ actual - distancia(2,3) - distancia(3,4) + distanc
 Analizamos si el reemplazo o la permutaci\'on es posible teniendo en cuenta las pociones que requieren los gimnasios, las que otorgan las pokeparadas y la capacidad de nuestra mochila. Con este fin avanzamos desde el nodo inicial de nuestra instancia de \texttt{Camino}, llevando la cuenta de cu\'antas pociones tenemos en nuestra mochila. Si el nodo actual es una pokeparada sumamos el m\'inimo entre 3 y lo que le reste de espacio a la mochila, en caso contrario restamos el costo del gimnasio. Si nuestra mochila queda con pociones negativas significa que el cambio no es posible y paramos de iterar, si no continuamos hasta llegar al final del camino. Llegar al nodo que no tiene siguiente significa que el cambio es posible.
 
 \subsection{Complejidad}
+
 El orden de complejidad temporal de peor caso para una iteraci\'on de la b\'usqueda local que mejora una soluci\'on, es decir, para encontrar una soluci\'on vecina s a s* tal que f(s) $<$ f(s*), es \bigo{k^2 \times $tamaño del camino$}, siendo k el tamaño de \texttt{nodosConsiderados}. En la primer vecindad esta complejidad es equivalente a \bigo{($tamaño del camino$)^3} $\in$ \bigo{(n+m)^3} siendo n la cantidad de gimnasios y m la cantidad de pokeparadas. Mientras que la complejidad de la vecindad que permuta y reemplaza pokeparadas es \bigo{m^2 \times $tamaño del camino$} $\in$ \bigo{m^2 \times (n+m)}.
 
 Este tipo de iteraci\'on se corresponde con una ejecuci\'on de \texttt{encuentroSoluci\'onVecinaMejor}, all\'i para cada par de los elementos que componen \texttt{nodosConsiderados} evaluamos si realizar la modificaci\'on nos permite hallar una soluci\'on vecina mejor. En el peor caso no encontramos una hasta la \'ultima iteraci\'on del primer ciclo, es decir, realizamos $k^2$ iteraciones. En cada una de las iteraciones realizamos una llamada a \texttt{cambiarMejora} donde se calcula la distancia nueva con una cantidad constante de operaciones \bigo{1}. Si es menor a la distancia actual analiza si el cambio es posible con un costo de \bigo{$tamaño del camino$} $\in$ \bigo{n+m} en el pero caso, cuando el cambio es posible y recorre el camino completo sin obtener una cantidad \textit{negativa} de pociones. Por otra parte, el costo de \texttt{est\'aEnElCamino} es \bigo{1} porque simplemente revisa que los atributos \texttt{anterior} y \texttt{siguiente} del nodo no sean ambos inv\'alidos. El costo de realizar efectivamente el reemplazo o la permutaci\'on es \bigo{1} porque tambi\'en \'unicamente altera los atributos \texttt{anterior} y \texttt{siguiente} de los nodos a modificar, y los de sus dos vecinos.
@@ -141,6 +142,7 @@ En este caso una iteraci\'on de la b\'usqueda local se corresponde con una ejecu
 Ejecutar nuestro algoritmo de b\'usqueda local sobre una soluci\'on inicial produce una cantidad de iteraciones de ambos tipos que no podemos estimar te\'oricamente. En pr\'oxima secci\'on intentamos encontrar una relaci\'on entre el n\'umero de iteraciones y los par\'ametros que recibe nuestro programa.
 
 \subsection{Experimentación}
+
 % GENERAL: Realizar una experimentacion computacional para medir la performance del programa implementado. Para ello se debe preparar un conjunto de casos de test que permitan observar los tiempos de ejecucion en funcion de los parametros de entrada. Deber ́an desarrollarse tanto experimentos con instancias aleatorias (detallando como fueron generadas) como experimentos con instancias particulares (de peor/mejor caso en tiempo de ejecuci ́on, por ejemplo). Se debe presentar adecuadamente en forma grafica una comparaci on entre los tiempos medidos y la complejidad te ́orica calculada y extraer conclusiones de la experimentaci ́on.
 % una experimentacion b ́asica que muestre que la cota planteada de complejidad tiene sentido.
 % algun experimento que muestre que el mejor caso es bueno y el peor caso es malo.
@@ -149,6 +151,8 @@ Ejecutar nuestro algoritmo de b\'usqueda local sobre una soluci\'on inicial prod
 
 % ESTE TP: Realizar una experimentacion que permita observar la performance del algoritmo comparando
 % los tiempos de ejecucion y la calidad de las soluciones obtenidas, en funci ́on de las vecindadeS utilizadas y elegir, si es posible, la configuraci ́on que mejores resultados provea para el grupo de instancias utilizado.Si es posible, dar una cota superior para la cantidad de iteraciones de la heur ́ıstica.
+
+\subsubsection{Instancias estudiadas}
 
 Con el objetivo de estudiar los algoritmos propuestos realizamos mediciones con diversos tipos de instancias que permiten hallar una soluci\'on por medio de la heur\'istica golosa que estudiamos anteriormente.
 
@@ -160,21 +164,26 @@ Para cada tipo creamos una cantidad fija de instancias de \texttt{Camino} y ejec
 Para generar cada instancia elegimos un n\'umero aleatorio de gimnasios entre 1 y 100. A cada gimnasio se le fij\'o una cantidad de pociones entre 0 y 10. Luego, sumamos las pociones que fueron asignadas a todos los gimnasios y elegimos una cantidad de pokeparadas random entre (cantidad total de pociones / 3) + 1 y ((cantidad total de pociones / 3) + 1) $\times$ 2. Las coordenadas de las pokeparadas y de los gimnasios se eligieron como n\'umeros aleatorios entre 0 y 1000. El tamaño de la mochila se determin\'o en 12 para evitar el desperdicio de pociones, debido a que lo m\'aximo que puede requerir un gimnasio es 10 pociones. Para estudiar este tipo creamos 30 instancias.
 
 \paragraph{Instancias aleatorias y sus soluciones \'optimas}
-Creamos 18 instancias con 1, 2, ..., 18 nodos cada una. En cada una elegimos la cantidad de gimnasios como el m\'inimo entre un n\'umero aleatorio entre 1 y la cantidad de nodos, y 10. Los nodos restantes corresponden a pokeparadas. Luego, establecemos que la cantidad m\'axima de pociones que puede pedir un gimnasio es (cantidad de pokeparadas $\times$ 3) / cantidad de gimnasios, y a cada nodo de tipo gimnasio le asignamos una cantida de pociones aleatoria entre 1 y el m\'inimo entre 10 y el m\'aximo calculado para la instancia. Nuevamente, las coordenadas se eligieron aleatoriamente entre 0 y 1000, y el tamaño de la mochila se fij\'o en 12.
+Creamos 18 instancias con 1, 2, ..., 17 y 18 nodos cada una. En cada una elegimos la cantidad de gimnasios como el m\'inimo entre un n\'umero aleatorio entre 1 y la cantidad de nodos, y 10. Los nodos restantes corresponden a pokeparadas. Luego, establecemos que la cantidad m\'axima de pociones que puede pedir un gimnasio es (cantidad de pokeparadas $\times$ 3) / cantidad de gimnasios, y a cada nodo de tipo gimnasio le asignamos una cantidad de pociones aleatoria entre 1 y el m\'inimo entre 10 y el m\'aximo calculado para la instancia. Nuevamente, las coordenadas se eligieron aleatoriamente entre 0 y 1000, y el tamaño de la mochila se fij\'o en 12. Elegimos estas cantidades de 
+gimnasios y pokeparadas para poder ejecutar el algoritmo de backtracking sobre estas instancias en un tiempo razonable.
 
 \paragraph{Instancias de mejor caso}
-Esperamos que la heur\'istica golosa tenga grandes dificultades para hallar caminos cercanos al \'optimo cuando los gimnasios y las pokeparadas se encuentran en \'areas distintas, ya que en primer lugar busca un camino entre los gimnasios y luego recorre las pokeparadas, lo que causar\'ia una ida y vuelta constante entre ambas \'areas. Estos casos, que podr\'iamos considerar como los \textit{peores} de la heur\'istica golosa, se corresonden con unos de los \textit{mejores} de la b\'usqueda local. Es decir, la b\'usqueda local va a tener un porcentaje de mejora mucho mayor que en instancias aleatorias.
-
-Para generar estas
+Esperamos que la heur\'istica golosa tenga grandes dificultades para hallar caminos cercanos al \'optimo cuando los gimnasios y las pokeparadas se encuentran en \'areas distintas, ya que en primer lugar busca un camino entre los gimnasios y luego recorre las pokeparadas, lo que causar\'ia una ida y vuelta constante entre ambas \'areas. Estos casos, que podr\'iamos considerar como los \textit{peores} de la heur\'istica golosa, se corresonden con unos de los \textit{mejores} de la b\'usqueda local. Es decir, la b\'usqueda local va a tener un porcentaje de mejora mucho mayor que en instancias aleatorias. Para generarlas procedemos de forma an\'aloga que con las aleatorias, la \'unica diferencia es que los gimnasios ahora tienen como coordenadas n\'umeros entre 0 y 500, y las pokeparadas entre 500 y 1000. Adem\'as, el tamaño de la mochila se elige como la cantidad total de pociones que requieren los gimnasios, lo que permite recorrer primero el \'area de pokeparadas y luego el \'area de gimnasios. Nuevamente, generamos 30 instancias de este tipo.
 
 \paragraph{Instancias de mejor caso y sus soluciones \'optimas}
+Con el objetivo de generar este tipo de instancias procedemos de forma an\'aloga a los \'ultimos dos tipos descriptos. Separamos los gimnasios de las pokeparadas y generamos grafos de pocos nodos para poder ejecutar el algoritmo de backtracking.
 
 \paragraph{Instancias con \#gimnasios fija e instancias con \#pokeparadas fija}
+En este caso a la variable fija se le asigna el n\'umero 10 y para la restante se elije aleatoriamente otro entre 1 y 100, el tamaño de la mochila es 12 otra vez y creamos 30 instancias. Para determinar la cantidad de pociones que requieren los gimnasios hacemos lo mismo que cuando queremos estudiar soluciones \'optimas y generamos los caminos con un n\'umero fijo de gimnasios y pokeparadas.
+
+\subsubsection{Complejidades}
+
+Para comprobar emp\'iricamente las complejidades te\'oricas dividimos el tiempo de ejecuci\'on por la complejidad respectiva esperando encontrar una funci\'on constante. Estos datos se pueden apreciar con mayor claridad utilizando un \textit{boxplot} con su respectiva densidad:
 
 \begin{figure}[H]
   \begin{center}
     \includegraphics{../experimentacion/ej3/expAleat_complejidad_permutaCamino.pdf}
-    \caption{expAleat complejidad permutaCamino}
+    \caption{Tiempo / complejidad en funci\'on de la cantidad de nodos para la vecindad que permuta el camino, utilizando instancias aleatorias.}
     \label{fig:expAleat_complejidad_permutaCamino}
   \end{center}
 \end{figure}
@@ -182,7 +191,7 @@ Para generar estas
 \begin{figure}[H]
   \begin{center}
     \includegraphics{../experimentacion/ej3/expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija.pdf}
-    \caption{expFijo complejidad permutaYReemplazaPokeparadas cantGimFija}
+    \caption{Tiempo / complejidad en funci\'on de la cantidad de nodos para la vecindad que permuta y reemplaza pokeparadas, utilizando una cantidad de gimnasios fija.}
     \label{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija}
   \end{center}
 \end{figure}
@@ -190,10 +199,14 @@ Para generar estas
 \begin{figure}[H]
   \begin{center}
     \includegraphics{../experimentacion/ej3/expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija.pdf}
-    \caption{expFijo complejidad permutaYReemplazaPokeparadas cantPokFija}
+    \caption{Tiempo / complejidad en funci\'on de la cantidad de nodos para la vecindad que permuta y reemplaza pokeparadas, utilizando una cantidad de pokeparadas fija.}
     \label{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija}
   \end{center}
 \end{figure}
+
+Como podemos observar en las figuras \ref{fig:expAleat_complejidad_permutaCamino}, \ref{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija} y \ref{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija} ...
+
+\subsubsection{\#iteraciones de la b\'usqueda}
 
 \begin{figure}[H]
   \begin{center}
@@ -210,6 +223,8 @@ Para generar estas
     \label{fig:expMejor_cantCambios}
   \end{center}
 \end{figure}
+
+\subsubsection{Calidad de las soluciones}
 
 \begin{table}[H]
     \begin{center}
