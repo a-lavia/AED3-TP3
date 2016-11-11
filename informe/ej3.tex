@@ -39,7 +39,7 @@ Establecemos que s* es una soluci\'on vecina a s si el camino de s* se puede obt
 Este vecindario considera que s* es una soluci\'on vecina a otra s si el camino de s* es igual al de s luego de permutar el orden en el que se recorren dos pokeparadas, o reemplazar una pokeparada del camino por otra que no se encontraba en \'el. La motivaci\'on principal de esta vecindad fue suponer que una heur\'istica golosa podr\'ia encontrar un buen camino entre los gimnasios pero tendr\'ia dificultades estableciendo los \textit{desv\'ios} para buscar pociones.
 
 \paragraph{}
-Como explicamos en la secci\'on \ref{sec:ej3_intro}, para realizar una b\'usqueda local tomamos una soluci\'on incial que luego es \textit{mejorada}. Para esto decidimos utilizar el algoritmo goloso desarrollado en el segundo ejercicio.
+Como explicamos en la secci\'on \ref{sec:ej3_intro}, para realizar una b\'usqueda local tomamos una soluci\'on inicial que luego es \textit{mejorada}. Para esto decidimos utilizar el algoritmo goloso desarrollado en el segundo ejercicio.
 
 Adem\'as, optamos por considerar tambi\'en las soluciones que devuelven una misma distancia final cuando no podemos encontrar soluciones vecinas que reduzcan ese n\'umero. Esperamos que en algunos casos esto nos permita hallar mejoras nuevas. Para evitar entrar en ciclos infinitos, por ejemplo, donde vamos de una soluci\'on s* a otra s equivalente, y de ella nuevamente volvemos a s*, utilizamos un diccionario donde tenemos como clave la identificaci\'on de un nodo y como significado un conjunto con las identificaciones de los nodos que fueron permutados o reemplazados por el primero. De esta manera tambi\'en limitamos la cantidad de soluciones equivalentes para analizar.
 
@@ -111,7 +111,7 @@ En s\'intesis, el algoritmo anterior toma cada par de nodos perteneciente al vec
 
 Para calcular la distancia nueva utilizamos los punteros almacenados en cada nodo. Si, por ejemplo, estuvi\'eramos en el caso de la figura \ref{fig:ej3_algoritmo_1} el c\'alculo realizado ser\'ia:
 \begin{equation*}
-distancia\ nueva = distancia\ actual - distancia(1,2) - distancia(3,4) + distancia(1,3) + distancia(2,4)
+    distancia\ nueva = distancia\ actual - distancia(1,2) - distancia(3,4) + distancia(1,3) + distancia(2,4)
 \end{equation*}
 
 \begin{figure}[H]
@@ -124,7 +124,7 @@ distancia\ nueva = distancia\ actual - distancia(1,2) - distancia(3,4) + distanc
 
 Si la modificaci\'on fuera un reemplazo, como, por ejemplo, en la figura \ref{fig:ej3_algoritmo_2}:
 \begin{equation*}
-distancia\ nueva = distancia\ actual - distancia(2,3) - distancia(3,4) + distancia(2,5) + distancia(5,4)
+    distancia\ nueva = distancia\ actual - distancia(2,3) - distancia(3,4) + distancia(2,5) + distancia(5,4)
 \end{equation*}
 
 Analizamos si el reemplazo o la permutaci\'on es posible teniendo en cuenta las pociones que requieren los gimnasios, las que otorgan las pokeparadas y la capacidad de nuestra mochila. Con este fin avanzamos desde el nodo inicial de nuestra instancia de \texttt{Camino}, llevando la cuenta de cu\'antas pociones tenemos en nuestra mochila. Si el nodo actual es una pokeparada sumamos el m\'inimo entre 3 y lo que le reste de espacio a la mochila, en caso contrario restamos el costo del gimnasio. Si nuestra mochila queda con pociones negativas significa que el cambio no es posible y paramos de iterar, si no continuamos hasta llegar al final del camino. Llegar al nodo que no tiene siguiente significa que el cambio es posible.
@@ -142,12 +142,6 @@ En este caso una iteraci\'on de la b\'usqueda local se corresponde con una ejecu
 Ejecutar nuestro algoritmo de b\'usqueda local sobre una soluci\'on inicial produce una cantidad de iteraciones de ambos tipos que no podemos estimar te\'oricamente. En pr\'oxima secci\'on intentamos encontrar una relaci\'on entre el n\'umero de iteraciones y los par\'ametros que recibe nuestro programa.
 
 \subsection{Experimentación}
-
-% GENERAL: Realizar una experimentacion computacional para medir la performance del programa implementado. Para ello se debe preparar un conjunto de casos de test que permitan observar los tiempos de ejecucion en funcion de los parametros de entrada. Deber ́an desarrollarse tanto experimentos con instancias aleatorias (detallando como fueron generadas) como experimentos con instancias particulares (de peor/mejor caso en tiempo de ejecuci ́on, por ejemplo). Se debe presentar adecuadamente en forma grafica una comparaci on entre los tiempos medidos y la complejidad te ́orica calculada y extraer conclusiones de la experimentaci ́on.
-% una experimentacion b ́asica que muestre que la cota planteada de complejidad tiene sentido.
-% algun experimento que muestre que el mejor caso es bueno y el peor caso es malo.
-% otros experimentos que les parezcan relevantes y pongan de manifiesto alguna caracter ́ıstica del algoritmo (que ya deber ́ıan haber comentado en algun lado).
-% una explicacion y justificacion de como van a hacer el experimento (como van a generar las instancias de prueba, cu ́antas corridas de cada uno van a tomar, etc.)
 
 % ESTE TP: Realizar una experimentacion que permita observar la performance del algoritmo comparando
 % los tiempos de ejecucion y la calidad de las soluciones obtenidas, en funci ́on de las vecindadeS utilizadas y elegir, si es posible, la configuraci ́on que mejores resultados provea para el grupo de instancias utilizado.Si es posible, dar una cota superior para la cantidad de iteraciones de la heur ́ıstica.
@@ -183,7 +177,7 @@ Para comprobar emp\'iricamente las complejidades te\'oricas dividimos el tiempo 
 \begin{figure}[H]
   \begin{center}
     \includegraphics{../experimentacion/ej3/expAleat_complejidad_permutaCamino.pdf}
-    \caption{Tiempo / complejidad en funci\'on de la cantidad de nodos para la vecindad que permuta el camino, utilizando instancias aleatorias.}
+    \caption{Tiempo sobre complejidad en funci\'on de la cantidad de nodos para la vecindad que permuta el camino, utilizando instancias aleatorias.}
     \label{fig:expAleat_complejidad_permutaCamino}
   \end{center}
 \end{figure}
@@ -191,7 +185,7 @@ Para comprobar emp\'iricamente las complejidades te\'oricas dividimos el tiempo 
 \begin{figure}[H]
   \begin{center}
     \includegraphics{../experimentacion/ej3/expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija.pdf}
-    \caption{Tiempo / complejidad en funci\'on de la cantidad de nodos para la vecindad que permuta y reemplaza pokeparadas, utilizando una cantidad de gimnasios fija.}
+    \caption{Tiempo sobre complejidad en funci\'on de la cantidad de nodos para la vecindad que permuta y reemplaza pokeparadas, utilizando una cantidad de gimnasios fija.}
     \label{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija}
   \end{center}
 \end{figure}
@@ -199,19 +193,21 @@ Para comprobar emp\'iricamente las complejidades te\'oricas dividimos el tiempo 
 \begin{figure}[H]
   \begin{center}
     \includegraphics{../experimentacion/ej3/expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija.pdf}
-    \caption{Tiempo / complejidad en funci\'on de la cantidad de nodos para la vecindad que permuta y reemplaza pokeparadas, utilizando una cantidad de pokeparadas fija.}
+    \caption{Tiempo sobre complejidad en funci\'on de la cantidad de nodos para la vecindad que permuta y reemplaza pokeparadas, utilizando una cantidad de pokeparadas fija.}
     \label{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija}
   \end{center}
 \end{figure}
 
-Como podemos observar en las figuras \ref{fig:expAleat_complejidad_permutaCamino}, \ref{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija} y \ref{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija} ...
+Como podemos observar en las figuras \ref{fig:expAleat_complejidad_permutaCamino}, \ref{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantGimFija} y \ref{fig:expFijo_complejidad_permutaYReemplazaPokeparadas_cantPokFija} la relaci\'on entre el tiempo de ejecuci\'on y las cotas te\'oricas de los algoritmos es constante, lo que permite dar por \textit{comprobadas} las complejidades.
 
 \subsubsection{\#iteraciones de la b\'usqueda}
+
+Con el objetivo de dar una cota superior para la cantidad de iteraciones que realiza la heur\'istica, es decir, la cantidad de veces que cambia la soluci\'on por otra vecina evaluamos su relaci\'on con la cantidad de nodos del grafo. Nuestra hip\'otesis es que ambas variable tienen una relaci\'on lineal, por lo tanto, al dividirlas deber\'iamos poder observar un valor constante en los gr\'aficos.
 
 \begin{figure}[H]
   \begin{center}
     \includegraphics{../experimentacion/ej3/expAleat_cantCambios.pdf}
-    \caption{expAleat cantCambios}
+    \caption{Cantidad de cambios sobre cantidad de nodos en funci\'on de la cantidad de nodos usando instancias aleatorias.}
     \label{fig:expAleat_cantCambios}
   \end{center}
 \end{figure}
@@ -219,12 +215,27 @@ Como podemos observar en las figuras \ref{fig:expAleat_complejidad_permutaCamino
 \begin{figure}[H]
   \begin{center}
     \includegraphics{../experimentacion/ej3/expMejor_cantCambios.pdf}
-    \caption{expMejor cantCambios}
+    \caption{Cantidad de cambios sobre cantidad de nodos en funci\'on de la cantidad de nodos usando instancias de mejor caso para la b\'usqueda.}
     \label{fig:expMejor_cantCambios}
   \end{center}
 \end{figure}
 
+En las figuras \ref{fig:expAleat_cantCambios} y \ref{fig:expMejor_cantCambios} no parece haber una pendiente marcada en ning\'un sentido, por lo que podr\'iamos pensar que nuestra hip\'otesis es v\'alida.
+
+Observando el gr\'afico correspondiente a las instancias aleatorias podr\'iamos atrevernos a acotar la cantidad de cambios por n + m, sin embargo, en el mejor caso de la b\'usqueda estos ascienden a 4 $\times$ (n + m). Si este caso es efectivamente el que logra la mayor \textit{mejora} con respecto a la soluci\'on golosa, podr\'ia tambi\'en ser el que m\'as cambios demanda, lo que permitir\'ia acotar la cantidad de iteraciones por 4 $\times$ (n + m).
+
+
 \subsubsection{Calidad de las soluciones}
+
+El prop\'osito de esta secci\'on es evaluar ambas vecindades en cuanto a la calidad de la soluci\'on, en particular, cu\'anto mejora la distancia original recibida del algoritmo goloso, el costo en tiempo del algoritmo y el error relativo con respecto a la soluci\'on \'optima.
+
+Definimos el porcentaje de mejora de la siguiente manera:
+
+\begin{equation*}
+    porcentaje\ de\ mejora = 100 - \frac{distancia\ nueva \times 100}{distancia\ original}
+\end{equation*}
+
+Utilizamos esta m\'etrica para evaluar todas las mediciones realizadas con instancias aleatorias y de mejor caso. Esperamos ver una gran diferencia entre ambos tipos, ya que, como mencionamos antes, el algoritmo goloso es especialmente ineficiente cuando las pokeparadas y los gimnasios est\'an esperados. Exihibimos estos datos en el cuadro \ref{table:porcentaje_mejora}.
 
 \begin{table}[H]
     \begin{center}
@@ -241,17 +252,27 @@ Como podemos observar en las figuras \ref{fig:expAleat_complejidad_permutaCamino
             M\'aximo        &   18.463784   &    28.902765  &       84.686633   &    23.047859  \\ \hline
         \end{tabular}
     \end{center}
-    \caption{Porcentaje de mejora.}    
+    \caption{Porcentaje de mejora para cada vecindad con instancias aleatorias y de mejor caso. \textit{Vecindad I} es \textit{swap} y \textit{Vecindad II} la restante.}    
     \label{table:porcentaje_mejora}
 \end{table} 
+
+Como esper\'abamos, la media del porcentaje var\'ia enormemente. Adem\'as es interesante notar que, como podr\'ia pensarse intuitivamente, la segunda vecindad es superior a la primera en instancias aleatorias pero inferior en el mejor caso. Estos resultados podr\'ian inclinarnos a pensar que la segunda vecindad es ampliamente superior a la primera, ya que la primera \'unicamente vence en el caso m\'as espec\'ifico. Sin embargo, es importante tener en cuenta el costo en cuanto a tiempo de ejecuci\'on de ambos vecindarios.
 
 \begin{figure}[H]
   \begin{center}
     \includegraphics{../experimentacion/ej3/expAleat_cantNodos_tiempo.pdf}
-    \caption{expAleat cantNodos tiempo}
+    \caption{Tiempo en funci\'on de la cantidad de nodos para ambas vecindades usando instancias aleatorias.}
     \label{fig:expAleat_cantNodos_tiempo}
   \end{center}
 \end{figure}
+
+En la figura \ref{fig:expAleat_cantNodos_tiempo} podemos apreciar la relaci\'on entre la cantidad de nodos y el tiempo de ejecuci\'on con instancias aleatorias. Como podr\'ia esperarse, la que m\'as demora es la que posee el mayor porcentaje de mejora, es decir, la que probablemente m\'as modificaciones realiza sobre la soluci\'on inicial.
+
+Por \'ultimo analizamos c\'uan buenas son las soluciones obtenidas por medio de la b\'usqueda local con respecto a laa \'optimas. Medimos esta magnitud con su error relativo:
+
+\begin{equation*}
+    error\ relativo = \frac{error\ absoluto}{valor\ exacto} = \frac{valor\ medido - valor\ exacto}{valor\ exacto}
+\end{equation*}
 
 \begin{table}[H]
     \begin{center}
@@ -268,6 +289,6 @@ Como podemos observar en las figuras \ref{fig:expAleat_complejidad_permutaCamino
             M\'aximo    &   0.280713    &   0.484252    &   0.492888    &   2.524617    \\ \hline
         \end{tabular}
     \end{center}
-    \caption{Error relativo.}    
+    \caption{Error relativo para cada vecindad con instancias aleatorias y de mejor caso.}    
     \label{table:error_relativo}
-\end{table} 
+\end{table}
