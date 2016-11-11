@@ -103,12 +103,26 @@ Planteamos dos experimentos diferentes para el backtracking. Para ambos utilizam
 El primero consiste en corroborar que la cota teórica de complejidad calculada se cumple en la práctica. Para esto utilizamos instancias del problema en las que es necesario pasar por la totalidad de las paradas para poder vencer en todos los gimnasios (acomodando adecuadamente los requerimientos de pociones). 
 A continuación observamos un gráfico en el que se refleja la división entre la función obtenida a partir de medir los ticks del clock en función de la cantidad de nodos y la función de complejidad
 
-Como podemos observar en la figura "citation needed again", la funcion N! / cantidad de ticks es decreciente, lo que muestra que N! acota superiormente a nuestra implementación.
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale = 0.5]{imagenes/ej1_complejidad.pdf}
+    \caption{Ticks de clock / n! en función de la cantidad de nodos.}
+    \label{fig:ej1_complejidad}
+  \end{center}
+\end{figure}
+
+Como podemos observar en la figura \ref{fig:ej1_complejidad}, la funcion N! / cantidad de ticks es decreciente, lo que muestra que N! acota superiormente a nuestra implementación.
 
 
 Para el segundo experimento, definimos un parámetro de dificultad que representa el porcentaje de paradas necesarias para poder triunfar en todos los gimnasios. Creemos que a medida que aumenta esta dificultad, el backtracking tardará más en encontrar alguna solución viable y podará menos soluciones parciales, por lo que tomará más tiempo de ejecución.
 Aquí debajo podemos ver un heatmap en el que mostramos la cantidad de ticks de reloj en función de la cantidad de nodos y de la dificultad.
 
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale = 0.5]{imagenes/ej1_conHeuristica.pdf}
+    \caption{Ticks de clock en función de la cantidad de nodos y la dificultad.}
+    \label{fig:ej1_conHeuristica}
+  \end{center}
+\end{figure}
 
-
-Como podemos observar en "citation needed", la cantidad de ticks del clock aumenta en función de ambas variables, por lo que nuestra hipótesis está confirmada.
+Como podemos observar en la figura \ref{fig:ej1_conHeuristica}, la cantidad de ticks del clock aumenta en función de ambas variables, por lo que nuestra hipótesis está confirmada.
