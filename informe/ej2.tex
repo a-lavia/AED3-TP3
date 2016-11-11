@@ -123,5 +123,180 @@ De la estructura \emph{vector}, las funciones que utilizamos son: size\footnote{
 De \emph{list}, utilizamos las funciones remove\footnote{\url{http://www.cplusplus.com/reference/list/list/remove/}} que tiene complejidad lineal, y push\_back\footnote{\url{http://www.cplusplus.com/reference/list/list/push_back/}} que tiene complejidad constante.
 
 
+\subsection{Comparación de la heuristica con respecto a la solución óptima}
+
+En esta sección veremos que tan mala puede llegar a ser nuestra \textbf{heurística constructiva golosa} con respecto a la solución óptima. Para esto, hemos generado algunos casos particulares que detallaremos a continuación. Para obtener la solución óptima hemos corrido el mismo test con el backtracking que hemos realizado para el primer ejercicio.
+
+Los casos fueron generados con un script de python. Para generar valores aleatorios utilizamos la función \textit{random.randint}\footnote{\url{https://docs.python.org/2/library/random.html}}.
+
+\subsubsection{Caso: Poke Paradas lejos de los Gimnasios}
+
+Este caso cuenta con 5 gimnasios, 5 poke paradas, mochila con capacidad 3 y pociones necesarias para ganar a los gimnasios oscilando entre 1 y 3.
+
+Las posiciones de los gimnasios, tanto $x$ como $y$, fueron elegidas de forma aleatoria entre 10 y 15; y las posiciones de las paradas también fueron elegidas de forma aleatoria pero entre 0 y 5. 
+
+Aquí podemos ver un grafico de la instancia donde los nodos rojos representan a los gimnasios y los verdes a las poke paradas:
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.4]{imagenes/test1.pdf}
+    \caption{Poke Paradas distantes de los nodos}
+    \label{fig:ej2_caso1}
+  \end{center}
+\end{figure}
+
+
+\newpage
+
+La solución óptima obtenida sobre esta instancia devuelve un camino con distancia 78.8592.
+Ahora bien, cuando la corremos con la heuristica obtenemos un camino con distancia 104.98, lo que da como diferencia 26.1208.
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.45\textwidth}
+\includegraphics[width=0.9\textwidth]{imagenes/test1-soltest1BT.pdf}
+\caption{Solución óptima}
+\label{fig:ej2_caso1bt}
+\end{minipage}
+\qquad
+\begin{minipage}{0.45\textwidth}
+\includegraphics[width=0.9\textwidth]{imagenes/test1-soltest1H.pdf}
+\caption{Solución con heuristica}
+\label{fig:ej2_caso1h}
+\end{minipage}
+\end{figure}
+
+
+Se puede apreciar en las figuras como la heuristica pasa por una poke parada más que en el óptimo y esto hace que la distancia recorrida sea mayor.
+
+
+\subsubsection{Caso: Poke Paradas y Gimnasios de a pares en el plano}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.4]{imagenes/test2.pdf}
+    \caption{Poke Paradas y Gimnasios de a pares}
+    \label{fig:ej2_caso2}
+  \end{center}
+\end{figure}
+
+En este caso, tenemos 5 gimnasios y 5 poke paradas que se encuentran de a pares en el plano. Las pociones de los gimnasios tienen valores entre 1 y 3; y la mochila tiene 5 de capacidad.
+
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{imagenes/test2-soltest2BT.pdf}
+\caption{Solución óptima}
+\label{fig:ej2_caso2bt}
+\end{minipage}
+\qquad
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{imagenes/test2-soltest2H.pdf}
+\caption{Solución con heuristica}
+\label{fig:ej2_caso2h}
+\end{minipage}
+\end{figure}
+
+La solución óptima devuelve un camino con distancia total 13.5366, en cambio la heuristica devuelve un camino con distancia 14.9061. La diferencia es de 1.3695.
+
+
+
+Tiene sentido que para este caso tenga una diferencia chica la una de la otra ya que por como están dispuestas las poke paradas y los gimnasios y, dado que la heuristica primero genera un camino de gimnasios, en estos casos va a haber una diferencia de distancias pequeña.
+
+
+\subsubsection{Caso: Sólo gimnasios}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.4]{imagenes/test3.pdf}
+    \caption{Sólo Gimnasios}
+    \label{fig:ej2_caso3}
+  \end{center}
+\end{figure}
+
+Este caso sólo presenta 10 gimnasios a los que no necesitan pociones para ser vencidos (en cada uno el valor necesario es cero). Éstos poséen posiciones aleatorias dentro del mapa.
+
+Cómo la heuristica genera un camino de gimnasios veamos como se comporta en este caso contra la solución óptima.
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{imagenes/test3-soltest3BT.pdf}
+\caption{Solución óptima}
+\label{fig:ej2_caso3bt}
+\end{minipage}
+\qquad
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{imagenes/test3-soltest3H.pdf}
+\caption{Solución con heuristica}
+\label{fig:ej2_caso3h}
+\end{minipage}
+\end{figure}
+
+Tanto la solución óptima como la heuristica en este caso devolvieron el mismo camino. Ésto nos dice que podemos obtener mejores casos cuando se tienen más gimnasios que paradas y las instancias tienen solución.
+
+
+\subsubsection{Caso: Posiciones aleatorias}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.4]{imagenes/test4.pdf}
+    \caption{Gimnasios y Paradas con posiciones aleatorias}
+    \label{fig:ej2_caso4}
+  \end{center}
+\end{figure}
+
+En este caso tenemos 5 gimnasios y 5 poke paradas dispersos en el plano. Se cuenta con una mochila de tamaño 3 y cada gimnasio necesita 3 pociones para ser vencido.
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{imagenes/test4-soltest4BT.pdf}
+\caption{Solución óptima}
+\label{fig:ej2_caso4bt}
+\end{minipage}
+\qquad
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[width=0.9\textwidth]{imagenes/test4-soltest4H.pdf}
+\caption{Solución con heuristica}
+\label{fig:ej2_caso4h}
+\end{minipage}
+\end{figure}
+
+La solución óptima obtenida para esta instancia devuelve un camino con distancia recorrida 60.7142, mientras que la heuristica devuelve un camino con distancia 85.9269. La diferencia entre distancias es de 25.2127. Esto nos dice que para grafos aleatorios podemos obtener casos muy lejanos de la solución óptima.
+
+\subsubsection{Caso: Heuristica no encuentra solución}
+
+Los peores casos de la heuristica son los que no encuentra una solución cuando la hay. Este es uno de esos casos.
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.4]{imagenes/test5.pdf}
+    \caption{Grafo en el que nuestra heuristica no encuentra solución pero la tiene.}
+    \label{fig:ej2_caso4}
+  \end{center}
+\end{figure}
+
+La cantidad de gimnasios y de paradas es de 5, la mochila tiene capacidad 5 y los gimnasios piden cantidad de pociones entre 1 y 5 para poder vencerlos.
+
+La solución óptima es la siguiente:
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.4]{imagenes/test5-soltest5BT.pdf}
+    \caption{Solución óptima.}
+    \label{fig:ej2_caso4}
+  \end{center}
+\end{figure}
+
+
 \subsection{Experimentación}
 
+Con el fin de observar la performance del algoritmo en términos de tiempo de ejecución en función del tamaño de entrada, generamos 

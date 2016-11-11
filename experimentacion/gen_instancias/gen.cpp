@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <math.h> //round
+#include <utility> //pair
 
 using namespace std;
 
@@ -14,6 +15,44 @@ float rndF(float min, float max) {
 	return ((max-min)*((float)rand()/RAND_MAX))+min;
 }
 
+void generarMapa(int x, int y, int g, int p, int dificultad, int semilla, int mochila, vector<pair<int, int>>& gimnasios, vector<int>& gimnasiosPoder, vector<pair<int, int>>& paradas) {
+
+	gimnasios.resize(g);
+	gimnasiosPoder.resize(g);
+	paradas.resize(p);
+
+	srand(semilla);
+
+	int pociones = p*3;
+
+	float poderGymMedio = pociones / (float) g;
+	poderGymMedio = poderGymMedio * ( dificultad / (float) 100);
+
+	for(int i = 0; i < g; i++) {
+
+		int poderGym = 0;
+		if(dificultad != 0) { 
+			poderGym = round(rndF(0, poderGymMedio*2));
+			poderGym = poderGym > mochila ? mochila : poderGym;
+			pociones -= poderGym;
+			if(pociones < 0) {
+				poderGym += pociones;
+				pociones = 0;
+			}
+		}
+
+		gimnasios[i].second = rnd(0, y);
+		gimnasios[i].first = rnd(0, x);
+		gimnasiosPoder[i] = poderGym;
+	}
+
+	for(int i = 0; i < p; i++) {
+		paradas[i].second = rnd(0, y);
+		paradas[i].first = rnd(0, x);
+	}
+
+}
+/*
 int main(int argc, char* argv[]) {
 
 	//entrada x y gimnasios pokeparadas mochila
@@ -85,4 +124,4 @@ int main(int argc, char* argv[]) {
 
 	mapa.close();
 	return 0;
-}
+}*/
