@@ -3,8 +3,7 @@
 
 #include "aux.h"
 #include "Grafo.h"
-#include "../ej2/funciones.h"
-#include "../ej2/SegundaHeuristica.h"
+#include "../ej2/heuristica.h"
 
 class Camino{
     public:
@@ -19,8 +18,7 @@ class Camino{
         int tamMochila() const;
 
         void asignarSolucion(double distancia, queue<int>& caminoCola);
-        void asignarSolucionGolosaJ();
-        void asignarSolucionGolosaA();
+        void asignarSolucionGolosa();
 
         bool encontreSolucion();
         bool encontreCamino();
@@ -37,6 +35,7 @@ class Camino{
         Nodo* _nodoInicial;
         double _distancia;
         Cambios _cambios;
+        vector<int> _ultimoCambio;
 
         void asignarNodoInicial(Nodo* nodoInicial);
         void asignarDistancia(double distancia);

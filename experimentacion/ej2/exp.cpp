@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	ofstream salida;
-	salida.open("salidaOtraH.csv", std::ios_base::app);
+	salida.open("salida.csv", std::ios_base::app);
 	double cantCiclosTotal = 0;
 	float distancia = 0;
 
@@ -36,12 +36,14 @@ int main(int argc, char* argv[]) {
 
 		auto inicio = RELOJ();
 		queue<int> solucion = solucionHeuristica(gimnasios, gimnasiosPoder, paradas, mochila);
+		distancia = distanciaCamino(solucion, gimnasios, paradas);
 		imprimirSolucion(solucion,gimnasios,paradas);
 		auto fin = RELOJ();
-	
+
+
 		cantCiclosTotal += (double) chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count();
 	}
-	
+
 	salida << n << "," << m << "," << mochila << "," << distancia << "," << cantCiclosTotal / (double) CANT_REPETICIONES << endl;
 	salida.close();
 

@@ -22,10 +22,10 @@ void generarCaminosAleatOp(vector<Camino>& caminos){
 
     cout << "Generando caminos... ";
 
-    for(int i = 0; i < CANT_NODOS_MAX_OP + 1; i++){
-        int cantGimnasios = min(aleatEnRango(min(CANT_GIMNASIOS_MIN,i), i), CANT_GIMNASIOS_MAX_OP);
+    for(int i = CANT_GIMNASIOS_MIN; i < CANT_NODOS_MAX_OP + 1; i++){
+        int cantGimnasios = min(aleatEnRango(CANT_GIMNASIOS_MIN, i), CANT_GIMNASIOS_MAX_OP);
         Grafo g;
-        generarGrafoAleatOp(cantGimnasios, i - cantGimnasios, g);
+        generarGrafoAleatFijo(cantGimnasios, i - cantGimnasios, g);
 
         Camino c(g, TAM_MOCHILA);
         caminos[i] = c;
@@ -60,10 +60,10 @@ void generarCaminosMejorOp(vector<Camino>& caminos){
 
     int tamMochila;
 
-    for(int i = 0; i < CANT_NODOS_MAX_OP + 1; i++){
-        int cantGimnasios = min(aleatEnRango(min(CANT_GIMNASIOS_MIN,i), i), CANT_GIMNASIOS_MAX_OP);
+    for(int i = CANT_GIMNASIOS_MIN; i < CANT_NODOS_MAX_OP + 1; i++){
+        int cantGimnasios = min(aleatEnRango(CANT_GIMNASIOS_MIN, i), CANT_GIMNASIOS_MAX_OP);
         Grafo g;
-        tamMochila = generarGrafoMejorOp(cantGimnasios, i - cantGimnasios, g);
+        tamMochila = generarGrafoMejorFijo(cantGimnasios, i - cantGimnasios, g);
 
         Camino c(g, tamMochila);
         caminos[i] = c;
@@ -72,12 +72,47 @@ void generarCaminosMejorOp(vector<Camino>& caminos){
     cout << "Listo" << endl;
 }
 
-void asignarSolucionesJ(vector<Camino>& caminos){
+
+void generarCaminosCantGimFija(vector<Camino>& caminos){
+    assert(caminos.size() == CANT_CASOS);
+
+    cout << "Generando caminos... ";
+
+    for(int i = 0; i < CANT_CASOS; i++){
+        int cantPokeparadas = aleatEnRango(CANT_POKEPARADAS_MIN, CANT_POKEPARADAS_MAX_CANTGIMFIJA);
+        Grafo g;
+        generarGrafoAleatFijo(CANT_FIJA, cantPokeparadas, g);
+
+        Camino c(g, TAM_MOCHILA);
+        caminos[i] = c;
+    }
+
+    cout << "Listo" << endl;
+}
+
+void generarCaminosCantPokFija(vector<Camino>& caminos){
+    assert(caminos.size() == CANT_CASOS);
+
+    cout << "Generando caminos... ";
+
+    for(int i = 0; i < CANT_CASOS; i++){
+        int cantGimnasios = aleatEnRango(CANT_GIMNASIOS_MIN, CANT_GIMNASIOS_MAX_CANTPOKFIJA);
+        Grafo g;
+        generarGrafoAleatFijo(cantGimnasios, CANT_FIJA, g);
+
+        Camino c(g, TAM_MOCHILA);
+        caminos[i] = c;
+    }
+
+    cout << "Listo" << endl;
+}
+
+void asignarSoluciones(vector<Camino>& caminos){
     cout << "Hallando soluciones golosas para los caminos... ";
 
     int cantCaminos = caminos.size();
     for(int c = 0; c < cantCaminos; c++){
-        caminos[c].asignarSolucionGolosaJ();
+        caminos[c].asignarSolucionGolosa();
     }
     
     cout << "Listo" << endl;
@@ -90,7 +125,6 @@ void generarSalidaBL(vector<Camino>& caminos, Vecindad criterio, ofstream& salid
     
     int cantCaminos = caminos.size();
     
-    double cantCiclosTotal;
     int cantGimnasios, cantPokeparadas, tamMochila, distanciaOriginal, distanciaNueva, tamCamino, cantNodos;
     queue<int> caminoCola, caminoColaVacia;    
     Camino caminoCopia;
@@ -114,7 +148,9 @@ void generarSalidaBL(vector<Camino>& caminos, Vecindad criterio, ofstream& salid
 
         cout << "           Midiendo tiempos... ";
  
-        cantCiclosTotal = 0;
+        tamMochila = caminos[c].tamMochila();
+        distanciaOriginal = caminos[c].distancia();
+
         if(caminos[c].encontreCamino()){
             for(int r = 0; r < CANT_REPETICIONES; r++){
                 caminoCola = caminoColaVacia;
@@ -123,24 +159,26 @@ void generarSalidaBL(vector<Camino>& caminos, Vecindad criterio, ofstream& salid
                     cambiosBL = caminoCopia.busquedaLocal(criterio);
                     distanciaNueva = caminoCopia.devolverSolucion(caminoCola);
                 auto fin = RELOJ();
-                cantCiclosTotal += (double) chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count();
+
+                tamCamino = caminoCola.size();
+
+                salida << cantGimnasios << "," << cantPokeparadas << "," << tamMochila << "," << distanciaOriginal << ","
+                       << distanciaNueva << "," << cambiosBL.cantPermutacionesParaMejorar << "," << cambiosBL.cantPermutacionesParaMantener
+                       << "," << cambiosBL.cantReemplazosParaMejorar << "," << cambiosBL.cantReemplazosParaMantener << "," << tamCamino << ","
+                       << chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count() << endl;
             }
-            tamCamino = caminoCola.size();
         } else{
             tamCamino = 0;
             distanciaNueva = caminos[c].distancia();
             cambiosBL = cambiosBLVacio;
+
+            salida << cantGimnasios << "," << cantPokeparadas << "," << tamMochila << "," << distanciaOriginal << ","
+                   << distanciaNueva << "," << cambiosBL.cantPermutacionesParaMejorar << "," << cambiosBL.cantPermutacionesParaMantener
+                   << "," << cambiosBL.cantReemplazosParaMejorar << "," << cambiosBL.cantReemplazosParaMantener << "," << tamCamino << ","
+                   << 0 << endl;
         }
 
         cout << "Listo" << endl;
-
-        tamMochila = caminos[c].tamMochila();
-        distanciaOriginal = caminos[c].distancia();
-
-        salida << cantGimnasios << "," << cantPokeparadas << "," << tamMochila << "," << distanciaOriginal << ","
-        << distanciaNueva << "," << cambiosBL.cantPermutacionesParaMejorar << "," << cambiosBL.cantPermutacionesParaMantener
-        << "," << cambiosBL.cantReemplazosParaMejorar << "," << cambiosBL.cantReemplazosParaMantener << "," << tamCamino << ","
-        << cantCiclosTotal / (double) CANT_REPETICIONES << endl;
 
         cout << "       Listo" << endl;
     }
@@ -155,7 +193,6 @@ void generarSalidaOp(vector<Camino>& caminos, ofstream& salida){
     
     int cantCaminos = caminos.size();
     
-    double cantCiclosTotal;
     int cantGimnasios, cantPokeparadas, tamMochila, distancia, tamCamino, cantNodos;
     queue<int> caminoCola, caminoColaVacia;
     
@@ -196,22 +233,20 @@ void generarSalidaOp(vector<Camino>& caminos, ofstream& salida){
 
         cout << "           Midiendo tiempos... ";
 
-        cantCiclosTotal = 0;
         for(int r = 0; r < CANT_REPETICIONES_OP; r++){
             backtracking bt(gimnasios, gimnasiosPoder, paradas, tamMochila);
             caminoCola = caminoColaVacia;
             auto inicio = RELOJ();
                 distancia = bt.correr_backtracking(&caminoCola);
             auto fin = RELOJ();
-            cantCiclosTotal += (double) chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count();
+
+            tamCamino = caminoCola.size();
+
+            salida << cantGimnasios << "," << cantPokeparadas << "," << tamMochila << "," << distancia << ","
+                   << tamCamino << "," << chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count() << endl;
         }
 
         cout << "Listo" << endl;
-
-        tamCamino = caminoCola.size();
-
-        salida << cantGimnasios << "," << cantPokeparadas << "," << tamMochila << "," << distancia << ","
-        << tamCamino << "," << cantCiclosTotal / (double) CANT_REPETICIONES_OP << endl;
 
         cout << "       Listo" << endl;
     }
@@ -238,7 +273,7 @@ void generarGrafoAleat(int cantGimnasios, Grafo& grafo){
         n++;
     }
 
-    int cantPokeparadas = aleatEnRango(cantTotalPociones, cantTotalPociones * 2);
+    int cantPokeparadas = aleatEnRango((cantTotalPociones / 3) + 1, ((cantTotalPociones / 3) + 1) * 2);
     int cantNodos = cantGimnasios + cantPokeparadas;
     Grafo g(cantNodos);
 
@@ -260,7 +295,7 @@ void generarGrafoAleat(int cantGimnasios, Grafo& grafo){
     grafo = g;
 }
 
-void generarGrafoAleatOp(int cantGimnasios, int cantPokeparadas, Grafo& grafo){
+void generarGrafoAleatFijo(int cantGimnasios, int cantPokeparadas, Grafo& grafo){
     int cantNodos = cantGimnasios + cantPokeparadas;
     Grafo g(cantNodos);   
 
@@ -314,7 +349,7 @@ int generarGrafoMejor(int cantGimnasios, Grafo& grafo){
         n++;
     }
 
-    int cantPokeparadas = aleatEnRango(cantTotalPociones, cantTotalPociones * 2);
+    int cantPokeparadas = aleatEnRango((cantTotalPociones / 3) + 1, ((cantTotalPociones / 3) + 1) * 2);
     int cantNodos = cantGimnasios + cantPokeparadas;
     Grafo g(cantNodos);
 
@@ -337,7 +372,7 @@ int generarGrafoMejor(int cantGimnasios, Grafo& grafo){
     return cantTotalPociones;
 }
 
-int generarGrafoMejorOp(int cantGimnasios, int cantPokeparadas, Grafo& grafo){
+int generarGrafoMejorFijo(int cantGimnasios, int cantPokeparadas, Grafo& grafo){
     int cantNodos = cantGimnasios + cantPokeparadas;
     Grafo g(cantNodos);   
 

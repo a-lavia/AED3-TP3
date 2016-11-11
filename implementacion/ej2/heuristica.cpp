@@ -129,16 +129,22 @@ queue<int> solucionHeuristica(vector<pos>& gimnasios, vector<int>& gimnasiosPode
 }
 
 void imprimirSolucion(queue<int>& camino, vector<pos>& posGym, vector<pos>& posParadas){
-	cout << distanciaCamino(camino, posGym, posParadas) << " ";
-	cout << camino.size() << " ";
+	float d = distanciaCamino(camino, posGym, posParadas);
 
-	if(solucion.size != 0){
-		while(!solucion.empty()){
-			cout << (solucion.front()+1) << " ";
-			solucion.pop();
+	// si la distancia es 0 y no hay gimnasios gane.
+	if(d == 0 && posGym.size() == 0){
+		cout << "0 0" << endl;
+		return;
+	}
+
+	if(camino.size() != 0){
+		cout << d << " " << camino.size() << " ";
+		while(!camino.empty()){
+			cout << (camino.front()+1) << " ";
+			camino.pop();
 		}
 	} else {
-		cout << "-1";
+		cout << -1;
 	}
 	cout << endl;
 

@@ -1,4 +1,4 @@
-#include "pokeGrasp.h"
+#include "grasp.h"
 
 //Recibe un vector con las posiciones de los gimnasios, un vector con el poder de los gimnasios, y otro vector con la posicion de las paradas
 grasp::grasp(vector<pos>& g, vector<int>& gp, vector<pos>& p, int m) : gimnasios(g), gimnasiosPoder(gp), paradas(p), mochila(m), grafo(g.size()+p.size()) {

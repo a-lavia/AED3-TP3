@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include "../ej2/SegundaHeuristica.h"
+#include "../ej2/heuristica.h"
 
 using namespace std;
 

@@ -1,10 +1,9 @@
 .PHONY: all clean
 
-BIN = exp exp2
+BIN = exp
 
 all:
-	g++ exp.cpp ../../implementacion/ej2/funciones.cpp -std=c++11 -o exp
-	g++ expOtraHeuristica.cpp ../../implementacion/ej2/SegundaHeuristica.cpp -std=c++11 -o exp2
+	g++ exp.cpp ../../implementacion/ej2/heuristica.cpp -std=c++11 -o exp
 
 clean:
 	rm -f $(BIN)

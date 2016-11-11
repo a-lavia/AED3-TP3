@@ -1,5 +1,5 @@
-#ifndef POKE_GRASP_H
-#define POKE_GRASP_H
+#ifndef GRASP_H
+#define GRASP_H
 
 #include <utility> //pair
 #include <vector>

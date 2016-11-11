@@ -50,20 +50,22 @@ def test1a():
 def test1b():
 	"""
 	Paradas lejos de los gym
-	Mochila variable de 3 a 15
+	Instancia fija de 10 nodos
+	muevo gym y paradas
 	Poder gym fijo = 3
-	10 nodos -> 5 y 5
+	Mochila fija 3
 	"""
-	pos = posaleat()
-	for i in range(3,16):
+	for i in range(1,11):
 		file = open("HvsBT/test1b_" + str(i), "w+")
-		file.write("5 5 " + str(i) + "\n")
+		cantGym = i
+		cantParadas = 10 - i
+		file.write(str(cantGym) + " " + str(cantParadas) + " " + "3" + "\n")
 
-		for j in range(5,10):
-			file.write(str(pos[j][0]) + " " + str(pos[j][1]) + " 3\n")
+		for j in range(0,cantGym):
+			file.write(str(random.randint(0,5)) + " " + str(random.randint(0,5)) + " 3\n")
 
-		for k in range(0,5):
-			file.write(str(pos[k][0]) + " " + str(pos[k][1]) + "\n")
+		for k in range(0,cantParadas):
+			file.write(str(random.randint(10,15)) + " " + str(random.randint(10,15)) + "\n")
 
 		file.close()
 
@@ -108,7 +110,7 @@ def test3a():
 	Mochila = 0 (no importa)
 	"""
 	file = open("HvsBT/test3a", "w+")
-	file.write("5 5 0\n")
+	file.write("10 0 0\n")
 	
 	for i in range(1,11):
 		file.write(str(random.randint(1,20)) + " " + str(random.randint(1,20)) + " " + "0\n")
@@ -123,7 +125,7 @@ def test3b():
 	Mochila = 0 (no importa)
 	"""
 	file = open("HvsBT/test3b", "w+")
-	file.write("5 5 0\n")
+	file.write("10 0 0\n")
 	
 	for i in range(2,5):
 		file.write(str(i) + " 4 0\n")
@@ -140,40 +142,22 @@ def test3b():
 	return
 
 
-def test4a():
+def test4():
 	"""
 	Posiciones aleatorias - 5 gym y 5 paradas
 	posiciones con valores entre 1 y 20
 	poder gym valor fijo = 3
-	Mochila entre 3 y 15
+	Mochila fija = 3
 	"""
-	for i in range(3,16):
-		file = open("HvsBT/test4a_" + str(i), "w+")
-		file.write("5 5 " + str(i) +"\n")
+	for i in range(0,100):
+		file = open("HvsBT/test4_" + str(i), "w+")
+		file.write("5 5 3\n")
 		for j in range(0,5):
 			file.write(str(random.randint(1,20)) + " " + str(random.randint(1,20)) + " 3\n")
 		for k in range(0,5):
 			file.write(str(random.randint(1,20)) + " " + str(random.randint(1,20)) + "\n")
 		file.close()
 
-	return
-
-
-def test4b():
-	"""
-	Posiciones aleatorias - 5 gym y 5 paradas
-	posiciones con valores entre 1 y 20
-	poder gym aleat entre 1 y 3
-	Mochila = 3
-	"""
-	file = open("HvsBT/test4b", "w+")
-	file.write("5 5 3\n")
-	for i in range(0,5):
-		file.write(str(random.randint(1,20)) + " " +  str(random.randint(1,20)) + " " + str(random.randint(1,3)) + "\n")
-	for j in range(0,5):
-		file.write(str(random.randint(1,20)) + " " +  str(random.randint(1,20)) + "\n")
-
-	file.close()
 	return
 
 
@@ -202,7 +186,5 @@ test2a()
 test2b()
 test3a()
 test3b()
-test4a()
-test4b()
+test4()
 test5()
-
