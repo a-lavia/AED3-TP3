@@ -129,24 +129,28 @@ queue<int> solucionHeuristica(vector<pos>& gimnasios, vector<int>& gimnasiosPode
 }
 
 void imprimirSolucion(queue<int>& camino, vector<pos>& posGym, vector<pos>& posParadas){
+	imprimirSolucionAOstream(cout, camino, posGym, posParadas);
+}
+
+void imprimirSolucionAOstream(ostream& sol, queue<int>& camino, vector<pos>& posGym, vector<pos>& posParadas){
 	float d = distanciaCamino(camino, posGym, posParadas);
 
 	// si la distancia es 0 y no hay gimnasios gane.
 	if(d == 0 && posGym.size() == 0){
-		cout << "0 0" << endl;
+		sol << "0 0" << endl;
 		return;
 	}
 
 	if(camino.size() != 0){
-		cout << d << " " << camino.size() << " ";
+		sol << d << " " << camino.size() << " ";
 		while(!camino.empty()){
-			cout << (camino.front()+1) << " ";
+			sol << (camino.front()+1) << " ";
 			camino.pop();
 		}
 	} else {
-		cout << -1;
+		sol << -1;
 	}
-	cout << endl;
+	sol << endl;
 
 	return;
 }

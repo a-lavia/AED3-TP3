@@ -26,8 +26,9 @@ int main(int argc, char* argv[]) {
 		cin >> paradas[i].second;
 	}
 
-	ofstream salida;
+	ofstream salida,camino;
 	salida.open("salida.csv", std::ios_base::app);
+	camino.open("camino.csv", std::ios_base::app);
 	double cantCiclosTotal = 0;
 	float distancia = 0;
 
@@ -42,9 +43,12 @@ int main(int argc, char* argv[]) {
 			distancia = -1;
 		}
 
-		imprimirSolucion(solucion,gimnasios,paradas);
 		auto fin = RELOJ();
 
+		if(i == 0){
+			imprimirSolucionAOstream(camino,solucion,gimnasios,paradas);
+			camino.close();
+		}
 
 		cantCiclosTotal += (double) chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count();
 	}

@@ -25,4 +25,6 @@ queue<int> solucionHeuristica(vector<pos>& gimnasios, vector<int>& gimnasiosPode
 
 void imprimirSolucion(queue<int>& camino, vector<pos>& posGym, vector<pos>& posParadas);
 
+void imprimirSolucionAOstream(ostream& sol, queue<int>& camino, vector<pos>& posGym, vector<pos>& posParadas);
+
 #endif

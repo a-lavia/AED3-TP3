@@ -36,25 +36,45 @@ int main(int argc, char* argv[]) {
 	}
 
 
-	// queue<int> solucion;
+	queue<int> solucion;
+	int nodo;
 
-
-	ofstream salida;
+	ofstream salida, camino;
 	salida.open("salida.csv", std::ios_base::app);
+	camino.open("camino.csv", std::ios_base::app);
 	double cantCiclosTotal = 0;
 	float distancia = 0;
+	
 	for (int i = 0; i < CANT_REPETICIONES; ++i){
 
 		auto inicio = RELOJ();
 
 		backtracking bt(gimnasios, gimnasiosPoder, paradas, mochila);
-		distancia = bt.correr_backtracking();
+		distancia = bt.correr_backtracking(&solucion);
 
 		auto fin = RELOJ();
 
-		// while(!solucion.empty()) {
-		// 	solucion.pop();
-		// }
+		// Necesito tener el camino en un csv, por eso esto
+		if(i == 0){
+
+			if(distancia == 0 && solucion.empty()){
+				camino << "-1" << endl;
+			
+			} else if(distancia > 0){
+				camino << distancia << " " << solucion.size() << " ";
+			
+				while(!solucion.empty()) {
+					nodo = solucion.front();
+					camino << nodo << " ";
+					solucion.pop();
+				}
+				camino << endl;
+			}
+		}
+
+		while(!solucion.empty()) {
+				solucion.pop();
+		}
 
 		cantCiclosTotal = cantCiclosTotal + (double) chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count();
 	}

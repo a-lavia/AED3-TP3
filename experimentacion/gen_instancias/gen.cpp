@@ -52,7 +52,7 @@ void generarMapa(int x, int y, int g, int p, int dificultad, int semilla, int mo
 	}
 
 }
-/*
+
 int main(int argc, char* argv[]) {
 
 	//entrada x y gimnasios pokeparadas mochila
@@ -125,4 +125,3 @@ int main(int argc, char* argv[]) {
 	mapa.close();
 	return 0;
 }
-*/
