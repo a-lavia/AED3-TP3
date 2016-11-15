@@ -14,7 +14,7 @@ echo "Fin Test 1 Heuristica"
 
 
 echo "Test 1 Backtracking"
-echo "gimnasios,paradas,mochila,distancia,cantciclos" >> ../ej1/salida.csv;
+echo "gimnasios,paradas,mochila,distancia,cantciclos" >> salida.csv;
 for ((i = 1; i <= 7; i++))
 do
 	for ((j = 1; j <= $i; j++))
@@ -23,8 +23,8 @@ do
 		../ej1/ej1Exp.out < CasosPerformanceTiempo/Caso1/caso1-p$i-g$j
 	done
 done
-mv ../ej1/salida.csv CasosPerformanceTiempo/Caso1/resultadosBT.csv
-mv ../ej1/camino.csv CasosPerformanceTiempo/Caso1/resCaminosBT.csv
+mv salida.csv CasosPerformanceTiempo/Caso1/resultadosBT.csv
+mv camino.csv CasosPerformanceTiempo/Caso1/resCaminosBT.csv
 echo "Fin Test 1 Backtracking"
 
 
@@ -44,7 +44,7 @@ echo "Fin Test 2 Heuristica"
 
 
 echo "Test 2 Backtracking"
-echo "gimnasios,paradas,mochila,distancia,cantciclos" >> ../ej1/salida.csv;
+echo "gimnasios,paradas,mochila,distancia,cantciclos" >> salida.csv;
 for ((i = 1; i <= 7; i++))
 do
 	for ((j = 1; j <= $i; j++))
@@ -53,8 +53,8 @@ do
 		../ej1/ej1Exp.out < CasosPerformanceTiempo/Caso2/caso2-g$i-p$j
 	done
 done
-mv ../ej1/salida.csv CasosPerformanceTiempo/Caso2/resultadosBT.csv
-mv ../ej1/camino.csv CasosPerformanceTiempo/Caso2/resCaminosBT.csv
+mv salida.csv CasosPerformanceTiempo/Caso2/resultadosBT.csv
+mv camino.csv CasosPerformanceTiempo/Caso2/resCaminosBT.csv
 echo "Fin Test 2 Backtracking"
 
 
@@ -70,13 +70,13 @@ echo "Fin Test 3 Heuristica"
 
 
 echo "Test 3 Backtracking"
-echo "gimnasios,paradas,mochila,distancia,cantciclos" >> ../ej1/salida.csv;
+echo "gimnasios,paradas,mochila,distancia,cantciclos" >> salida.csv;
 for i in {1..13}; do
 	echo "Caso 3 Backtracking: $i <= 13"
 	../ej1/ej1Exp.out < CasosPerformanceTiempo/Caso3/caso3-$i
 done;
-mv ../ej1/salida.csv CasosPerformanceTiempo/Caso3/resultadosBT.csv
-mv ../ej1/camino.csv CasosPerformanceTiempo/Caso3/resCaminosBT.csv
+mv salida.csv CasosPerformanceTiempo/Caso3/resultadosBT.csv
+mv camino.csv CasosPerformanceTiempo/Caso3/resCaminosBT.csv
 echo "Fin Test 3 Backtracking"
 
 
@@ -92,13 +92,13 @@ echo "Fin Test 4 Heuristica"
 
 
 echo "Test 4 Backtracking"
-echo "gimnasios,paradas,mochila,distancia,cantciclos" >> ../ej1/salida.csv;
+echo "gimnasios,paradas,mochila,distancia,cantciclos" >> salida.csv;
 for i in {1..7}; do
 	echo "Caso 4 Backtracking: $i <= 7"
 	../ej1/ej1Exp.out < CasosPerformanceTiempo/Caso4/caso4-$i
 done;
-mv ../ej1/salida.csv CasosPerformanceTiempo/Caso4/resultadosBT.csv
-mv ../ej1/camino.csv CasosPerformanceTiempo/Caso4/resCaminosBT.csv
+mv salida.csv CasosPerformanceTiempo/Caso4/resultadosBT.csv
+mv camino.csv CasosPerformanceTiempo/Caso4/resCaminosBT.csv
 echo "Fin Test 4 Backtracking"
 
 
@@ -114,11 +114,11 @@ echo "Fin Test 5 Heuristica"
 
 
 echo "Test 5 Backtracking"
-echo "gimnasios,paradas,mochila,distancia,cantciclos" >> ../ej1/salida.csv;
+echo "gimnasios,paradas,mochila,distancia,cantciclos" >> salida.csv;
 for i in {1..100}; do
 	echo "Caso 5 Backtracking: $i <= 100"
 	../ej1/ej1Exp.out < CasosPerformanceTiempo/Caso5/caso5-$i;
 done;
-mv ../ej1/salida.csv CasosPerformanceTiempo/Caso5/resultadosBT.csv
-mv ../ej1/camino.csv CasosPerformanceTiempo/Caso5/resCaminosBT.csv
+mv salida.csv CasosPerformanceTiempo/Caso5/resultadosBT.csv
+mv camino.csv CasosPerformanceTiempo/Caso5/resCaminosBT.csv
 echo "Fin Test 5 Backtracking"

@@ -38,14 +38,13 @@ int main(int argc, char* argv[]) {
 		auto inicio = RELOJ();
 		queue<int> solucion = solucionHeuristica(gimnasios, gimnasiosPoder, paradas, mochila);
 		distancia = distanciaCamino(solucion, gimnasios, paradas);
-		
-		if(distancia == 0 && solucion.size() == 0){
-			distancia = -1;
-		}
-
 		auto fin = RELOJ();
+		
 
 		if(i == 0){
+			if(distancia == 0 && solucion.size() == 0){
+				distancia = -1;
+			}
 			imprimirSolucionAOstream(camino,solucion,gimnasios,paradas);
 			camino.close();
 		}

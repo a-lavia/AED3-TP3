@@ -70,6 +70,7 @@ int main(int argc, char* argv[]) {
 				}
 				camino << endl;
 			}
+			camino.close();
 		}
 
 		while(!solucion.empty()) {
