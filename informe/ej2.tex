@@ -12,8 +12,6 @@ Una vez obtenido este camino, generamos el camino solución de la siguiente form
 
 El algoritmo termina si, o bien le ganó a todos los gimnasios, caso en el que devuelve la distancia recorrida, la cantidad de gimnasios y pokeparadas que recorrió y el camino realizado; o si llega a un punto donde no puede ganarle a ningún gimnasio y tiene la mochila llena o pasó por todas las pokeparadas, devolviendo $-1$.
 
-%Con todo esto descripto anteriormente, el pseudocódigo del algoritmo propuesto es el siguiente:
-
 Para generar el camino de gimnasios lo que hacemos es: comenzando por un gimnasio, buscamos el gimnasio de distancia menor a éste. Luego buscamos el de distancia menor al siguiente, así hasta que no quedan más gimnasios por recorrer y comparamos la distancia total del camino generado con la de la mejor solución, si es menor nos quedamos con el camino y reemplaza al mejor que teníamos, si es mayor lo descartamos. Este procedimiento lo hacemos por cada gimnasio, generando los caminos y siempre quedándonos con el de distancia menor. Una vez terminado, devolvemos el camino guardado. El pseudo código de esta operación es el siguiente:
 
 \begin{algorithm}[H]
@@ -274,80 +272,167 @@ La solución óptima es la siguiente:
 \end{figure}
 
 
-\subsection{Experimentación}
+% \subsection{Experimentación}
 
-% Con el fin de observar la performance del algoritmo en términos de tiempo de ejecución en función del tamaño de entrada, generamos...
+% Comento los No-tests. Luego veo que hago con la parte de la complejidad.
 
-Test 1 - 
-Gimnasios aumntando desde 1 a 250 - 
-Paradas fijas = 250 - 
-Mochila fija = 6 - 
-Dificultad = 50
+% Test 1 - 
+% Gimnasios aumntando desde 1 a 250 - 
+% Paradas fijas = 250 - 
+% Mochila fija = 6 - 
+% Dificultad = 50
+
+% \begin{figure}[H]
+%   \begin{center}
+%     \includegraphics[scale=0.8]{imagenes/ej2test1tiempos.pdf}
+%     \caption{}
+%     \label{}
+%   \end{center}
+% \end{figure}
+
+
+% Test 2
+% Paradas aumentado desde 1 a 250.
+% Gimnasios fijos = 250
+% Mochila fija = 6
+% Dificultad = 50
+
+% \begin{figure}[H]
+%   \begin{center}
+%     \includegraphics[scale=0.8]{imagenes/ej2test1tiempos.pdf}
+%     \caption{}
+%     \label{}
+%   \end{center}
+% \end{figure}
+
+
+% Test 3
+% Instancia fija de 500 nodos.
+% Aumentamos y disminuimos al mismo tiempo gimnasios y paradas
+% Mochila fija = 6
+% Dificultad 50
+
+% \begin{figure}[H]
+%   \begin{center}
+%     \includegraphics[scale=0.8]{imagenes/ej2test3iempos.pdf}
+%     \caption{}
+%     \label{}
+%   \end{center}
+% \end{figure}
+
+
+% Test 4 - 
+% Aumentamos gimnasios y paradas al mismo tiempo - 
+% Hasta 500 nodos - 
+% Mochila fija = 6
+
+
+% \begin{figure}[H]
+%   \begin{center}
+%     \includegraphics[scale=0.8]{imagenes/ej2test4iempos.pdf}
+%     \caption{}
+%     \label{}
+%   \end{center}
+% \end{figure}
+
+
+% Test 5 - 
+% Dificultad entre 0 y 100 - 
+% Gimnasios = 250 - 
+% Paradas = 250 - 
+% Mochila = 18
+
+% \begin{figure}[H]
+%   \begin{center}
+%     \includegraphics[scale=0.8]{imagenes/ej2test5iempos.pdf}
+%     \caption{}
+%     \label{}
+%   \end{center}
+% \end{figure}
+
+
+\subsection{Experimentación: Heurística Vs Backtracking}
+Con el fin de observar la performance del algoritmo en tiempos de ejecución en función del tamaño de la entrada, hemos decidido comparar nuestra heurística constructiva golosa contra nuestro backtracking. Dado que estamos comparando dos algoritmos con complejidades temporales muy diferentes (\bigo{N!} en el caso del backtracking, siendo $N$ la cantidad de nodos, contra \bigo{|gimnasios|^3 + |paradas|^2} de la heurística) que buscan una solución al mismo problema, deseamos examinar que tan grande es esa diferencia.
+
+Luego de realizar comparaciones temporales, y para completar el experimento, sobre las mismas intancias comparamos la calidad de las respuestas obtenidas de los mismos. Como sabemos de antemano que la heurística corre más rápido que el backtracking, queremos observar como esto hace perder la presición en la solución y cual es esta diferencia.
+
+Para realizar estos experimentos, generamos una cierta cantidad de tests con los que hemos corrido ambos algoritmos. Las mediciónes de tiempo fueron calculadas en base al promedio de la cantidad de corridas: se corrió 30 veces cada algoritmo por instancia y luego se tomó el promedio de todas las corridas. Para generar las instancias hemos creado un script en C++ donde podemos setear la cantidad de gimnasios y poke paradas, la capacidad de la mochila y algo que llamamos dificultad. La dificultad es la necesidad de pasar por las poke paradas para ganarle a los gimnasios, si la dificultad es baja hay poca necesidad de pasar estas mientras que si es alta necesita pasar por todas estas. Generamos esto en busqueda de casos bordes y también hicimos un experimento al respecto. Luego, genera valores pseudo aleatorios\footnote{Utilizamos la función \textbf{rand} \url{http://www.cplusplus.com/reference/cstdlib/rand/}} para generar las instancias.
+
+Sobre la comparación de la calidad de respuestas, utilizamos la distancia devuelta por el algoritmo para observar las diferencias.
+
+
+\subsubsection{Caso: Cantidad de poke paradas fijas - Cantidad de gimnasios creciente}
+Aquí compararemos instancias pseudo aleatorias donde la cantidad de poke paradas esta fija en 7, la cantidad de gimnasios va en crecimiento de 1 a 7 y la mochila esta fija en 6.
+Los resultados sobre los tiempos de ejecución los representamos con el siguiente gráfico:
 
 \begin{figure}[H]
   \begin{center}
-    \includegraphics[scale=0.8]{imagenes/ej2test1tiempos.pdf}
-    \caption{}
-    \label{}
+    \includegraphics[scale=0.8]{imagenes/ej2test1hvsbttiemposa.pdf}
+    \caption{Instancia: poke paradas fija en 7 - gimnasios en crecimiento de 1 a 7 - mochila fija en 6}
+    \label{ej2test1a}
+  \end{center}
+\end{figure}
+
+Como podemos observar en la figura \ref{ej2test1a}, la diferencia temporal de estas instancias entre la heurística y el backtracking es muy alta, obteniendo un pico máximo de diferencia en la instancia donde hay 6 gimnasios. También se puede observar como el agregar gimnasios genera que los tiempos en la heurística sean de forma creciente mientras que en el bactrackig, a pesar de ser creciente no se mantiene en forma de recta sino crece de forma abrupta a medida que se van agregando gimnasios. Esto último no lo tomamos de forma empirica sino que se da por la observación de éstas instancias en particular.
+
+\newpage
+Ahora veamos la diferencia en calidad de soluciónes con el siguiente gráfico:
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.8]{imagenes/ej2test1hvsbttiemposb.pdf}
+    \caption{Instancia: poke paradas fija en 7 - gimnasios en crecimiento de 1 a 7 - mochila fija en 6}
+    \label{ej2test1b}
+  \end{center}
+\end{figure}
+
+Cómo podemos observar en la figura \ref{ej2test1b}, la diferencia de tiempos afecta sobre las soluciónes. En este caso la diferencia mínima entre soluciones se produjo sobre la instancia con un sólo gimnasio mientas que la máxima diferencia se encuentra en la instancia donde hay 4 gimnasios.
+
+
+\subsubsection{Caso: Cantidad de gimnasios fijo - Cantidad de poke paradas crecientes}
+Aquí compararemos instancias pseudo aleatorias donde la cantidad de gimnasios esta fija en 7, la cantidad de gimnasios va en crecimiento de 1 a 7 y la mochila esta fija en 6.
+Los resultados sobre los tiempos de ejecución los representamos con el siguiente gráfico:
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.8]{imagenes/ej2test2hvsbttiemposa.pdf}
+    \caption{Instancia: poke paradas en crecimiento de 1 a 7 - gimnasios fijo en 7 - mochila fija en 6}
+    \label{ej2test2a}
+  \end{center}
+\end{figure}
+
+En la figura \ref{ej2test2a} se puede observar cómo las diferencias de performance sobre tiempo siguen siendo muy altas entre el backtracking y la heurística. Algo que se puede apreciar sobre los resultados es que, mientras el backtracking tiene una tendencia un poco más creciente, la curva que mide el tiempo de la heurística parece ir de forma decreciente a medida que aumentan las pokeparadas. Esto puede deberse a las instancias con las que fueron tomados los experimentos y la necesidad de pasar por las poke paradas.
+
+Ahora veamos la diferencia en calidad de soluciónes con el siguiente gráfico:
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.8]{imagenes/ej2test2hvsbttiemposb.pdf}
+    \caption{Instancia: poke paradas en crecimiento de 1 a 7 - gimnasios fijo en 7 - mochila fija en 6}
+    \label{ej2test2b}
+  \end{center}
+\end{figure}
+
+En la figura \ref{ej2test2b} se pueden apreciar algo muy particular: la heuristica llega a devolver un resultado óptimo en dos ocaciones (cuando la cantidad de poke paradas es 1 y cuando es 3). Aunque lo más interesante del gráfico no son sólo esos dos casos sino como los resultados de la heurística pueden dar resultados tan variados con respecto al óptimo.
+
+\subsubsection{Comparación de tiempos entre los dos casos anteriores}
+En los casos anteriores vimos instancias en las cuales fijamos una variable (gimnasios o poke paradas) y aumentamos la otra para ver como se comportan en función del tiempo. Ahora veamos cómo en esas instancias fijas (de 8 a 14 nodos) se comportan con respecto al tiempo. Esta comparación la haremos siempre sobre la heuristica en este caso.
+
+El gráfico de la comparación temporal de los dos casos es el siguiente:
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[scale=0.8]{imagenes/ej2test12bishvsbttiempos.pdf}
+    \caption{Instancia: poke paradas en crecimiento de 1 a 7 - gimnasios fijo en 7 - mochila fija en 6}
+    \label{ej2test12bis}
   \end{center}
 \end{figure}
 
 
-Test 2
-Paradas aumentado desde 1 a 250.
-Gimnasios fijos = 250
-Mochila fija = 6
-Dificultad = 50
+Se puede apreciar en la figura \ref{ej2test12bis} como al dejar fijos las paradas e ir aumentando los gimnasios va tomando cada vez más tiempo. Esto tiene sentido dado que en nuestro algoritmo lo primero que realizamos es la buscar un camino corto entre todos los gimnasios que da una complejidad cubica y luego construye el camino final si necesita poke paradas. Lo interesante de la figura es que dejando los gimnasios fijos y al aumentar la cantidad de paradas el tiempo va disminuyendo. Aunque concluímos en que los casos generados pseudo aleatoriamente dieron estos resultados y no podemos tomar que este comportamiento va a ocurrir siempre.
 
-\begin{figure}[H]
-  \begin{center}
-    \includegraphics[scale=0.8]{imagenes/ej2test1tiempos.pdf}
-    \caption{}
-    \label{}
-  \end{center}
-\end{figure}
+\subsubsection{}
+\subsubsection{}
+\subsubsection{}
 
-
-Test 3
-Instancia fija de 500 nodos.
-Aumentamos y disminuimos al mismo tiempo gimnasios y paradas
-Mochila fija = 6
-Dificultad 50
-
-\begin{figure}[H]
-  \begin{center}
-    \includegraphics[scale=0.8]{imagenes/ej2test3iempos.pdf}
-    \caption{}
-    \label{}
-  \end{center}
-\end{figure}
-
-
-Test 4 - 
-Aumentamos gimnasios y paradas al mismo tiempo - 
-Hasta 500 nodos - 
-Mochila fija = 6
-
-
-\begin{figure}[H]
-  \begin{center}
-    \includegraphics[scale=0.8]{imagenes/ej2test4iempos.pdf}
-    \caption{}
-    \label{}
-  \end{center}
-\end{figure}
-
-
-Test 5 - 
-Dificultad entre 0 y 100 - 
-Gimnasios = 250 - 
-Paradas = 250 - 
-Mochila = 18
-
-\begin{figure}[H]
-  \begin{center}
-    \includegraphics[scale=0.8]{imagenes/ej2test5iempos.pdf}
-    \caption{}
-    \label{}
-  \end{center}
-\end{figure}
+\subsubsection{Conclusiones del experimento}
